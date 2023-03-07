@@ -1,0 +1,7 @@
+package net.in.pSwitch.model;
+
+public enum Status {
+
+	INCOMPLETE, COMPLETED, PENDING, REVIEW, APPROVED, REJECTED, DISABLED, ACTIVE, SUCCESSFUL;
+}
+

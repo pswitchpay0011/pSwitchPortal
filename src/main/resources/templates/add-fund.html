@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>pSwitch - Welcome Retailer</title>
+
+<link rel="shortcut icon" href="/assets/images/favicon.ico" />
+
+
+<div th:replace="fragment/StyleFragment :: style"></div>
+
+</head>
+
+<body>
+
+	<div th:replace="fragment/topnav :: navbar"></div>
+
+	<!-- Page content -->
+	<div class="page-content">
+
+		<div th:replace="fragment/mainSidebar :: sidebar"></div>
+
+		<!-- Main content -->
+		<div class="content-wrapper">
+
+			<!-- Page header -->
+			<div class="page-header">
+				<div class="page-header-content header-elements-md-inline">
+					<div class="page-title d-flex">
+						<h4>
+							<i class="icon-arrow-down52 mr-2"></i> Add Fund Request
+						</h4>
+						<a href="#" class="header-elements-toggle text-default d-md-none"><i
+							class="icon-more"></i></a>
+					</div>
+				</div>
+			</div>
+			<!-- /page header -->
+
+
+			<!-- Content area -->
+			<div class="content">
+
+				<div class="d-md-flex align-items-md-start">
+
+
+					<div class="tab-content w-100">
+						<div class="tab-pane fade active show" id="">
+
+							<!-- Profile info -->
+
+							<form action="#" th:action="@{/user/addFundRequest}"
+								method="post" enctype="multipart/form-data">
+								<div class="card">
+									<div class="card-header header-elements-inline">
+										<h5 class="card-title">Wallet Amount Details</h5>
+										<div class="header-elements">
+											<div class="list-icons">
+												<a class="list-icons-item" data-action="collapse"></a>
+											</div>
+										</div>
+									</div>
+									<div class="card-body">
+										<div class="form-group row">
+											<label class="col-form-label col-lg-2">Request Amount</label>
+											<div class="col-lg-10">
+												<input id="totalAmount" name="totalAmount" type="number"
+													th:value="${fundRequest !=null ? fundRequest.totalAmount: 0}"
+													class="form-control"> <input id="fundRequestId"
+													name="fundRequestId" type="hidden"
+													th:if="${fundRequest !=null}" th:value="${fundRequest.id}">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="card">
+									<div class="card-header header-elements-inline">
+										<h5 class="card-title">Bank Details</h5>
+										<div class="header-elements">
+											<div class="list-icons">
+												<a class="list-icons-item" data-action="collapse"></a>
+											</div>
+										</div>
+									</div>
+
+									<div class="card-body">
+										<!-- <form action="#"> -->
+
+
+										<div class="form-group">
+											<div class="row">
+												<div class="col-md-4">
+													<label>Bank</label> <select class="form-control"
+														required="required" name="bankDetailsId"
+														id="bankDetailsId">
+														<option value="">Select Bank</option>
+														<option th:each="countryBank : ${countryBankList}"
+															th:value="${countryBank.id}"
+															th:text="${countryBank.accountHolderName+' | '+countryBank.BANK_NAME + ' | '+countryBank.accountNumber}">
+														</option>
+													</select>
+
+												</div>
+												<div class="col-md-2">
+													<label>Date</label>
+													<div class="input-group">
+														<span class="input-group-prepend"> <span
+															class="input-group-text"><i
+																class="icon-calendar22"></i></span>
+														</span> <input type="text" name="paymentDate" id="paymentDate"
+															class="form-control daterange-single" value="3/23/2021">
+													</div>
+
+												</div>
+												<div class="col-md-2">
+													<label>Recipt No.</label> <input id="reciptNo"
+														name="reciptNo" type="text" value="001"
+														class="form-control">
+
+												</div>
+												<div class="col-md-4">
+													<label>Upload Recipt</label> <input type="file"
+														id="reciptImage" name="reciptImage"
+														class="form-input-styled"> <span
+														class="form-text text-muted">Accepted formats: gif,
+														png, jpg. Max file size 2Mb</span>
+												</div>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-md-12 text-right">
+												<button type="submit" class="btn btn-primary">Save</button>
+												<button type="submit" class="btn btn-primary">Cancel</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+
+				<div class="tab-pane fade" id="schedule">
+
+					<!-- Available hours -->
+					<div class="card">
+						<div class="card-header header-elements-inline">
+							<h6 class="card-title">Available hours</h6>
+							<div class="header-elements">
+								<div class="list-icons">
+									<a class="list-icons-item" data-action="collapse"></a> <a
+										class="list-icons-item" data-action="reload"></a> <a
+										class="list-icons-item" data-action="remove"></a>
+								</div>
+							</div>
+						</div>
+
+						<div class="card-body">
+							<div class="chart-container">
+								<div class="chart has-fixed-height" id="available_hours"></div>
+							</div>
+						</div>
+					</div>
+					<!-- /available hours -->
+
+
+					<!-- Schedule -->
+					<div class="card">
+						<div class="card-header header-elements-inline">
+							<h5 class="card-title">My schedule</h5>
+							<div class="header-elements">
+								<div class="list-icons">
+									<a class="list-icons-item" data-action="collapse"></a> <a
+										class="list-icons-item" data-action="reload"></a> <a
+										class="list-icons-item" data-action="remove"></a>
+								</div>
+							</div>
+						</div>
+
+						<div class="card-body">
+							<div class="my-schedule"></div>
+						</div>
+					</div>
+					<!-- /schedule -->
+
+				</div>
+
+
+
+				<div class="tab-pane fade" id="orders"></div>
+				<!-- /right content -->
+
+			</div>
+
+
+		</div>
+
+
+	</div>
+	<!-- /main content -->
+
+	<!-- Footer -->
+	<div class="navbar navbar-expand-lg navbar-light">
+		<div class="text-center d-lg-none w-100">
+			<button type="button" class="navbar-toggler dropdown-toggle"
+				data-toggle="collapse" data-target="#navbar-footer">
+				<i class="icon-unfold mr-2"></i> Footer
+			</button>
+		</div>
+
+		<div class="navbar-collapse collapse" id="navbar-footer">
+			<span class="navbar-text"> &copy; 2020. </span>
+
+			<ul class="navbar-nav ml-lg-auto">
+				<li class="nav-item"><a href="#" class="navbar-nav-link"
+					target="_blank"><i class="icon-lifebuoy mr-2"></i> Support</a></li>
+				<li class="nav-item"><a href="#" class="navbar-nav-link"
+					target="_blank"><i class="icon-file-text2 mr-2"></i> Docs</a></li>
+
+
+
+			</ul>
+
+			<ul class="navbar-nav ml-lg-auto">
+
+
+				<li class="nav-item"><a href="#" class="navbar-nav-link"
+					target="_blank"><i class="icon-facebook color-fb "></i> </a></li>
+
+				<li class="nav-item"><a href="#" class="navbar-nav-link"
+					target="_blank"><i class="icon-twitter text-blue"></i> </a></li>
+
+				<li class="nav-item"><a href="#" class="navbar-nav-link"
+					target="_blank"><i class="icon-youtube text-red"></i> </a></li>
+
+			</ul>
+		</div>
+	</div>
+	<!-- /footer -->
+
+	</div>
+	<!-- /page content -->
+
+	<!-- Basic modal -->
+	<div id="modal_default" class="modal fade" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Agreement Terms</h5>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<div class="modal-body">
+					<p>A Terms and Conditions agreement is the agreement that
+						includes the terms, the rules and the guidelines of acceptable
+						behavior and other useful sections to which users must agree in
+						order to use or access your website and mobile app.</p>
+
+					<hr>
+
+					<p>A Terms and Conditions agreement is the agreement that
+						includes the terms, the rules and the guidelines of acceptable
+						behavior and other useful sections to which users must agree in
+						order to use or access your website and mobile app.</p>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /basic modal -->
+</body>
+
+</html>

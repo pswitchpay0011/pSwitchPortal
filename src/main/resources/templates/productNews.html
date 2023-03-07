@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>pSwitch - NEWS</title>
+
+<link rel="shortcut icon" href="images/favicon.ico" />
+
+
+<div th:replace="fragment/StyleFragment :: style"></div>
+
+</head>
+
+<body>
+
+	<div th:replace="fragment/topnav :: navbar"></div>
+
+	<!-- Page content -->
+	<div class="page-content">
+		<div th:replace="fragment/mainSidebar :: sidebar"></div>
+
+		<!-- Main content -->
+		<div class="content-wrapper">
+
+			<!-- Page header -->
+			<div class="page-header">
+				<div class="page-header-content header-elements-md-inline">
+					<div class="page-title d-flex">
+						<h4>
+							<i class="icon-arrow-down52 mr-2"></i> News
+						</h4>
+						<a href="#" class="header-elements-toggle text-default d-md-none"><i
+							class="icon-more"></i></a>
+					</div>
+
+
+				</div>
+			</div>
+			<!-- /page header -->
+
+
+			<!-- Content area -->
+			<div class="content">
+
+				<div class="card">
+					<!-- Start Table -->
+
+					<div class="text-left ml-2 mt-2">
+						<a th:href="@{/admin/addProductNews}" class="btn btn-primary">Add
+							News <i class="icon-add ml-2"></i>
+						</a>
+					</div>
+
+					<table id="productList" class="table datatable-basic">
+						<thead>
+							<tr>
+								<th>News</th>
+								<th>Create Date</th>
+								<th>Modified Date</th>
+								<th>Actions</th>
+								<th>Status</th>
+								<th>Roles</th>
+							</tr>
+						</thead>
+						<tbody>
+
+							<tr th:each="news : ${newsList}">
+								<td th:text="${news.news}"></td>
+								<td
+									th:text="${#temporals.format(news.createdTs, 'dd-MM-yyyy hh:mm a')}"></td>
+								<td
+									th:text="${#temporals.format(news.lastUpdatedTs, 'dd-MM-yyyy hh:mm a')}"></td>
+								<td>
+									<div class="list-icons">
+										<div class="dropdown">
+											<a href="#" class="list-icons-item" data-toggle="dropdown">
+												<i class="icon-menu9"></i>
+											</a>
+
+											<div class="dropdown-menu dropdown-menu-right">
+												<a th:href="@{/admin/news/enable/}+${news.id}"
+													class="dropdown-item"><i class="icon-checkmark"></i>
+													Enabled</a> <a th:href="@{/admin/news/disable/}+${news.id}"
+													class="dropdown-item"><i class="icon-blocked"></i>
+													Disabled</a>
+
+												<div>
+													<a th:href="@{/admin/news/edit/}+${news.id}"
+														class="dropdown-item"><i class="fas fa-edit"></i> Edit</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</td>
+								<td><span class="badge badge-danger"
+									th:if="${news.active == 0}">Disable</span> <span
+									class="badge badge-success" th:if="${news.active == 1}">Active</span>
+								</td>
+								<td>
+									<span
+									class="badge badge-success">All</span>
+								</td>
+
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<!-- End Table -->
+
+
+			</div>
+			<!-- /main content -->
+
+			<!-- Footer -->
+			<div class="navbar navbar-expand-lg navbar-light">
+				<div class="text-center d-lg-none w-100">
+					<button type="button" class="navbar-toggler dropdown-toggle"
+						data-toggle="collapse" data-target="#navbar-footer">
+						<i class="icon-unfold mr-2"></i> Footer
+					</button>
+				</div>
+
+				<div class="navbar-collapse collapse" id="navbar-footer">
+					<span class="navbar-text"> &copy; 2020. </span>
+
+					<ul class="navbar-nav ml-lg-auto">
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-lifebuoy mr-2"></i> Support</a></li>
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-file-text2 mr-2"></i> Docs</a></li>
+
+
+					</ul>
+
+					<ul class="navbar-nav ml-lg-auto">
+
+
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-facebook color-fb "></i> </a></li>
+
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-twitter text-blue"></i> </a></li>
+
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-youtube text-red"></i> </a></li>
+
+					</ul>
+				</div>
+			</div>
+			<!-- /footer -->
+
+		</div>
+		<!-- /page content -->
+
+		<!-- Basic modal -->
+		<div id="modal_default" class="modal fade" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Agreement Terms</h5>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+
+					<div class="modal-body">
+						<p>A Terms and Conditions agreement is the agreement that
+							includes the terms, the rules and the guidelines of acceptable
+							behavior and other useful sections to which users must agree in
+							order to use or access your website and mobile app.</p>
+
+						<hr>
+
+						<p>A Terms and Conditions agreement is the agreement that
+							includes the terms, the rules and the guidelines of acceptable
+							behavior and other useful sections to which users must agree in
+							order to use or access your website and mobile app.</p>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /basic modal -->
+
+		<script>
+			$(document).ready(
+					function() {
+						table = $('#productList').dataTable();
+						console.log(table);
+
+						new $.fn.dataTable.Buttons(table, {
+							buttons : [ {
+								text : 'Create CSV',
+								action : function(e, dt, node, config) {
+									// Do custom processing
+									// ...
+
+									// Call the default csvHtml5 action method to create the CSV file
+									$.fn.dataTable.ext.buttons.csvHtml5.action
+											.call(this, e, dt, node, config);
+								}
+							} ]
+						});
+
+						/* $('.datatable-basic').DataTable({
+							dom : 'Bfrtip',
+							buttons : [ {
+								extend : 'alert',
+								text : 'My button 1'
+							}, {
+								extend : 'alert',
+								text : 'My button 2'
+							}, {
+								extend : 'alert',
+								text : 'My button 3'
+							} ]
+						}); */
+						/* $('#productList').DataTable({
+							dom : 'Bfrtip',
+							buttons : [ {
+								text : 'My button',
+								action : function(e, dt, node, config) {
+									alert('Button activated');
+								}
+							} ]
+						}); */
+					});
+		</script>
+</body>
+</html>

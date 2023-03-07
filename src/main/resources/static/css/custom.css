@@ -1,0 +1,45 @@
+.page-title {
+	padding: 1rem 0;
+	position: relative;
+}
+
+.color-fb {
+	color: #3b5998;
+}
+
+.content {
+	padding: 0.2rem 1.25rem;
+}
+
+.navbar-brand img {
+	height: 33px;
+	display: block;
+}
+
+.navbar-brand {
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.form-control-feedback {
+	position: absolute;
+	top: 2px;
+	color: #000;
+}
+/*.card-body{
+-webkit-box-shadow: 0px 0px 36px -19px rgba(0,0,0,0.75);
+-moz-box-shadow: 0px 0px 36px -19px rgba(0,0,0,0.75);
+box-shadow: 0px 0px 36px -19px rgba(0,0,0,0.75);
+}
+*/
+.form-group-feedback-left .form-control-lg {
+	padding-left: 35px;
+}
+
+.min-height-300 {
+	min-height: 300px;
+}
+
+.doc-img-height {
+	min-height: 130px;
+}

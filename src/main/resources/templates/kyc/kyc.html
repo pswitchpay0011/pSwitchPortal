@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>pSwitch - KYC</title>
+
+    <link rel="shortcut icon" href="/images/favicon.ico"/>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet"
+          type="text/css">
+    <link href="/css/icons/fontawesome/styles.min.css" rel="stylesheet" type="text/css">
+    <link href="/css/icons/icomoon/styles.min.css" rel="stylesheet" type="text/css">
+    <link href="/css/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="/css/bootstrap_page.css" rel="stylesheet" type="text/css">
+    <link href="/css/layout.css" rel="stylesheet" type="text/css">
+    <link href="/css/components.css" rel="stylesheet" type="text/css">
+    <link href="/css/colors.css" rel="stylesheet" type="text/css">
+    <link href="/css/custom.css" rel="stylesheet" type="text/css">
+    <!-- /global stylesheets -->
+
+    <!-- Core JS files -->
+    <script src="/js/main/jquery.min.js"></script>
+    <script src="/js/main/bootstrap.bundle.min.js"></script>
+    <script src="/js/plugins/loaders/blockui.min.js"></script>
+    <!-- /core JS files -->
+
+    <!-- Theme JS files -->
+
+
+    <script src="/js/plugins/visualization/d3/d3.min.js"></script>
+    <script src="/js/plugins/visualization/d3/d3_tooltip.js"></script>
+    <script src="/js/plugins/forms/styling/switchery.min.js"></script>
+    <script src="/js/plugins/ui/moment/moment.min.js"></script>
+    <script src="/js/plugins/pickers/daterangepicker.js"></script>
+
+    <!-- JS files For This Page-->
+    <script src="/js/plugins/extensions/rowlink.js"></script>
+    <script src="/js/plugins/visualization/echarts/echarts.min.js"></script>
+    <script src="/js/plugins/forms/styling/uniform.min.js"></script>
+    <script src="/js/plugins/ui/fullcalendar/core/main.min.js"></script>
+    <script src="/js/plugins/ui/fullcalendar/daygrid/main.min.js"></script>
+    <script src="/js/plugins/ui/fullcalendar/timegrid/main.min.js"></script>
+    <script src="/js/plugins/ui/fullcalendar/interaction/main.min.js"></script>
+
+    <script src="/js/app.js"></script>
+    <script src="/js/custom.js"></script>
+    <script src="/js/demo_pages/user_pages_profile_tabbed.js"></script>
+    <script src="/js/demo_charts/echarts/light/bars/tornado_negative_stack.js"></script>
+    <script src="/js/demo_charts/pages/profile/light/balance_stats.js"></script>
+    <script src="/js/demo_charts/pages/profile/light/available_hours.js"></script>
+
+    <script src="/js/demo_pages/picker_date.js"></script>
+
+    <script src="/js/plugins/forms/wizards/steps.min.js"></script>
+    <script src="/js/plugins/forms/styling/uniform.min.js"></script>
+    <script src="/js/plugins/forms/inputs/inputmask.js"></script>
+    <script src="/js/plugins/forms/validation/validate.min.js"></script>
+    <script src="/js/plugins/extensions/cookie.js"></script>
+    <script src="/js/plugins/forms/selects/select2.min.js"></script>
+<!--    <script src="/js/demo_pages/form_select2.js"></script>-->
+
+
+    <!-- /theme JS files -->
+
+
+    <style>
+        .overlayLoading{
+            text-align: center;
+            display: none;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 999;
+            background: rgba(255,255,255,0.8) url("/images/loading.gif") center no-repeat;
+        }
+        /*body{*/
+        /*    text-align: center;*/
+        /*}*/
+        /* Turn off scrollbar when body element has the loading class */
+        body.loading{
+            overflow: hidden;
+        }
+        /* Make spinner image visible when body element has the loading class */
+        body.loading .overlayLoading{
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+<div th:replace="fragment/topnav :: navbar"></div>
+
+<!-- Page content -->
+<div class="page-content">
+
+    <div th:replace="fragment/mainSidebar :: sidebar"></div>
+
+    <!-- Main content -->
+    <div class="content-wrapper">
+
+        <!-- Page header -->
+        <div class="page-header">
+            <div class="page-header-content header-elements-md-inline">
+                <div class="page-title d-flex">
+                    <h4><i class="icon-arrow-down52 mr-2"></i> KYC</h4>
+                    <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+                </div>
+
+
+            </div>
+        </div>
+        <!-- /page header -->
+
+
+        <!-- Content area -->
+        <div class="content">
+
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="/images/backgrounds/kyc-img.jpg" class="img-fluid" alt="">
+                </div>
+
+                <div class="col-md-8">
+
+                    <div class="d-md-flex align-items-md-start">
+
+
+                        <div class="tab-content w-100">
+                            <div class="tab-pane fade active show" id="">
+
+                                <!-- Profile info -->
+                                <div class="card">
+                                    <!--<div class="card-header bg-white header-elements-inline">
+                                        <h6 class="card-title">Wizard with validation</h6>
+                                        <div class="header-elements">
+                                            <div class="list-icons">
+                                                <a class="list-icons-item" data-action="collapse"></a>
+                                                <a class="list-icons-item" data-action="reload"></a>
+                                                <a class="list-icons-item" data-action="remove"></a>
+                                            </div>
+                                        </div>
+                                    </div> -->
+
+                                    <div class="alert alert-danger" role="alert" style="display: none" id="errorAlert">
+                                        <p id="errorMessage">Error while saving data</p>
+                                    </div>
+
+                                    <div class="alert alert-success" role="alert" style="display: none" id="successAlert">
+                                        <p id="successMessage">Success</p>
+                                    </div>
+
+                                    <form class="wizard-form steps-validation" id="kycForm" action="#" th:action="@{/kyc/updateKyc}" method="post" data-fouc>
+                                        <input type="hidden" id="stepNo" th:value="${stepNo}" name="stepNo">
+                                        <input type="hidden" id="userId" name="userId" th:value="${user.userId}">
+                                        <input type="hidden" id="refId" name="refId" th:value="${kycDetails.refId}">
+
+
+                                        <h6>Business Details</h6>
+                                        <fieldset>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Business Name: <span class="text-danger">*</span></label>
+                                                        <input type="text" name="businessName" id="businessName"
+                                                               th:value="${(kycDetails != null && !#strings.isEmpty(kycDetails.businessName)) ? kycDetails.businessName : ''}"
+                                                               class="form-control" required="required"
+                                                               th:disabled="${kycDetails !=null && kycDetails.businessName!=null}"
+                                                               placeholder="Business Name">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Address <span class="text-danger">*</span></label>
+                                                        <input type="text" name="address" id="address"  class="form-control" required="required"
+                                                               th:value="${(kycDetails != null && !#strings.isEmpty(kycDetails.address)) ? kycDetails.address : ''}"
+                                                               th:disabled="${kycDetails !=null && kycDetails.address!=null}"
+                                                               placeholder="Address">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label>Pincode: <span class="text-danger">*</span></label>
+                                                        <div class="form-group form-group-feedback form-group-feedback-right">
+                                                            <input type="number" name="zipcode" id="zipcode" class="form-control" onkeyup="zipcodeCheck()" required="required"
+                                                                   th:value="${(kycDetails != null && !#strings.isEmpty(kycDetails.zipcode)) ? kycDetails.zipcode : ''}"
+                                                                   th:disabled="${kycDetails !=null && !#strings.isEmpty(kycDetails.zipcode)}"
+                                                                   placeholder="Pincode">
+                                                            <div class="form-control-feedback" id="zipSpinner" style="display: none">
+                                                                <i class="icon-spinner2 spinner"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label>State: <span class="text-danger">*</span></label>
+                                                        <select class="form-control select-search" data-placeholder="Select State"
+                                                                th:disabled="${kycDetails !=null && !#strings.isEmpty(kycDetails.state)}"
+                                                                name="state" id="state" data-fouc>
+                                                            <option></option>
+                                                            <optgroup label="Select State">
+                                                                <option th:each="item : ${states}"
+                                                                        th:selected="${(kycDetails !=null && !#strings.isEmpty(kycDetails.state) and kycDetails.getStateCode() == item.id)}"
+                                                                        th:value="${item.id}" th:text="${item.name}" />
+                                                            </optgroup>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label>City: <span class="text-danger">*</span></label>
+                                                        <select class="form-control select-search" data-placeholder="Select District"
+                                                                th:disabled="${kycDetails !=null && !#strings.isEmpty(kycDetails.city)}"
+                                                                name="city" id="city" data-fouc>
+                                                            <option></option>
+                                                            <optgroup label="Select State">
+                                                                <option th:each="item : ${cities}"
+                                                                        th:selected="${(kycDetails !=null && !#strings.isEmpty(kycDetails.city) and kycDetails.getCityCode() == item.id)}"
+                                                                        th:value="${item.id}" th:text="${item.name}" />
+                                                            </optgroup>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Type of Shop</label>
+                                                        <select class="form-control select-search" data-placeholder="Select Type of Shop"
+                                                                th:disabled="${kycDetails !=null && !#strings.isEmpty(kycDetails.typeOfShops)}"
+                                                                name="typeOfShops" id="typeOfShops" data-fouc>
+                                                            <option></option>
+                                                            <optgroup th:each="shopType : ${typeOfShops}" th:label="${shopType.key}">
+                                                                <option th:each="item : ${shopType.value}"
+                                                                        th:selected="${(kycDetails !=null and !#strings.isEmpty(kycDetails.typeOfShops) and kycDetails.getTypeOfShopCode() == item.id)}"
+                                                                        th:value="${item.id}" th:text="${item.industry}" />
+                                                            </optgroup>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Type of MCC</label>
+                                                        <select class="form-control select-search" data-placeholder="Select Type of MCC"
+                                                                th:disabled="${kycDetails !=null && !#strings.isEmpty(kycDetails.typeOfMcc)}"
+                                                                name="typeOfMcc" id="typeOfMcc" data-fouc>
+                                                            <option></option>
+                                                            <optgroup label="Select MCC Type">
+                                                                <option th:each="item : ${typeOfMCC}"
+                                                                        th:selected="${(kycDetails !=null and !#strings.isEmpty(kycDetails.typeOfMcc) and kycDetails.getTypeOfMccCode() == item.id)}"
+                                                                        th:value="${item.id}" th:text="${item.mccType}" />
+                                                                <option value="1">Other</option>
+                                                            </optgroup>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                        <h6>Aadhaar Card</h6>
+                                        <fieldset data-step-start>
+                                            <div class="row">
+                                                <div class="col-md-7">
+                                                    <div class="form-group">
+                                                        <div class="row">
+                                                            <div class="col-md-7">
+                                                                <label>Aadhaar card Number: <span
+                                                                        class="text-danger">*</span></label>
+                                                                <input type="text" name="aadhaarCardNumber" id="aadhaarCardNumber"
+                                                                       onkeyup="formatAadhaar()"
+                                                                       class="form-control required"
+                                                                       th:value="${(kycDetails != null && !#strings.isEmpty(kycDetails.aadhaarCardNumber)) ? kycDetails.aadhaarCardNumber : ''}"
+                                                                       th:disabled="${kycDetails !=null && !#strings.isEmpty(kycDetails.aadhaarCardNumber)}"
+                                                                       placeholder="Please Enter Aadhaar card number">
+                                                            </div>
+                                                            <div class="col-md-4 " th:if="${kycDetails ==null || #strings.isEmpty(kycDetails.aadhaarCardNumber)}">
+                                                                <label><br></label>
+                                                                <button onclick="generateOtp()" class="form-control btn btn-primary">Generate OTP </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="col-md-5" th:if="${kycDetails ==null || #strings.isEmpty(kycDetails.aadhaarCardNumber)}">
+                                                    <div class="form-group">
+
+                                                        <div class="row">
+                                                            <div class="col-md-7">
+                                                                <label>One Time Password : <span class="text-danger">*</span></label>
+                                                                <input type="text" name="aadhaarOtp" id="aadhaarOtp"
+                                                                       onkeyup="formatOTP()"
+                                                                       class="form-control required"
+                                                                       disabled
+                                                                       placeholder="Please Enter OTP">
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <label><br></label>
+                                                                <button onclick="verifyAadhaarOtp()" id="verifyOTPBtn" style="display: none" class="form-control btn btn-primary">Verify OTP </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </fieldset>
+
+                                        <h6>Pan Card</h6>
+
+                                        <fieldset data-step-start>
+                                            <div class="row">
+                                                <div class="col-md-7">
+                                                    <div class="form-group">
+                                                        <div class="row">
+                                                            <div class="col-md-7">
+                                                                <label>PAN card number <span class="text-danger">*</span></label>
+                                                                <input type="text" name="panCard" id="panCard"
+                                                                       onkeyup="formatPanCard()"
+                                                                       class="form-control required"
+                                                                       th:value="${(kycDetails != null && !#strings.isEmpty(kycDetails.panCard)) ? kycDetails.panCard : ''}"
+                                                                       th:disabled="${kycDetails !=null && !#strings.isEmpty(kycDetails.panCard)}"
+                                                                       placeholder="Please Enter Pan card number">
+                                                            </div>
+                                                            <div class="col-md-4 " th:if="${kycDetails ==null || #strings.isEmpty(kycDetails.panCard)}">
+                                                                <label><br></label>
+                                                                <button id="btnPanVerify" onclick="verifyPanCard()" class="form-control btn btn-primary">Verify PanCard</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                        <h6>E-sign agreement</h6>
+                                        <fieldset>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="custom-checkbox">
+
+                                                        <p>1. <a href="#" data-toggle="modal" data-target="#tnc">Term
+                                                            and Conditions </a></p>
+
+                                                        <input type="checkbox" class="custom-control-input"
+                                                               id="termAndConditions"
+                                                               th:checked="${kycDetails !=null && kycDetails.termAndConditions != null && kycDetails.termAndConditions == 1}"
+                                                               th:disabled="${kycDetails !=null && kycDetails.termAndConditions != null && kycDetails.termAndConditions == 1}"
+                                                               required="required"  name="termAndConditions">
+                                                        <label class="custom-control-label  ml-4 mb-2"
+                                                               for="termAndConditions"> I have read and
+                                                            agree to the retailer agreement </label>
+
+                                                        <p>2. Submit and Verify your Aadhaar on NSDL</p>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                        <h6>Bank Verification</h6>
+                                        <fieldset>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Bank: <span class="text-danger">*</span></label>
+                                                        <select class="form-control select-search" data-placeholder="Select Bank" name="bankName"
+                                                                th:value="${(kycDetails != null && !#strings.isEmpty(kycDetails.bankName)) ? kycDetails.bankName : ''}"
+                                                                th:disabled="${kycDetails !=null && !#strings.isEmpty(kycDetails.bankName)}"
+                                                                id="bankName" data-fouc required>
+                                                            <optgroup label="Lis of Banks">
+                                                                <option></option>
+                                                                <option th:each="item : ${bankList}"
+                                                                        th:selected="${(kycDetails !=null and !#strings.isEmpty(kycDetails.bankName) and kycDetails.getBankCode() == item.id)}"
+                                                                        th:value="${item.id}" th:text="${item.bankName}" />
+                                                            </optgroup>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>IFSC Code <span class="text-danger">*</span></label>
+                                                        <input type="text" name="ifscCode" id="ifscCode"
+                                                               th:value="${(kycDetails != null && !#strings.isEmpty(kycDetails.ifscCode)) ? kycDetails.ifscCode : ''}"
+                                                               th:disabled="${kycDetails !=null && !#strings.isEmpty(kycDetails.ifscCode)}"
+                                                               class="form-control required"
+                                                               required
+                                                               placeholder="IFSC Code">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Account Type: <span class="text-danger">*</span></label>
+                                                        <select class="form-control" name="accountType"
+                                                                th:value="${(kycDetails != null && !#strings.isEmpty(kycDetails.accountType)) ? kycDetails.accountType : ''}"
+                                                                th:disabled="${kycDetails !=null && !#strings.isEmpty(kycDetails.accountType)}"
+                                                                required
+                                                                id="accountType" >
+                                                            <option value="">Select Account Type</option>
+                                                            <option value="Saving">Saving</option>
+                                                            <option value="Current">Current</option>
+
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Account Number <span class="text-danger">*</span></label>
+                                                        <input type="text" name="accountNumber" id="accountNumber" class="form-control required"
+                                                               th:value="${(kycDetails != null && !#strings.isEmpty(kycDetails.accountNumber)) ? kycDetails.accountNumber : ''}"
+                                                               th:disabled="${kycDetails !=null && !#strings.isEmpty(kycDetails.accountNumber)}"
+                                                               required
+                                                               placeholder="Account Number">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Account Holder Name<span class="text-danger">*</span></label>
+                                                        <input type="text" name="accountHolderName" id="accountHolderName" class="form-control required"
+                                                               th:value="${(kycDetails != null && !#strings.isEmpty(kycDetails.accountHolderName)) ? kycDetails.accountHolderName : ''}"
+                                                               disabled
+                                                               required
+                                                               placeholder="Account Holder Name">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label><br></label>
+                                                        <button onclick="verifyBankInfo()" class="form-control btn btn-primary">Verify</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                                <!-- /profile info -->
+
+                            </div>
+                            <!-- /right content -->
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+        <!-- /main content -->
+
+        <!-- Footer -->
+        <div class="navbar navbar-expand-lg navbar-light">
+            <div class="text-center d-lg-none w-100">
+                <button type="button" class="navbar-toggler dropdown-toggle" data-toggle="collapse"
+                        data-target="#navbar-footer">
+                    <i class="icon-unfold mr-2"></i>
+                    Footer
+                </button>
+            </div>
+
+            <div class="navbar-collapse collapse" id="navbar-footer">
+					<span class="navbar-text">
+						&copy; 2020.
+					</span>
+
+                <ul class="navbar-nav ml-lg-auto">
+                    <li class="nav-item"><a href="#" class="navbar-nav-link" target="_blank"><i
+                            class="icon-lifebuoy mr-2"></i> Support</a></li>
+                    <li class="nav-item"><a href="#" class="navbar-nav-link" target="_blank"><i
+                            class="icon-file-text2 mr-2"></i> Docs</a></li>
+
+
+                </ul>
+
+                <ul class="navbar-nav ml-lg-auto">
+
+
+                    <li class="nav-item"><a href="#" class="navbar-nav-link" target="_blank"><i
+                            class="icon-facebook color-fb "></i> </a></li>
+
+                    <li class="nav-item"><a href="#" class="navbar-nav-link" target="_blank"><i
+                            class="icon-twitter text-blue"></i> </a></li>
+
+                    <li class="nav-item"><a href="#" class="navbar-nav-link" target="_blank"><i
+                            class="icon-youtube text-red"></i> </a></li>
+
+                </ul>
+            </div>
+        </div>
+        <!-- /footer -->
+
+    </div>
+    <!-- /page content -->
+
+    <!-- Basic modal -->
+    <div id="tnc" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">TERM & CONDITIONS</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <h6 class="font-weight-semibold">The following terms shall
+                        have the meanings ascribed below</h6>
+                    <ul>
+                        <li><p>
+                            <b>"Agreement"</b> shall mean this Business Associates,
+                            Distributor Agreement, Merchant/Business Associates in its
+                            entirety, including all content which is referenced or
+                            hyperlinked in this Agreement
+                        </p></li>
+                        <li><p>
+                            <b>"Term"</b> shall mean the period commencing from the date of
+                            acceptance of this Agreement by the Merchant/Business Associates
+                            up to the termination of this Agreement in accordance with
+                            Clause 9 as provided herein below;
+                        </p></li>
+
+                        <li><p>
+                            <b>"Territory"</b> shall mean the Republic of India.
+                        </p></li>
+                        </p>
+                    </ul>
+                </div>
+
+                <div class="modal-footer">
+
+                    <button type="button" class="btn bg-primary" data-dismiss="modal">Agree</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /basic modal -->
+</div>
+
+<script src="/js/demo_pages/form_wizard.js"></script>
+<script src="/js/ps/dropdown.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#typeOfShops').select2();
+        $('#typeOfMcc').select2();
+        $('#bankName').select2();
+        $('#state').select2();
+        $('#city').select2();
+    });
+</script>
+<script>
+    $(document).ready({
+        ajaxStart: function(){
+            $("body").addClass("loading");
+        },
+        ajaxStop: function(){
+            $("body").removeClass("loading");
+        }
+    });
+</script>
+</body>
+</html>

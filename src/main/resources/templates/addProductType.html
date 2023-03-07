@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>pSwitch</title>
+
+<link rel="shortcut icon" href="assets/images/favicon.ico" />
+
+<div th:replace="fragment/StyleFragment :: style"></div>
+<script src="/js/demo_pages/form_multiselect.js"></script>
+
+</head>
+
+<body>
+	<div th:replace="fragment/topnav :: navbar"></div>
+	<!-- Page content -->
+	<div class="page-content">
+
+		<div th:replace="fragment/mainSidebar :: sidebar"></div>
+
+		<!-- Main content -->
+		<div class="content-wrapper">
+
+			<!-- Page header -->
+			<div class="page-header">
+				<div class="page-header-content header-elements-md-inline">
+					<div class="page-title d-flex">
+						<h4>
+							<i class="icon-arrow-left52 mr-2"></i> Add Product
+						</h4>
+						<a href="#" class="header-elements-toggle text-default d-md-none"><i
+							class="icon-more"></i></a>
+					</div>
+				</div>
+			</div>
+			<!-- /page header -->
+
+			<!-- Content area -->
+			<div class="content">
+
+				<!-- Form inputs -->
+				<div class="card">
+					<div class="card-body">
+
+						<div th:if="${updateError}" class="alert alert-danger"
+							role="alert">
+							<table>
+								<tr th:each="error : ${updateError}">
+									<td class="text-left" th:text="${'* '+ error}">data</td>
+								</tr>
+							</table>
+						</div>
+
+						<form action="#" th:action="@{/admin/saveProductType}"
+							method="post">
+							<fieldset class="mb-3">
+
+								<input type="hidden" id="id" name="id"
+									th:if="${productType !=null}" th:value="${productType.id}">
+
+								<input type="hidden" id="menuId" name="menuId"
+									th:if="${menu !=null}" th:value="${menu.menuId}"> <input
+									type="hidden" id="PTMID" th:if="${PTM !=null}"
+									th:value="${PTM.menuId}"> <input type="hidden"
+									id="PTMNAME" th:if="${PTM !=null}" th:value="${PTM.menuName}">
+
+								<div class="form-group row">
+									<label class="col-form-label col-lg-2">Product Type
+										Menu</label>
+									<div class="col-lg-10">
+
+										<select id="test" name="productTypeMenuId" required="required">
+											<option value="">Select Parent</option>
+										</select>
+
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label class="col-form-label col-lg-2">Product Type
+										Name</label>
+									<div class="col-lg-10">
+										<input type="text" class="form-control" required
+											th:value="${(productType !=null)? productType.name : ''}"
+											name="name" id="name">
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label class="col-form-label col-lg-2">User Access</label>
+									<div class="col-lg-10">
+										<select multiple="multiple" required class="form-control muls"
+											size=5 name="userAccess">
+											<option
+												th:selected="${(menu !=null and menu.adminMenu == 1)}"
+												value="AD">Admin</option>
+											<option
+												th:selected="${(menu !=null and menu.retailerMenu == 1)}"
+												value="RE">Retailer</option>
+											<option
+												th:selected="${(menu !=null and menu.distributorMenu == 1)}"
+												value="DS">Distributor</option>
+											<option
+												th:selected="${(menu !=null and menu.superDistributorMenu == 1)}"
+												value="SD">Super Distributor</option>
+											<option
+												th:selected="${(menu !=null and menu.businessAssociateMenu == 1)}"
+												value="BA">Business Associate</option>
+										</select>
+									</div>
+								</div>
+
+							</fieldset>
+
+							<div class="text-right">
+								<button type="submit" class="btn btn-primary">
+									Submit <i class="icon-paperplane ml-2"></i>
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!-- /form inputs -->
+
+			</div>
+			<!-- /content area -->
+
+
+			<!-- Footer -->
+			<div class="navbar navbar-expand-lg navbar-light">
+				<div class="text-center d-lg-none w-100">
+					<button type="button" class="navbar-toggler dropdown-toggle"
+						data-toggle="collapse" data-target="#navbar-footer">
+						<i class="icon-unfold mr-2"></i> Footer
+					</button>
+				</div>
+
+				<div class="navbar-collapse collapse" id="navbar-footer">
+					<span class="navbar-text"> &copy; 2020. </span>
+
+					<ul class="navbar-nav ml-lg-auto">
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-lifebuoy mr-2"></i> Support</a></li>
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-file-text2 mr-2"></i> Docs</a></li>
+					</ul>
+
+					<ul class="navbar-nav ml-lg-auto">
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-facebook color-fb "></i> </a></li>
+
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-twitter text-blue"></i> </a></li>
+
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-youtube text-red"></i> </a></li>
+
+					</ul>
+				</div>
+			</div>
+			<!-- /footer -->
+
+		</div>
+		<!-- /main content -->
+
+	</div>
+	<!-- /page content -->
+
+
+	<script>
+		$(document).ready(function() {
+			$('#test').select2({
+				minimumResultsForSearch : Infinity,
+				ajax : {
+					url : '/admin/menu/data',
+					processResults : function(data) {
+						// Transforms the top-level key of the response object from 'items' to 'results'
+						return {
+							results : data
+						};
+					}
+				}
+			});
+
+		});
+
+		$(window).on('load', function() {
+
+			var PTMID = $('#PTMID').val();
+			var PTMNAME = $('#PTMNAME').val();
+
+			if (PTMID != null || PTMNAME != null) {
+				if ($('#test').find("option[value='" + PTMID + "']").length) {
+					$('#test').val(data.id).trigger('change');
+				} else {
+					// Create a DOM Option and pre-select by default
+					var newOption = new Option(PTMNAME, PTMID, true, true);
+					// Append it to the select
+					$('#test').append(newOption).trigger('change');
+				}
+			}
+		});
+	</script>
+</body>
+
+</html>

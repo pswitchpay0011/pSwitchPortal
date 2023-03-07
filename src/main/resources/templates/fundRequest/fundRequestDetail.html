@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>pSwitch</title>
+
+<link rel="shortcut icon" href="assets/images/favicon.ico" />
+
+<div th:replace="fragment/StyleFragment :: style"></div>
+<script src="/js/demo_pages/form_multiselect.js"></script>
+
+</head>
+
+<body>
+	<div th:replace="fragment/topnav :: navbar"></div>
+	<!-- Page content -->
+	<div class="page-content">
+
+		<div th:replace="fragment/mainSidebar :: sidebar"></div>
+
+		<!-- Main content -->
+		<div class="content-wrapper">
+
+			<!-- Page header -->
+			<div class="page-header">
+				<div class="page-header-content header-elements-md-inline">
+					<div class="page-title d-flex">
+						<h4>
+							<i class="icon-arrow-left52 mr-2"></i> Fund Request
+						</h4>
+						<a href="#" class="header-elements-toggle text-default d-md-none"><i
+							class="icon-more"></i></a>
+					</div>
+				</div>
+			</div>
+			<!-- /page header -->
+
+			<!-- Content area -->
+			<div class="content">
+
+				<!-- Form inputs -->
+				<div class="card">
+					<div class="card-body">
+
+						<div th:if="${updateError}" class="alert alert-danger"
+							role="alert">
+							<table>
+								<tr th:each="error : ${updateError}">
+									<td class="text-left" th:text="${'* '+ error}">data</td>
+								</tr>
+							</table>
+						</div>
+
+						<form action="#" th:action="@{/fund/transferAmount}" method="post">
+							<fieldset class="mb-3">
+
+								<input type="hidden" id="id" name="id"
+									th:if="${fundRequest !=null}" th:value="${fundRequest.id}">
+
+								<div class="form-group row">
+									<label class="col-form-label col-lg-2">Requester Name </label>
+									<div class="col-lg-10">
+										<input type="text" class="form-control" required
+											readonly="readonly"
+											th:value="${(fundRequest !=null)? fundRequest.user.fullName+' ('+fundRequest.user.userPSwitchId+')' : ''}"
+											name="requesterName" id="requesterName">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-form-label col-lg-2">Total Amount </label>
+									<div class="col-lg-10">
+										<input type="text" class="form-control" required
+											readonly="readonly"
+											th:value="${(fundRequest !=null)? fundRequest.totalAmount : ''}"
+											name="totalAmount" id="totalAmount">
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label class="col-form-label col-lg-2">MPIN</label>
+									<div class="col-lg-10">
+										<input type="password" class="form-control" required
+											name="mpin" id="mpin">
+									</div>
+								</div>
+
+							</fieldset>
+
+							<div class="text-right">
+								<button type="submit" class="btn btn-primary">
+									Accept Request <i class="icon-paperplane ml-2"></i>
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!-- /form inputs -->
+
+			</div>
+			<!-- /content area -->
+
+
+			<!-- Footer -->
+			<div class="navbar navbar-expand-lg navbar-light">
+				<div class="text-center d-lg-none w-100">
+					<button type="button" class="navbar-toggler dropdown-toggle"
+						data-toggle="collapse" data-target="#navbar-footer">
+						<i class="icon-unfold mr-2"></i> Footer
+					</button>
+				</div>
+
+				<div class="navbar-collapse collapse" id="navbar-footer">
+					<span class="navbar-text"> &copy; 2020. </span>
+
+					<ul class="navbar-nav ml-lg-auto">
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-lifebuoy mr-2"></i> Support</a></li>
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-file-text2 mr-2"></i> Docs</a></li>
+					</ul>
+
+					<ul class="navbar-nav ml-lg-auto">
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-facebook color-fb "></i> </a></li>
+
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-twitter text-blue"></i> </a></li>
+
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-youtube text-red"></i> </a></li>
+
+					</ul>
+				</div>
+			</div>
+			<!-- /footer -->
+
+		</div>
+		<!-- /main content -->
+
+	</div>
+	<!-- /page content -->
+
+	<!-- Basic modal -->
+	<div id="transfer" class="modal fade" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header bg-indigo">
+					<h5 class="modal-title">Transfer Confirmation</h5>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<div class="modal-body">
+					<div class="form-group">
+
+						<div class="form-group row">
+							<label class="col-form-label col-lg-4">Full Name </label>
+							<div class="col-lg-8">
+								<div class="form-control-plaintext">Rajesh Kumar</div>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label class="col-form-label col-lg-4">Account Number </label>
+							<div class="col-lg-8">
+								<div class="form-control-plaintext">55001698754306</div>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label class="col-form-label col-lg-4">Amount </label>
+							<div class="col-lg-8">
+								<div class="form-control-plaintext">₹ 5,000</div>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label class="col-form-label col-lg-4">MPIN <span
+								class="text-red">*</span></label>
+							<div class="col-lg-8">
+								<input type="text" class="form-control">
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label class="col-form-label col-lg-4">OTP <span
+								class="text-red">*</span></label>
+							<div class="col-lg-8">
+								<input type="text" class="form-control">
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success" data-dismiss="modal">Transfer</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /basic modal -->
+
+</body>
+
+</html>

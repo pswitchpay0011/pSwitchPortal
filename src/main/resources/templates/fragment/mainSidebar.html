@@ -1,0 +1,169 @@
+<div th:fragment="sidebar">
+    <!-- Main sidebar -->
+    <div class="sidebar sidebar-dark sidebar-main sidebar-expand-md">
+
+        <!-- Sidebar mobile toggler -->
+        <div class="sidebar-mobile-toggler text-center">
+            <a href="#" class="sidebar-mobile-main-toggle"> <i
+                    class="icon-arrow-left8"></i>
+            </a> Navigation <a href="#" class="sidebar-mobile-expand"> <i
+                class="icon-screen-full"></i> <i class="icon-screen-normal"></i>
+        </a>
+        </div>
+        <!-- /sidebar mobile toggler -->
+
+
+        <!-- Sidebar content -->
+        <div class="sidebar-content">
+
+            <!-- User menu -->
+            <div class="sidebar-user">
+                <div class="card-body">
+                    <div class="media">
+                        <div class="mr-3">
+                            <a th:href="@{/profile}"> <img width="38" height="38"
+                                                           class="rounded-circle"
+                                                           th:src="${(user.profilePicture != null && !#strings.isEmpty(user.profilePicture)) ? '/files/'+user.profilePicture : '/images/user.png'}"
+                                                           th:alt="${user.firstName}"/>
+                            </a>
+                        </div>
+
+                        <div class="media-body">
+                            <div class="media-title font-weight-semibold"
+                                 th:text="${user.firstName+ ' '+user.lastName}">User
+                            </div>
+                            <div class="media-title font-weight-semibold"
+                                 th:text="${user.userPSwitchId}">User
+                            </div>
+                            <div class="font-size-xs opacity-50">
+                                <i class="icon-user font-size-sm"></i> &nbsp;<span
+                                    th:text="${role.roleName}">Role</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /user menu -->
+
+
+            <!-- Main navigation -->
+            <!-- <div class="card card-sidebar-mobile">
+                <ul class="nav nav-sidebar" data-nav-type="accordion">
+
+                </ul>
+            </div> -->
+            <!-- /main navigation -->
+
+            <!-- Main navigation -->
+            <div class="card card-sidebar-mobile">
+                <ul class="nav nav-sidebar" data-nav-type="accordion">
+
+                    <!-- Main -->
+
+                    <li th:each="menu : ${menuList}" class="nav-item mb-1"
+                        th:if="${menu.parentMenuId == null and menu.menus.isEmpty()}">
+                        <!-- th:value="${item.menuId}" th:text="${item.menuName}"  -->
+                        <!--						(user.kycCompleted ? menu.pageUrl: '/index')-->
+                        <a th:target="${(menu !=null and menu.menuType == 'link') ? '_blank': ''}"
+                           class="nav-link"
+                           th:href="@{${#strings.replace(#strings.replace(#strings.replace(#strings.replace((user.kycCompleted ? menu.pageUrl: '/index'),'{#NAME#}',user.getFullName()),'{#USERID#}',user.userPSwitchId),'{#USERCONTACT#}',user.mobileNumber),'{#USEREMAIL#}',user.username)}}"
+                           th:classappend="${(activePage != null and activePage == menu.menuName) ? 'active' : ''}">
+                            <i th:class="${menu.menuIcon}"></i> <span
+                                class="font-weight-normal" th:text="${menu.menuName}">Dashboard
+						</span>
+                        </a> <!-- <ul class="nav nav-group-sub"
+							th:if="${menu.menus != null and !menu.menus.isEmpty()}">
+							<li th:each="subMenu : ${menu.menus}"
+								class="nav-item nav-item-submenu"><a class="nav-link"
+								th:classappend="${(activePage != null and activePage == subMenu.menuName) ? 'active' : ''}"
+								th:href="@{${subMenu.pageUrl}}"> <i
+									th:class="${subMenu.menuIcon}"></i> <span
+									th:text="${subMenu.menuName}">Dashboard </span>
+							</a>
+
+								<ul class="nav nav-group-sub"
+									th:if="${menu.menus != null and !menu.menus.isEmpty()}">
+									<li th:each="subSubMenu : ${subMenu.menus}"
+										class="nav-item nav-item-submenu"><a class="nav-link"
+										th:classappend="${(activePage != null and activePage == subSubMenu.menuName) ? 'active' : ''}"
+										th:href="@{${subSubMenu.pageUrl}}"> <i
+											th:class="${subSubMenu.menuIcon}"></i> <span
+											th:text="${subSubMenu.menuName}">Dashboard </span>
+									</a></li>
+								</ul></li>
+						</ul> -->
+                    </li>
+
+                    <li class="nav-item-header">
+                        <div class="text-uppercase font-size-xs line-height-xs"></div>
+                        <i
+                                class="icon-menu" title="Forms"></i>
+                    </li>
+
+                    <li th:each="level1 : ${menuList}" class="nav-item nav-item-submenu"
+                        th:if="${!level1.menus.isEmpty() and level1.parentMenuId == null}"
+                        th:classappend="${(activePage != null and #lists.contains(activePage, level1.menuName)) ? 'nav-item-expanded nav-item-open' : ''}">
+                        <a class="nav-link" href="#"> <i th:class="${level1.menuIcon}"></i>
+                            <span class="font-weight-normal" th:text="${level1.menuName}">Dashboard
+						</span>
+                        </a>
+                        <ul class="nav nav-group-sub"
+                            th:if="${level1.menus != null and !level1.menus.isEmpty()}">
+                            <li th:each="level2 : ${level1.menus}"
+                                class="nav-item nav-item-submenu"
+                                th:class="${(level2 != null and level2.menus.isEmpty()) ? 'nav-item' : 'nav-item nav-item-submenu'}"
+                                th:classappend="${(activePage != null and #lists.contains(activePage, level2.menuName) and !level2.menus.isEmpty()) ? 'nav-item-expanded nav-item-open' : ''}">
+
+                                <a class="nav-link"
+                                   th:target="${(level2 !=null and level2.menuType == 'link') ? '_blank': ''}"
+                                   th:classappend="${(activePage != null and (activePage == level2.menuName or #lists.contains(activePage, level2.menuName))) ? 'active' : ''}"
+
+                                   th:href="@{${#strings.replace(#strings.replace(#strings.replace(#strings.replace((user.kycCompleted ? level2.pageUrl: '/index'),'{#NAME#}',user.getFullName()),'{#USERID#}',user.userPSwitchId),'{#USERCONTACT#}',user.mobileNumber),'{#USEREMAIL#}',user.username)}}"
+                                > <!-- <i
+									th:class="${subMenu.menuIcon}"></i> --> <span
+                                        class="font-weight-normal" th:text="${level2.menuName}">Dashboard
+								</span>
+                                </a>
+                                <ul class="nav nav-group-sub"
+                                    th:if="${level2.menus != null and !level2.menus.isEmpty()}">
+                                    <li th:each="level3 : ${level2.menus}"
+                                        class="nav-item nav-item-submenu"
+                                        th:class="${(level3 != null and level3.menus.isEmpty()) ? 'nav-item' : 'nav-item nav-item-submenu'}"
+                                        th:classappend="${(activePage != null and #lists.contains(activePage, level3.menuName) and !level3.menus.isEmpty()) ? 'nav-item-expanded nav-item-open' : ''}">
+
+                                        <a class="nav-link"
+                                           th:target="${(level3 !=null and level3.menuType == 'link') ? '_blank': ''}"
+                                           th:classappend="${(activePage != null and (activePage == level3.menuName or #lists.contains(activePage, level3.menuName))) ? 'active' : ''}"
+
+                                           th:href="@{${#strings.replace(#strings.replace(#strings.replace(#strings.replace((user.kycCompleted ? level3.pageUrl: '/index'),'{#NAME#}',user.getFullName()),'{#USERID#}',user.userPSwitchId),'{#USERCONTACT#}',user.mobileNumber),'{#USEREMAIL#}',user.username)}}"> <span
+                                                class="font-weight-normal" th:text="${level3.menuName}">Dashboard
+										</span>
+                                        </a>
+
+                                        <ul class="nav nav-group-sub"
+                                            th:if="${level3.menus != null and !level3.menus.isEmpty()}">
+                                            <li th:each="level4 : ${level3.menus}" class="nav-item">
+                                                <a class="nav-link"
+                                                   th:target="${(level4 !=null and level4.menuType == 'link') ? '_blank': ''}"
+                                                   th:classappend="${(activePage != null and (activePage == level4.menuName or #lists.contains(activePage, level4.menuName))) ? 'active' : ''}"
+                                                   th:href="@{${#strings.replace(#strings.replace(#strings.replace(#strings.replace((user.kycCompleted ? level4.pageUrl: '/index'),'{#NAME#}',user.getFullName()),'{#USERID#}',user.userPSwitchId),'{#USERCONTACT#}',user.mobileNumber),'{#USEREMAIL#}',user.username)}}"> <span
+                                                        class="font-weight-normal" th:text="${level4.menuName}">Dashboard
+												</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- /main navigation -->
+
+        </div>
+        <!-- /sidebar content -->
+
+    </div>
+    <!-- /main sidebar -->
+</div>

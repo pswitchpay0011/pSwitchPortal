@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<meta http-equiv="content-type" content="text/html;charset=UTF-8"/><!-- /Added by HTTrack -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>pSwitch Login</title>
+
+    <!-- Global stylesheets -->
+    <link
+            href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900"
+            rel="stylesheet" type="text/css">
+    <link href="/css/icons/fontawesome/styles.min.css" rel="stylesheet"
+          type="text/css">
+    <link href="/css/icons/icomoon/styles.min.css" rel="stylesheet"
+          type="text/css">
+    <link href="/css/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="/css/bootstrap_page.css" rel="stylesheet" type="text/css">
+    <link href="/css/layout.css" rel="stylesheet" type="text/css">
+    <link href="/css/components.css" rel="stylesheet" type="text/css">
+    <link href="/css/colors.css" rel="stylesheet" type="text/css">
+    <link href="/css/custom.css" rel="stylesheet" type="text/css">
+    <!-- /global stylesheets -->
+
+    <!-- Core JS files -->
+    <script src="/js/main/jquery.min.js"></script>
+    <script src="/js/plugins/forms/validation/validate.min.js"></script>
+    <script src="/js/main/bootstrap.bundle.min.js"></script>
+    <script src="/js/plugins/loaders/blockui.min.js"></script>
+    <!-- /core JS files -->
+
+    <!-- Theme JS files -->
+    <script src="/js/plugins/forms/styling/uniform.min.js"></script>
+
+    <script src="/js/app.js"></script>
+    <script src="/js/demo_pages/login.js"></script>
+    <!-- /theme JS files -->
+    <script src="/js/custom.js"></script>
+
+</head>
+<body>
+
+<!-- Page content -->
+<!--  <div class="page-content login-cover">-->
+
+<!-- Main content
+<div class="content-wrapper">-->
+
+<!-- Content area
+<div class="content d-flex align-items-center">-->
+<div class="container-fluid vh-100 ">
+    <div class="row justify-content-center vh-100">
+        <!--        #3A3285-->
+        <div class="col-md-6 hidden-md-down justify-content-center d-flex align-items-center"
+             style="background-color: white">
+             <!-- #e6e6e5; -->
+            <!--            background-image:url(/images/backgrounds/loginImage.png);-->
+            <img alt="" class="img-fluid img-back" src="/images/backgrounds/left-img.jpg">
+            <div style="background: #0189bd url(/images/backgrounds/left-img.jpg) no-repeat; background-size: cover; background-attachment: fixed;"></div>
+        </div>
+        <div class="col-md-6 col-lg-6 col-xl-6 justify-content-center d-flex align-items-center"
+             style="background-color: #3A3285">
+            <div th:replace="fragment/terms :: termsAndAggrement"></div>
+            <!-- Login form -->
+            <div class="login-form wmin-sm-500" action="/index">
+                <div class="card mb-0">
+                    <!--<ul class="nav nav-tabs nav-justified alpha-grey mb-0">
+                    <li class="nav-item"><a href="#login-tab1" class="nav-link border-y-0 border-left-0 active" data-toggle="tab"><h6 class="my-1">Sign in</h6></a></li>
+                    <li class="nav-item"><a href="#login-tab2" class="nav-link border-y-0 border-right-0" data-toggle="tab"><h6 class="my-1">Register</h6></a></li>
+                </ul> -->
+
+                    <div class="tab-content card-body">
+                        <!-- Reset Password -->
+                        <!-- Update Password -->
+
+                        <div class="">
+<!--                            th:action="@{/account/registration}"-->
+                            <form id="signup" method="post" th:object="${user}">
+                                <div class="text-center mb-3">
+                                    <img src="/images/logo_dark.png" alt="">
+                                    <hr>
+                                    <input type="hidden" id="latLng", name="latLng">
+                                    <div th:if="${errorMsg}">
+                                        <div class="alert alert-danger">
+                                            <p th:text="${errorMsg}"></p>
+                                        </div>
+                                    </div>
+
+                                    <div th:if="${confirmationMessage}"
+                                         class="alert alert-success" role="alert"
+                                         th:text="${confirmationMessage}"></div>
+
+                                    <div th:if="${errors}" class="alert alert-danger" role="alert">
+                                        <table>
+                                            <tr th:each="error : ${errors}">
+                                                <td class="text-left" th:text="${'* '+ error}">data</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+
+                                    <h5 class="mb-0">Create account</h5>
+                                    <span class="d-block text-muted">All fields are
+											required</span>
+                                </div>
+
+                                <div class="form-group text-center text-muted content-divider">
+                                    <span class="px-2">Personal Details </span>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-feedback form-group-feedback-left">
+                                            <input type="text" class="form-control form-control-lg"
+                                                   placeholder="First Name" id="firstName"
+                                                   th:field="*{firstName}" required autofocus="autofocus">
+                                            <div class="form-control-feedback">
+                                                <i class="icon-user-check text-blue-800"></i>
+                                            </div>
+                                            <small class="form-text text-danger"></small>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-feedback form-group-feedback-left">
+                                            <input type="text" class="form-control form-control-lg"
+                                                   placeholder="Last Name" id="lastName"
+                                                   th:field="*{lastName}" autofocus="autofocus">
+                                            <div class="form-control-feedback">
+                                                <i class="icon-user-check text-blue-800"></i>
+                                            </div>
+                                            <small class="form-text text-danger"></small>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-feedback form-group-feedback-left">
+                                            <input type="text" class="form-control form-control-lg"
+                                                   placeholder="Email Id" id="email" th:field="*{username}"
+                                                   required autofocus="autofocus">
+                                            <div class="form-control-feedback">
+                                                <i class="icon-envelop text-blue-800"></i>
+                                            </div>
+                                            <small class="form-text text-danger"></small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-feedback form-group-feedback-left">
+                                            <input type="text" class="form-control form-control-lg"
+                                                   placeholder="Mobile Number as per aadhaar" id="mobileNumber"
+                                                   th:field="*{mobileNumber}" required autofocus="autofocus">
+                                            <div class="form-control-feedback">
+                                                <i class="icon-mobile text-blue-800"></i>
+                                            </div>
+                                            <small class="form-text text-danger"></small>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 d-none">
+                                        <div class="form-group form-group-feedback form-group-feedback-left">
+                                            <select th:field="*{role}"
+                                                    class="form-control form-control-lg" required
+                                                    autofocus="autofocus">
+                                                <option th:each="role : ${rolesList}"
+                                                        th:value="${role.roleCode}"
+                                                        th:utext="${role.roleName}"/>
+                                            </select>
+                                            <div class="form-control-feedback">
+                                                <i class="icon-lock2 text-blue-800"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-feedback form-group-feedback-left">
+                                            <input type="password" class="form-control form-control-lg"
+                                                   placeholder="Password" id="password" th:field="*{password}"
+                                                   required autofocus="autofocus">
+                                            <div class="form-control-feedback">
+                                                <i class="icon-key text-blue-800"></i>
+                                            </div>
+                                            <small class="form-text text-danger"></small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-feedback form-group-feedback-left">
+                                            <input type="password" class="form-control form-control-lg"
+                                                   placeholder="Confirm password" id="confirmPassword"
+                                                   required autofocus="autofocus">
+                                            <div class="form-control-feedback">
+                                                <i class="icon-key text-blue-800"></i>
+                                            </div>
+                                            <small class="form-text text-danger"></small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--                                <div class="form-group text-center text-muted content-divider">-->
+                                <!--                                    <span class="px-2">Login Details </span>-->
+                                <!--                                </div>-->
+
+                                <div class="row">
+
+                                    <!-- <div class="col-md-6">
+                                         <div class="form-group form-group-feedback form-group-feedback-left">
+                                             <input type="hidden" class="form-control form-control-lg"
+                                                    placeholder="Enter Password" id="password"
+                                                    th:field="*{password}">
+                                             <div class="form-control-feedback">
+                                                 <i class="icon-lock2 text-blue-800"></i>
+                                             </div>
+                                         </div>
+                                     </div>-->
+
+
+                                </div>
+
+                                <div class="form-group text-center text-muted content-divider">
+                                    <span class="px-2">Additions</span>
+                                </div>
+
+                                <div class="form-group">
+
+                                    <div class="form-check">
+                                        <label class="form-check-label"> <input
+                                                type="checkbox" name="remember" class="form-input-styled"
+                                                checked data-fouc> Subscribe to monthly newsletter
+                                        </label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <label class="form-check-label"> <input
+                                                type="checkbox" name="remember" required="required"
+                                                class="form-input-styled"
+                                                data-fouc>Please accept <a href="#" data-toggle="modal"
+                                                                     data-target="#termsAndAggrement">Terms and Conditions</a>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="text-left">
+                                            <a type="button" th:href="@{/login}" class="btn btn-default rounded-round"><< Back for Sign In</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="text-right">
+                                            <button type="submit" class="btn btn-danger rounded-round">
+                                                Register
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <span class="form-text text-center text-muted">powered by <span  class="text-primary" >pSwitch services ptv ltd.</span> </span> -->
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /login form -->
+
+<!-- </div>
+  /content area -->
+
+<!--</div>
+ /main content -->
+<!--
+</div>
+ /page content -->
+
+<script src="/js/ps/signUp.js"></script>
+</body>
+
+
+</html>

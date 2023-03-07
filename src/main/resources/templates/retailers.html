@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>pSwitch</title>
+	<link rel="shortcut icon" href="assets/images/favicon.ico" />
+
+	<link rel="shortcut icon" href="assets/images/favicon.ico" />
+	<div th:replace="fragment/StyleFragment :: style"></div>
+	<script src="/js/demo_pages/form_multiselect.js"></script>
+
+</head>
+
+<body>
+
+	<div th:replace="fragment/topnav :: navbar"></div>					
+	<!-- Page content -->
+	<div class="page-content">
+
+	<div th:replace="fragment/mainSidebar :: sidebar"></div>
+
+		<!-- Main content -->
+		<div class="content-wrapper">
+
+			<!-- Page header -->
+			<div class="page-header">
+				<div class="page-header-content header-elements-md-inline">
+					<div class="page-title d-flex">
+						<h4><i class="icon-arrow-down52 mr-2"></i> Retailers</h4>
+						<a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+					</div>
+
+					
+				</div>
+			</div>
+			<!-- /page header -->
+
+
+			<!-- Content area -->
+			<div class="content">
+				
+				<div class="card">
+					
+					<!-- Start Table -->
+
+					<table class="table datatable-basic datatable-select-checkbox">
+						<thead>
+							<tr>
+							<th class="select-checkbox sorting_disabled"></th>
+							<th>Id</th>
+								<th>Retailer</th>
+								
+								<th>City</th>
+								<th>Distributor</th>
+								<th class="text-center">Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							
+							
+							<tr>
+							<td><input type="checkbox" class="form-input-styled" data-fouc=""></td>
+								<td>R20-0036</td>
+								<td>Viabhav Rana</td>
+							
+								<td>Agra</td>
+								<td>Vikas (PS_DL_DS_108891)</td>
+								<td class="text-center">
+									<div class="list-icons">
+										<div class="dropdown">
+											<a href="#" class="list-icons-item" data-toggle="dropdown">
+												<i class="icon-menu9"></i>
+											</a>
+
+											<div class="dropdown-menu dropdown-menu-right">
+											<a href="#" data-target="#assign" data-toggle="modal" class="dropdown-item"><i class="icon-user"></i> Change Distributor</a>
+												<a href="#" class="dropdown-item"><i class="icon-checkmark"></i> Enabled</a>
+												<a href="#" class="dropdown-item"><i class="icon-blocked"></i> Disabled</a>
+												<a href="#" class="dropdown-item"><i class="icon-compose"></i> Edit</a>
+												<a href="#" class="dropdown-item"><i class="icon-bin"></i> Delete</a>
+											</div>
+										</div>
+									</div>
+								</td>
+								
+							</tr>
+							
+							<tr>
+							<td><input type="checkbox" class="form-input-styled" data-fouc=""></td>
+							<td>R20-0025</td>
+								<td>Abhishek Tripathi</td>
+								
+								<td>Agra</td>
+								<td>Vikas (PS_DL_DS_108891)</td>
+								<td class="text-center">
+									<div class="list-icons">
+										<div class="dropdown">
+											<a href="#" class="list-icons-item" data-toggle="dropdown">
+												<i class="icon-menu9"></i>
+											</a>
+
+											<div class="dropdown-menu dropdown-menu-right">
+											<a href="#" data-target="#assign" data-toggle="modal" class="dropdown-item"><i class="icon-user"></i> Change Distributor</a>
+												<a href="#" class="dropdown-item"><i class="icon-checkmark"></i> Enabled</a>
+												<a href="#" class="dropdown-item"><i class="icon-blocked"></i> Disabled</a>
+												<a href="#" class="dropdown-item"><i class="icon-compose"></i> Edit</a>
+												<a href="#" class="dropdown-item"><i class="icon-bin"></i> Delete</a>
+											</div>
+										</div>
+									</div>
+								</td>
+							
+							</tr>
+							
+							<tr>
+							<td><input type="checkbox" class="form-input-styled" data-fouc=""></td>
+							<td>R20-0010</td>
+								<td>Rahul</td>
+							
+								<td>Mumbai</td>
+								<td>Vikas (PS_DL_DS_108891)</td>
+								<td class="text-center">
+									<div class="list-icons">
+										<div class="dropdown">
+											<a href="#" class="list-icons-item" data-toggle="dropdown">
+												<i class="icon-menu9"></i>
+											</a>
+
+											<div class="dropdown-menu dropdown-menu-right">
+											<a href="#" data-target="#assign" data-toggle="modal" class="dropdown-item"><i class="icon-user"></i> Change Distributor</a>
+												<a href="#" class="dropdown-item"><i class="icon-checkmark"></i> Enabled</a>
+												<a href="#" class="dropdown-item"><i class="icon-blocked"></i> Disabled</a>
+												<a href="#" class="dropdown-item"><i class="icon-compose"></i> Edit</a>
+												<a href="#" class="dropdown-item"><i class="icon-bin"></i> Delete</a>
+											</div>
+										</div>
+									</div>
+								</td>
+								
+							</tr>
+							
+							<tr>
+							<td><input type="checkbox" class="form-input-styled" data-fouc=""></td>
+							<td>R20-0001</td>
+								<td>Mayank Malhotra</td>
+						
+								<td>Delhi</td>
+								<td>Vikas (PS_DL_DS_108891)</td>
+								<td class="text-center">
+									<div class="list-icons">
+										<div class="dropdown">
+											<a href="#" class="list-icons-item" data-toggle="dropdown">
+												<i class="icon-menu9"></i>
+											</a>
+
+											<div class="dropdown-menu dropdown-menu-right">
+											<a href="#" data-target="#assign" data-toggle="modal" class="dropdown-item"><i class="icon-user"></i> Change Distributor</a>
+												<a href="#" class="dropdown-item"><i class="icon-checkmark"></i> Enabled</a>
+												<a href="#" class="dropdown-item"><i class="icon-blocked"></i> Disabled</a>
+												<a href="#" class="dropdown-item"><i class="icon-compose"></i> Edit</a>
+												<a href="#" class="dropdown-item"><i class="icon-bin"></i> Delete</a>
+											</div>
+										</div>
+									</div>
+								</td>
+								
+							</tr>
+							
+							
+							<tr>
+							<td><input type="checkbox" class="form-input-styled" data-fouc=""></td>
+							<td>R20-0046</td>
+								<td>Raj Kumar</td>
+					
+								<td>Delhi</td>
+								<td><a href="" data-target="#assign" data-toggle="modal"><span class="text-red">Not Assigned</span></a></td>
+								<td class="text-center">
+									<div class="list-icons">
+										<div class="dropdown">
+											<a href="#" class="list-icons-item" data-toggle="dropdown">
+												<i class="icon-menu9"></i>
+											</a>
+
+											<div class="dropdown-menu dropdown-menu-right">
+												<a href="#" class="dropdown-item"><i class="icon-checkmark"></i> Enabled</a>
+												<a href="#" class="dropdown-item"><i class="icon-blocked"></i> Disabled</a>
+												<a href="#" class="dropdown-item"><i class="icon-compose"></i> Edit</a>
+												<a href="#" class="dropdown-item"><i class="icon-bin"></i> Delete</a>
+											</div>
+										</div>
+									</div>
+								</td>
+								
+							</tr>
+							
+							<tr>
+							<td><input type="checkbox" class="form-input-styled" data-fouc=""></td>
+							<td>R20-0037</td>
+								<td>Sunil Kumar</td>
+								<td>Delhi</td>
+
+								<td>Vikas (PS_DL_DS_108891)</td>
+								<td class="text-center">
+									<div class="list-icons">
+										<div class="dropdown">
+											<a href="#" class="list-icons-item" data-toggle="dropdown">
+												<i class="icon-menu9"></i>
+											</a>
+
+											<div class="dropdown-menu dropdown-menu-right">
+											<a href="#" data-target="#assign" data-toggle="modal" class="dropdown-item"><i class="icon-user"></i> Change Distributor</a>
+												<a href="#" class="dropdown-item"><i class="icon-checkmark"></i> Enabled</a>
+												<a href="#" class="dropdown-item"><i class="icon-blocked"></i> Disabled</a>
+												<a href="#" class="dropdown-item"><i class="icon-compose"></i> Edit</a>
+												<a href="#" class="dropdown-item"><i class="icon-bin"></i> Delete</a>
+											</div>
+										</div>
+									</div>
+								</td>
+								
+							</tr>
+							
+							<tr>
+							<td><input type="checkbox" class="form-input-styled" data-fouc=""></td>
+							<td>R20-0073</td>
+								<td>Rajesh Kumar</td>
+								<td>Jaipur</td>
+								<td><a href="" data-target="#assign" data-toggle="modal"><span class="text-red">Not Assigned</span></a></td>
+								<td class="text-center">
+									<div class="list-icons">
+										<div class="dropdown">
+											<a href="#" class="list-icons-item" data-toggle="dropdown">
+												<i class="icon-menu9"></i>
+											</a>
+
+											<div class="dropdown-menu dropdown-menu-right">
+												<a href="#" class="dropdown-item"><i class="icon-checkmark"></i> Enabled</a>
+												<a href="#" class="dropdown-item"><i class="icon-blocked"></i> Disabled</a>
+												<a href="#" class="dropdown-item"><i class="icon-compose"></i> Edit</a>
+												<a href="#" class="dropdown-item"><i class="icon-bin"></i> Delete</a>
+											</div>
+										</div>
+									</div>
+								</td>
+								
+							</tr>
+							
+							
+
+							
+		
+						</tbody>
+					</table>
+				</div>
+				<!-- End Table -->
+			
+			
+
+		</div>
+		<!-- /main content -->
+		
+		<!-- Footer -->
+			<div class="navbar navbar-expand-lg navbar-light">
+				<div class="text-center d-lg-none w-100">
+					<button type="button" class="navbar-toggler dropdown-toggle" data-toggle="collapse" data-target="#navbar-footer">
+						<i class="icon-unfold mr-2"></i>
+						Footer
+					</button>
+				</div>
+
+				<div class="navbar-collapse collapse" id="navbar-footer">
+					<span class="navbar-text">
+						&copy; 2020.
+					</span>
+					
+					<ul class="navbar-nav ml-lg-auto">
+						<li class="nav-item"><a href="#" class="navbar-nav-link" target="_blank"><i class="icon-lifebuoy mr-2"></i> Support</a></li>
+						<li class="nav-item"><a href="#" class="navbar-nav-link" target="_blank"><i class="icon-file-text2 mr-2"></i> Docs</a></li>
+						
+						
+						
+					</ul>
+
+					<ul class="navbar-nav ml-lg-auto">
+					
+						
+						<li class="nav-item"><a href="#" class="navbar-nav-link" target="_blank"><i class="icon-facebook color-fb "></i> </a></li>
+						
+						<li class="nav-item"><a href="#" class="navbar-nav-link" target="_blank"><i class="icon-twitter text-blue"></i> </a></li>
+						
+						<li class="nav-item"><a href="#" class="navbar-nav-link" target="_blank"><i class="icon-youtube text-red"></i> </a></li>
+						
+					</ul>
+				</div>
+			</div>
+			<!-- /footer -->
+
+	</div>
+	<!-- /page content -->
+	
+	 <!-- Basic modal -->
+				<div id="assign" class="modal fade" tabindex="-1">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title">Assign Distributor</h5>
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+							</div>
+
+							<div class="modal-body">
+								<div class="form-group">
+									
+									<select class="form-control select">
+									<option>Select Distributor</option>
+											<option value="">Vikas (PS_RJ_JP_10091)</option>
+											<option value="">Manas (PS_RJ_JP_16367)</option>
+											<option value="">Naresh (PS_RJ_JP_0025)</option>
+										
+									</select>
+								</div>
+
+							</div>
+
+							<div class="modal-footer">
+								<button type="button" class="btn btn-success" data-dismiss="modal">Assign</button>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /basic modal -->
+
+
+</body>
+</html>

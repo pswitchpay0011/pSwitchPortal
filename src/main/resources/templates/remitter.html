@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>pSwitch</title>
+	
+	<link rel="shortcut icon" href="assets/images/favicon.ico" />
+
+	<link rel="shortcut icon" href="assets/images/favicon.ico" />
+	<div th:replace="fragment/StyleFragment :: style"></div>
+	<script src="/js/demo_pages/form_multiselect.js"></script>
+
+</head>
+
+<body>
+
+	<div th:replace="fragment/topnav :: navbar"></div>					
+	<!-- Page content -->
+	<div class="page-content">
+
+	<div th:replace="fragment/mainSidebar :: sidebar"></div>
+
+		<!-- Main content -->
+		<div class="content-wrapper">
+
+			<!-- Page header -->
+			<div class="page-header">
+				<div class="page-header-content header-elements-md-inline">
+					<div class="page-title d-flex">
+						<h4><i class="icon-arrow-down52 mr-2"></i> Remitter</h4>
+						<a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+					</div>
+					
+					<div class="header-elements d-none text-center text-md-left mb-3 mb-md-0">
+						<div class="btn-group">
+							<button type="button" class="btn bg-indigo-400" data-toggle="modal" data-target="#add-remitter"><i class="icon-user mr-2"></i> Add Remitter</button>
+							
+							<button type="button" class="btn bg-warning-400 ml-3" data-toggle="modal" data-target="#rest-mpin"><i class="icon-mobile mr-2"></i> Rest MPIN</button>
+							
+						</div>
+					</div>
+					
+					
+
+					
+				</div>
+			</div>
+			<!-- /page header -->
+
+
+			<!-- Content area -->
+			<div class="content">
+				
+				<div class="card">
+					
+					<!-- Start Table -->
+
+					<table class="table datatable-basic datatable-select-checkbox">
+						<thead>
+							<tr>
+							
+							<th>Remitter Id</th>
+								<th>Name</th>
+								<th>Phone No.</th>
+								<th>Aadhaar No.</th>
+								<th>Pan No.</th>
+								<th>Transfer Mode</th>
+								<th class="text-center">Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							
+							
+							<tr>
+								<td>R20-0036</td>
+								<td>Viabhav Rana</td>
+								<td>9875269875</td>
+								<td>5511 2255 6699</td>
+								
+								<td>ABP259GG5D</td>
+								<td>
+								
+								<button type="button" data-toggle="modal" data-target="#neft" class="btn btn-outline bg-indigo-400 text-indigo-400 border-indigo-400 mr-2">Fund Transfer</button>
+								
+								
+								
+								</td>
+								<td class="text-center">
+									<div class="list-icons">
+										<div class="dropdown">
+											<a href="#" class="list-icons-item" data-toggle="dropdown">
+												<i class="icon-menu9"></i>
+											</a>
+
+											<div class="dropdown-menu dropdown-menu-right">
+											<a href="#" data-target="#assign" data-toggle="modal" class="dropdown-item"><i class="icon-pencil"></i> Edit Details</a>
+												<a href="#" class="dropdown-item"><i class="icon-bin"></i> Delete</a>
+											</div>
+										</div>
+									</div>
+								</td>
+							</tr>
+							
+							
+							
+
+						</tbody>
+					</table>
+				</div>
+				<!-- End Table -->
+			
+			
+
+		</div>
+		<!-- /main content -->
+		
+		<!-- Footer -->
+			<div class="navbar navbar-expand-lg navbar-light">
+				<div class="text-center d-lg-none w-100">
+					<button type="button" class="navbar-toggler dropdown-toggle" data-toggle="collapse" data-target="#navbar-footer">
+						<i class="icon-unfold mr-2"></i>
+						Footer
+					</button>
+				</div>
+
+				<div class="navbar-collapse collapse" id="navbar-footer">
+					<span class="navbar-text">
+						&copy; 2020.
+					</span>
+					
+					<ul class="navbar-nav ml-lg-auto">
+						<li class="nav-item"><a href="#" class="navbar-nav-link" target="_blank"><i class="icon-lifebuoy mr-2"></i> Support</a></li>
+						<li class="nav-item"><a href="#" class="navbar-nav-link" target="_blank"><i class="icon-file-text2 mr-2"></i> Docs</a></li>
+						
+						
+						
+					</ul>
+
+					<ul class="navbar-nav ml-lg-auto">
+					
+						
+						<li class="nav-item"><a href="#" class="navbar-nav-link" target="_blank"><i class="icon-facebook color-fb "></i> </a></li>
+						
+						<li class="nav-item"><a href="#" class="navbar-nav-link" target="_blank"><i class="icon-twitter text-blue"></i> </a></li>
+						
+						<li class="nav-item"><a href="#" class="navbar-nav-link" target="_blank"><i class="icon-youtube text-red"></i> </a></li>
+						
+					</ul>
+				</div>
+			</div>
+			<!-- /footer -->
+
+	</div>
+	<!-- /page content -->
+	
+	 <!-- Basic modal -->
+				<div id="add-remitter" class="modal fade" tabindex="-1">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header bg-indigo">
+								<h5 class="modal-title">Add Remitter</h5>
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+							</div>
+
+							<div class="modal-body">
+								<div class="form-group">
+								
+								
+								<div class="form-group row">
+									<label class="col-form-label col-lg-4">Remitter Name <span class="text-red">*</span></label>
+									<div class="col-lg-8">
+										<input type="text" class="form-control">
+									</div>
+								</div>
+								
+								<div class="form-group row">
+									<label class="col-form-label col-lg-4">Mobile No. <span class="text-red">*</span></label>
+									<div class="col-lg-8">
+										<input type="text" class="form-control">
+									</div>
+								</div>
+								
+								<div class="form-group row">
+									<label class="col-form-label col-lg-4">Aadhaar Number <span class="text-red">*</span></label>
+									<div class="col-lg-8">
+										<input type="text" class="form-control">
+									</div>
+								</div>
+								
+								<div class="form-group row">
+									<label class="col-form-label col-lg-4">Pan Number <span class="text-red">*</span></label>
+									<div class="col-lg-8">
+										<input type="text" class="form-control">
+									</div>
+								</div>
+
+
+								</div>
+
+							</div>
+
+							<div class="modal-footer">
+								<button type="button" class="btn btn-success" data-dismiss="modal">Add</button>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /basic modal -->
+				
+				<div id="rest-mpin" class="modal fade" tabindex="-1">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header bg-warning">
+								<h5 class="modal-title">Rest MPIN</h5>
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+							</div>
+
+							<div class="modal-body">
+								<div class="form-group">
+								
+								
+								<div class="form-group row">
+									<label class="col-form-label col-lg-4">Old PIN <span class="text-red">*</span></label>
+									<div class="col-lg-8">
+										<input type="text" class="form-control">
+									</div>
+								</div>
+								
+									<div class="form-group row">
+									<label class="col-form-label col-lg-4">New PIN <span class="text-red">*</span></label>
+									<div class="col-lg-8">
+										<input type="text" class="form-control">
+									</div>
+								</div>
+								
+								
+								<div class="form-group row">
+									<label class="col-form-label col-lg-4">OTP <span class="text-red">*</span></label>
+									<div class="col-lg-8">
+										<input type="text" class="form-control">
+									</div>
+								</div>
+							
+
+								</div>
+
+							</div>
+
+							<div class="modal-footer">
+								<button type="button" class="btn btn-success" data-dismiss="modal">Update</button>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				
+				<div id="neft" class="modal fade" tabindex="-1">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header bg-indigo">
+								<h5 class="modal-title">Fund Transfer</h5>
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+							</div>
+
+							<div class="modal-body">
+								<div class="form-group">
+								
+								
+								
+								
+								<div class="form-group row">
+									<label class="col-form-label col-lg-4">Beneficiary  <span class="text-red">*</span></label>
+									<div class="col-lg-8">
+										<select class="custom-select">
+			                                <option value="opt1">Select Beneficiary</option>
+			                                <option value="opt2">Option 2</option>
+			                                <option value="opt3">Option 3</option>
+			                                <option value="opt4">Option 4</option>
+			                                <option value="opt5">Option 5</option>
+			                                <option value="opt6">Option 6</option>
+			                                <option value="opt7">Option 7</option>
+			                                <option value="opt8">Option 8</option>
+			                            </select>
+									</div>
+								</div>
+								
+									<div class="form-group row">
+									<label class="col-form-label col-lg-4">Beneficiary Mobile No. <span class="text-red">*</span></label>
+									<div class="col-lg-8">
+										<div class="form-control-plaintext">9876521598</div>
+									</div>
+								</div>
+								
+								
+								<div class="form-group row">
+									<label class="col-form-label col-lg-4">Account Number <span class="text-red">*</span></label>
+									<div class="col-lg-8">
+										<div class="form-control-plaintext">5632145987</div>
+									</div>
+								</div>
+								
+								
+								<div class="form-group row">
+									<label class="col-form-label col-lg-4">Bank <span class="text-red">*</span></label>
+									<div class="col-lg-8">
+										<div class="form-control-plaintext">HDFC</div>
+									</div>
+								</div>
+								
+								
+								
+								<div class="form-group row">
+									<label class="col-form-label col-lg-4">Amount <span class="text-red">*</span></label>
+									<div class="col-lg-8">
+										<input type="text" class="form-control">
+									</div>
+								</div>
+								
+									<div class="form-group row">
+									<label class="col-form-label col-lg-4">MPIN <span class="text-red">*</span></label>
+									<div class="col-lg-8">
+										<input type="text" class="form-control">
+									</div>
+								</div>
+								
+								
+								<div class="form-group row">
+									<label class="col-form-label col-lg-4">OTP <span class="text-red">*</span></label>
+									<div class="col-lg-8">
+										<input type="text" class="form-control">
+									</div>
+								</div>
+							
+
+								</div>
+
+							</div>
+
+							<div class="modal-footer">
+								<button type="button" class="btn btn-success" data-dismiss="modal">Transfer</button>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+</body>
+</html>

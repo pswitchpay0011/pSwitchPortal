@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>pSwitch - Welcome Retailer</title>
+
+<link rel="shortcut icon" href="images/favicon.ico" />
+
+<div th:replace="fragment/StyleFragment :: style"></div>
+</head>
+
+<body>
+
+	<div th:replace="fragment/topnav :: navbar"></div>
+
+	<!-- Page content -->
+	<div class="page-content">
+		<div th:replace="fragment/mainSidebar :: sidebar"></div>
+
+		<!-- Main content -->
+		<div class="content-wrapper">
+
+			<!-- Page header -->
+			<div class="page-header">
+				<div class="page-header-content header-elements-md-inline">
+					<div class="page-title d-flex">
+						<h4>
+							<i class="icon-arrow-down52 mr-2"></i> Customers
+						</h4>
+						<a href="#" class="header-elements-toggle text-default d-md-none"><i
+							class="icon-more"></i></a>
+					</div>
+
+
+				</div>
+			</div>
+			<!-- /page header -->
+
+
+			<!-- Content area -->
+			<div class="content">
+
+				<div class="card">
+					<!-- Start Table -->
+
+					<table class="table datatable-basic">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>User Type</th>
+								<th>Phone Number</th>
+								<th>Create Date</th>
+								<th>Manager Name</th>
+								<th class="text-center">Actions</th>
+								<th>Account Status</th>
+								<th>Verfication Status</th>
+							</tr>
+						</thead>
+						<tbody>
+
+							<tr th:each="userinfo : ${userList}">
+								<td><a th:href="@{/userProfile/} +${userinfo.userId}"
+									th:text="${userinfo.firstName+ ' '+userinfo.lastName}">User
+										name</a></td>
+								<td th:text="${userinfo.roles.roleName}"></td>
+								<td th:text="${userinfo.mobileNumber}"></td>
+								<td th:text="${userinfo.createdDate}"></td>
+								<td th:text="${'NA'}"></td>
+								<!-- <td th:text="${#temporals.format(question.lastUpdatedTs, 'dd-MM-yyyy HH:mm')}"></td> -->
+								<td th:if="${user!=null && user.roles.roleCode eq 'AD'}" class="text-center">
+									<div class="list-icons">
+										<div class="dropdown">
+											<a href="#" class="list-icons-item" data-toggle="dropdown">
+												<i class="icon-menu9"></i>
+											</a>
+
+											<div class="dropdown-menu dropdown-menu-right">
+												<a th:href="@{/admin/user/enable/}+${userinfo.userId}"
+													class="dropdown-item"><i class="icon-checkmark"></i>
+													Enabled</a> <a
+													th:href="@{/admin/user/disble/}+${userinfo.userId}"
+													class="dropdown-item"><i class="icon-blocked"></i>
+													Disabled</a>
+
+												<div
+													th:classappend="${(userinfo.aggrementAccept == null || userinfo.aggrementAccept == 0) ? 'd-none' : ''}">
+													<a th:href="@{/admin/user/verified/}+${userinfo.userId}"
+														class="dropdown-item"><i class="icon-checkmark"></i>
+														Verified</a> <a
+														th:href="@{/admin/user/reject/}+${userinfo.userId}"
+														class="dropdown-item"><i class="icon-blocked"></i>
+														Not-Verified</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</td>
+								<td><span class="badge badge-danger"
+									th:if="${userinfo.isActive == 0}">Disable</span> <span
+									class="badge badge-success"
+									th:unless="${userinfo.isActive == 0}">Active</span></td>
+
+								<td><span class="badge badge-danger"
+									th:if="${(userinfo.aggrementAccept == null || userinfo.aggrementAccept == 0)}">Profile
+										In-Complete</span> <span class="badge badge-success"
+									th:unless="${(userinfo.aggrementAccept == null || userinfo.aggrementAccept == 0)}">Profile
+										Completed</span> <span class="badge badge-info"
+									th:if="${userinfo.isVerified == 0}">Pending</span> <span
+									class="badge badge-success" th:if="${userinfo.isVerified == 1}">Verified</span>
+									<span class="badge badge-danger"
+									th:if="${userinfo.isVerified == 2}">Rejected</span></td>
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+				<!-- End Table -->
+
+
+			</div>
+			<!-- /main content -->
+
+			<!-- Footer -->
+			<div class="navbar navbar-expand-lg navbar-light">
+				<div class="text-center d-lg-none w-100">
+					<button type="button" class="navbar-toggler dropdown-toggle"
+						data-toggle="collapse" data-target="#navbar-footer">
+						<i class="icon-unfold mr-2"></i> Footer
+					</button>
+				</div>
+
+				<div class="navbar-collapse collapse" id="navbar-footer">
+					<span class="navbar-text"> &copy; 2020. </span>
+
+					<ul class="navbar-nav ml-lg-auto">
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-lifebuoy mr-2"></i> Support</a></li>
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-file-text2 mr-2"></i> Docs</a></li>
+
+
+					</ul>
+
+					<ul class="navbar-nav ml-lg-auto">
+
+
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-facebook color-fb "></i> </a></li>
+
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-twitter text-blue"></i> </a></li>
+
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-youtube text-red"></i> </a></li>
+
+					</ul>
+				</div>
+			</div>
+			<!-- /footer -->
+
+		</div>
+		<!-- /page content -->
+
+		<!-- Basic modal -->
+		<div id="modal_default" class="modal fade" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Agreement Terms</h5>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+
+					<div class="modal-body">
+						<p>A Terms and Conditions agreement is the agreement that
+							includes the terms, the rules and the guidelines of acceptable
+							behavior and other useful sections to which users must agree in
+							order to use or access your website and mobile app.</p>
+
+						<hr>
+
+						<p>A Terms and Conditions agreement is the agreement that
+							includes the terms, the rules and the guidelines of acceptable
+							behavior and other useful sections to which users must agree in
+							order to use or access your website and mobile app.</p>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /basic modal -->
+</body>
+</html>

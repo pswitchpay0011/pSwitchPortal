@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>pSwitch</title>
+
+<div th:replace="fragment/StyleFragment :: style"></div>
+
+</head>
+
+<body>
+
+	<div th:replace="fragment/topnav :: navbar"></div>
+
+	<!-- Page content -->
+	<div class="page-content">
+		<div th:replace="fragment/mainSidebar :: sidebar"></div>
+
+		<!-- Main content -->
+		<div class="content-wrapper">
+
+			<!-- Page header -->
+			<div class="page-header">
+				<div class="page-header-content header-elements-md-inline">
+					<div class="page-title d-flex">
+						<h4>
+							<i class="icon-arrow-down52 mr-2"></i> User Profile
+						</h4>
+						<a href="#" class="header-elements-toggle text-default d-md-none"><i
+							class="icon-more"></i></a>
+					</div>
+
+
+				</div>
+			</div>
+			<!-- /page header -->
+
+
+			<!-- Content area -->
+			<div class="content">
+
+				<!-- Inner container -->
+				<div class="d-md-flex align-items-md-start">
+
+
+					<!-- /left sidebar component -->
+
+
+					<!-- Right content -->
+					<div class="tab-content w-100">
+						<div class="tab-pane fade active show" id="">
+
+							<div class="card">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-lg-4">
+
+											<div class="col-sm-12">
+												<div class="card card-body">
+													<div class="media">
+														<div class="mr-3">
+															<a href="#"> <img src="/images/user.png"
+																class="rounded" width="38" height="38" alt="">
+															</a>
+														</div>
+
+														<div class="media-body">
+															<div class="font-weight-semibold"
+																th:text="${userProfile.firstName + ' '+ userProfile.lastName}">Rajesh
+																Kumar</div>
+															<span class="text-muted" th:text="${userRole.roleName}">Retailer</span>
+
+															<div>
+																<span>Verification Status</span> : <span
+																	th:text="${userProfile.isVerified ==null || userProfile.isVerified == 0? 'Pending' : ((userProfile.isVerified !=null && userProfile.isVerified == 1) ? 'Verified' : 'Rejected')}"
+																	th:class="${userProfile.isVerified ==null || userProfile.isVerified == 0? 'text-info' : ((userProfile.isVerified !=null && userProfile.isVerified == 1) ? 'text-success' : 'text-danger')}">
+																	Status</span>
+															</div>
+
+														</div>
+
+														<!-- <div class="ml-3 align-self-center">
+															<span class="badge badge-mark bg-success border-success"></span>
+														</div> -->
+													</div>
+												</div>
+											</div>
+
+
+											<div class="col-lg-12">
+
+												<!-- Today's revenue -->
+												<div class="card bg-blue-400" style="min-height: 430px;">
+													<div class="card-body">
+														<div class="d-flex">
+															<h3 class="font-weight-semibold mb-0">₹ 0</h3>
+
+														</div>
+
+														<div>
+															Coming Soon...
+															<div class="font-size-sm opacity-75">₹ 0 avg</div>
+														</div>
+													</div>
+
+													<div id="today-revenue" style="min-height: 200px;"></div>
+												</div>
+												<!-- /today's revenue -->
+											</div>
+										</div>
+
+										<div class="col-sm-8">
+											<div class="table-responsive">
+												<h2>Personal Details</h2>
+												<table class="table table-bordered table-striped">
+													<tbody>
+														<tr>
+															<td width="25%">Agent Id</td>
+															<td
+																th:text="${userProfile.userPSwitchId!=null?  userProfile.userPSwitchId : 'NA'}">NA</td>
+														</tr>
+														<tr>
+															<td width="25%">Name</td>
+															<td
+																th:text="${userProfile.firstName + ' '+ userProfile.lastName}">Rajesh
+																Kumar</td>
+														</tr>
+														<tr>
+															<td>Ph. No.</td>
+															<td><span th:text="${userProfile.mobileNumber}">+99-99-9999-9999</span>
+
+																<span class="text-success"
+																th:if="${userProfile.contactVerified == 1}">Contact
+																	Verified </span> <span class="text-danger"
+																th:if="${userProfile.contactVerified == 0 || userProfile.contactVerified == null}">Contact
+																	Not Verified </span></td>
+														</tr>
+														<tr>
+															<td>Email</td>
+															<td th:text="${userProfile.username}">adityayadav@gmail.com</td>
+														</tr>
+														<tr>
+															<td>Address</td>
+															<td th:text="${userProfile.address}">D-22, Vikas
+																Puri, New Delhi, 110011, India</td>
+														</tr>
+														<tr>
+															<td>GST No.</td>
+															<td th:text="${userProfile.gstNo}">NA</td>
+														</tr>
+														<tr>
+															<td>Company Name</td>
+															<td th:text="${userProfile.companyName}">NA</td>
+														</tr>
+														<tr th:if="${userProfile.parent !=null}">
+															<td><span
+																th:text="${userProfile.parent !=null and userProfile.parent.roles !=null? userProfile.parent.roles.roleName: ''}"></span></td>
+															<td><span
+																th:text="${userProfile.parent !=null? userProfile.parent.firstName + ' '+ userProfile.parent.lastName: ''}"></span></td>
+														</tr>
+
+													</tbody>
+												</table>
+
+												<h2 class="mt-2">Bank Details</h2>
+												<table class="table table-bordered table-striped">
+
+													<tbody>
+														<tr>
+															<td width="25%">Account Holder Name</td>
+															<td
+																th:text="${(userProfile.bankDetails != null && !#strings.isEmpty(userProfile.bankDetails.accountHolderName)) ? userProfile.bankDetails.accountHolderName : ''}">NA
+															</td>
+														</tr>
+														<tr>
+															<td width="25%">Bank Name</td>
+															<td
+																th:text="${(userProfile.bankDetails != null && !#strings.isEmpty(userProfile.bankDetails.BANK_NAME)) ? userProfile.bankDetails.BANK_NAME : ''}">Rajesh
+																Kumar</td>
+														</tr>
+														<tr>
+															<td>Account Number</td>
+															<td
+																th:text="${(userProfile.bankDetails != null && !#strings.isEmpty(userProfile.bankDetails.AccountNumber)) ? userProfile.bankDetails.AccountNumber : ''}">+99-99-9999-9999</td>
+														</tr>
+														<tr>
+															<td>IFSC Code</td>
+															<td
+																th:text="${(userProfile.bankDetails != null && !#strings.isEmpty(userProfile.bankDetails.ifscCode)) ? userProfile.bankDetails.ifscCode : ''}">adityayadav@gmail.com</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+
+											<div th:if="${user!=null && user.roles.roleCode eq 'AD'}" class="text-right m-2">
+												<a th:href="@{/admin/user/verified/}+${userProfile.userId}"
+													class="btn btn-primary">Accept Profile</a> <a
+													th:href="@{/admin/user/reject/}+${userProfile.userId}"
+													class="btn btn-danger">Reject Profile</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- Documents -->
+							<div class="card">
+								<div class="card-header header-elements-inline">
+									<h5 class="card-title">Documents</h5>
+									<div class="header-elements">
+										<div class="list-icons">
+											<a class="list-icons-item" data-action="collapse"></a>
+										</div>
+									</div>
+								</div>
+
+
+								<div class="card-body">
+									<div class="form-group row">
+										<div class="col-lg-12">
+											<div class="row" id="gallery">
+												<div class="col-sm-6 col-xl-3"
+													th:each="attachment,iter : ${userProfile.attachments}"
+													th:if="${userProfile.attachments != null}">
+													<div class="card min-height-300">
+														<div class="card-img-actions mx-1 mt-1 doc-img-height "
+															data-toggle="modal" data-target="#exampleModal">
+															<img class="card-img img-fluid"
+																th:src="${(attachment.file != null && !#strings.isEmpty(attachment.file)) ? '/files/'+attachment.file : '/images/user.png'}"
+																th:alt="${userProfile.firstName}" width="170"
+																height="170" data-target="#carouselExample"
+																th:data-slide-to="${iter.index}">
+															<!-- <div class="card-img-actions-overlay card-img">
+																<a href="assets/images/adhaar.jpg"
+																	class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round"
+																	data-popup="lightbox" rel="group"> <i
+																	class="icon-enlarge"></i>
+																</a>
+															</div> -->
+														</div>
+
+														<div class="card-body">
+															<form action="#" th:action="@{/user/rejectDocument}"
+																method="post">
+																<div class="d-flex align-items-start flex-nowrap ">
+																	<div>
+																		<h6 class="font-weight-semibold mr-2"
+																			th:text="${attachment.documentType}"></h6>
+																		<h6 class="font-weight-semibold mr-2"
+																			th:text="${attachment.documentNumber}">5485 5000
+																			8000</h6>
+
+																		<!-- <p>
+																			<span class="text-danger"
+																				th:text="${attachment.documentDescription}">Lorem
+																				Ipsum is simply dummy text of the printing and
+																				typesetting industry.</span>
+																		</p> -->
+																		<p>
+																			Verification : <span class="badge"
+																				th:classappend="${(attachment.status != null && attachment.status == T(net.in.pSwitch.model.Status).REJECTED) ? 'badge-danger' : 'badge-success'}"
+																				th:text="${attachment.status}"></span>
+																		</p>
+																		<hr>
+																	</div>
+
+																	<div th:if="${user!=null && user.roles.roleCode eq 'AD'}"
+																		class="list-icons list-icons-extended ml-auto">
+																		<a
+																			th:href="${(attachment.file != null && !#strings.isEmpty(attachment.file)) ? '/files/'+attachment.file : '/images/user.png'}"
+																			target="_blank" class="list-icons-item"><i
+																			class="icon-download top-0"></i></a> <a
+																			th:href="${(attachment.id != null && !#strings.isEmpty(attachment.id)) ? '/user/deleteDocument/'+attachment.id : '#'}"
+																			class="list-icons-item"><i
+																			class="icon-trash top-0"></i></a>
+																	</div>
+
+																</div>
+
+
+																<div th:if="${user!=null && user.roles.roleCode eq 'AD'}"
+																	class="text-right">
+
+																	<input type="hidden" id="userId" name="userId"
+																		th:value="${userProfile.userId}"> <input
+																		type="hidden" id="attachmentId" name="attachmentId"
+																		th:value="${attachment.id}">
+
+																	<textarea required="required"
+																		th:text="${attachment.documentDescription}"
+																		maxlength="250"
+																		placeholder="Enter reason of Rejection if have any"
+																		id="rejectionReason" name="rejectionReason"
+																		class="form-control"></textarea>
+
+																	<button type="submit" class="btn btn-danger m-2">
+																		Reject</button>
+																</div>
+															</form>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- /Documents -->
+
+							<!-- Available hours -->
+							<div class="card">
+								<div class="card-header header-elements-inline">
+									<h6 class="card-title">Weekly Transactions</h6>
+
+								</div>
+
+								<div class="card-body">
+									<div class="chart-container">
+										<div class="chart has-fixed-height" id="available_hours"></div>
+									</div>
+								</div>
+							</div>
+							<!-- /available hours -->
+
+							<!-- Profile info -->
+							<div class="card">
+
+
+								<div class="card-body">
+									<div class="row">
+
+										<div class="col-sm-3">
+
+											<!-- Available hours -->
+											<div class="card text-center">
+												<div class="card-body">
+
+													<!-- Progress counter -->
+													<div class="svg-center position-relative" id="dmt"></div>
+													<!-- /progress counter -->
+
+
+													<!-- Bars -->
+													<div id="dmt-bars"></div>
+													<!-- /bars -->
+
+												</div>
+											</div>
+											<!-- /available hours -->
+
+										</div>
+
+										<div class="col-sm-3">
+
+											<!-- Productivity goal -->
+											<div class="card text-center">
+												<div class="card-body">
+
+													<!-- Progress counter -->
+													<div class="svg-center position-relative" id="abp"></div>
+													<!-- /progress counter -->
+
+													<!-- Bars -->
+													<div id="abp-bars"></div>
+													<!-- /bars -->
+
+												</div>
+											</div>
+											<!-- /productivity goal -->
+
+										</div>
+
+										<div class="col-sm-3">
+
+											<!-- Productivity goal -->
+											<div class="card text-center">
+												<div class="card-body">
+
+													<!-- Progress counter -->
+													<div class="svg-center position-relative" id="aeps"></div>
+													<!-- /progress counter -->
+
+													<!-- Bars -->
+													<div id="aeps-bars"></div>
+													<!-- /bars -->
+
+												</div>
+											</div>
+											<!-- /productivity goal -->
+
+										</div>
+
+										<div class="col-sm-3">
+
+											<!-- Productivity goal -->
+											<div class="card text-center">
+												<div class="card-body">
+
+													<!-- Progress counter -->
+													<div class="svg-center position-relative" id="ins"></div>
+													<!-- /progress counter -->
+
+													<!-- Bars -->
+													<div id="ins-bars"></div>
+													<!-- /bars -->
+
+												</div>
+											</div>
+											<!-- /productivity goal -->
+
+										</div>
+
+
+									</div>
+								</div>
+							</div>
+							<!-- /profile info -->
+
+
+							<div class="card">
+								<div class="card-header header-elements-inline">
+									<h6 class="card-title">last 10 transactions</h6>
+									<div class="header-elements">
+										<span class="font-weight-bold text-danger-600 ml-2">₹
+											4,378</span>
+										<div class="list-icons ml-3">
+											<div class="dropdown">
+												<a href="#" class="list-icons-item dropdown-toggle"
+													data-toggle="dropdown"><i class="icon-cog3"></i></a>
+												<div class="dropdown-menu dropdown-menu-right">
+													<a href="#" class="dropdown-item"><i class="icon-sync"></i>
+														Update data</a> <a href="#" class="dropdown-item"><i
+														class="icon-list-unordered"></i> Detailed log</a> <a href="#"
+														class="dropdown-item"><i class="icon-pie5"></i>
+														Statistics</a>
+													<div class="dropdown-divider"></div>
+													<a href="#" class="dropdown-item"><i
+														class="icon-cross3"></i> Clear list</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+								<div class="table-responsive">
+									<table class="table text-nowrap">
+										<thead>
+											<tr>
+												<th class="w-100">Service</th>
+												<th>Time</th>
+												<th>Price</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>
+													<div class="d-flex align-items-center">
+														<div class="mr-3">
+															<a href="#"
+																class="btn bg-primary-400 rounded-round btn-icon btn-sm">
+																<span class="letter-icon">S</span>
+															</a>
+														</div>
+														<div>
+															<a href="#"
+																class="text-default font-weight-semibold letter-icon-title">Sigma
+																application</a>
+															<div class="text-muted font-size-sm">
+																<i class="icon-checkmark3 font-size-sm mr-1"></i> New
+																order
+															</div>
+														</div>
+													</div>
+												</td>
+												<td><span class="text-muted font-size-sm">06:28
+														pm</span></td>
+												<td>
+													<h6 class="font-weight-semibold mb-0">₹ 49.90</h6>
+												</td>
+											</tr>
+
+											<tr>
+												<td>
+													<div class="d-flex align-items-center">
+														<div class="mr-3">
+															<a href="#"
+																class="btn bg-danger-400 rounded-round btn-icon btn-sm">
+																<span class="letter-icon">A</span>
+															</a>
+														</div>
+														<div>
+															<a href="#"
+																class="text-default font-weight-semibold letter-icon-title">Alpha
+																application</a>
+															<div class="text-muted font-size-sm">
+																<i class="icon-spinner11 font-size-sm mr-1"></i> Renewal
+															</div>
+														</div>
+													</div>
+												</td>
+												<td><span class="text-muted font-size-sm">04:52
+														pm</span></td>
+												<td>
+													<h6 class="font-weight-semibold mb-0">₹ 90.50</h6>
+												</td>
+											</tr>
+
+											<tr>
+												<td>
+													<div class="d-flex align-items-center">
+														<div class="mr-3">
+															<a href="#"
+																class="btn bg-indigo-400 rounded-round btn-icon btn-sm">
+																<span class="letter-icon">D</span>
+															</a>
+														</div>
+														<div>
+															<a href="#"
+																class="text-default font-weight-semibold letter-icon-title">Delta
+																application</a>
+															<div class="text-muted font-size-sm">
+																<i class="icon-lifebuoy font-size-sm mr-1"></i> Support
+															</div>
+														</div>
+													</div>
+												</td>
+												<td><span class="text-muted font-size-sm">01:26
+														pm</span></td>
+												<td>
+													<h6 class="font-weight-semibold mb-0">₹ 60.00</h6>
+												</td>
+											</tr>
+
+											<tr>
+												<td>
+													<div class="d-flex align-items-center">
+														<div class="mr-3">
+															<a href="#"
+																class="btn bg-success-400 rounded-round btn-icon btn-sm">
+																<span class="letter-icon">O</span>
+															</a>
+														</div>
+														<div>
+															<a href="#"
+																class="text-default font-weight-semibold letter-icon-title">Omega
+																application</a>
+															<div class="text-muted font-size-sm">
+																<i class="icon-lifebuoy font-size-sm mr-1"></i> Support
+															</div>
+														</div>
+													</div>
+												</td>
+												<td><span class="text-muted font-size-sm">11:46
+														am</span></td>
+												<td>
+													<h6 class="font-weight-semibold mb-0">₹ 55.00</h6>
+												</td>
+											</tr>
+
+											<tr>
+												<td>
+													<div class="d-flex align-items-center">
+														<div class="mr-3">
+															<a href="#"
+																class="btn bg-danger-400 rounded-round btn-icon btn-sm">
+																<span class="letter-icon">A</span>
+															</a>
+														</div>
+														<div>
+															<a href="#"
+																class="text-default font-weight-semibold letter-icon-title">Alpha
+																application</a>
+															<div class="text-muted font-size-sm">
+																<i class="icon-spinner11 font-size-sm mr-2"></i> Renewal
+															</div>
+														</div>
+													</div>
+												</td>
+												<td><span class="text-muted font-size-sm">10:29
+														am</span></td>
+												<td>
+													<h6 class="font-weight-semibold mb-0">₹ 90.50</h6>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+
+
+
+						</div>
+
+						<div class="tab-pane fade" id="schedule">
+
+							<!-- Available hours -->
+							<div class="card">
+								<div class="card-header header-elements-inline">
+									<h6 class="card-title">Available hours</h6>
+									<div class="header-elements">
+										<div class="list-icons">
+											<a class="list-icons-item" data-action="collapse"></a> <a
+												class="list-icons-item" data-action="reload"></a> <a
+												class="list-icons-item" data-action="remove"></a>
+										</div>
+									</div>
+								</div>
+
+								<div class="card-body">
+									<div class="chart-container">
+										<div class="chart has-fixed-height" id="available_hours"></div>
+									</div>
+								</div>
+							</div>
+							<!-- /available hours -->
+
+
+							<!-- Schedule -->
+							<div class="card">
+								<div class="card-header header-elements-inline">
+									<h5 class="card-title">My schedule</h5>
+									<div class="header-elements">
+										<div class="list-icons">
+											<a class="list-icons-item" data-action="collapse"></a> <a
+												class="list-icons-item" data-action="reload"></a> <a
+												class="list-icons-item" data-action="remove"></a>
+										</div>
+									</div>
+								</div>
+
+								<div class="card-body">
+									<div class="my-schedule"></div>
+								</div>
+							</div>
+							<!-- /schedule -->
+
+						</div>
+
+
+
+						<div class="tab-pane fade" id="orders"></div>
+						<!-- /right content -->
+
+					</div>
+					<!-- /inner container -->
+
+				</div>
+				<!-- /content area -->
+
+
+
+
+			</div>
+			<!-- /main content -->
+
+			<!-- Footer -->
+			<div class="navbar navbar-expand-lg navbar-light">
+				<div class="text-center d-lg-none w-100">
+					<button type="button" class="navbar-toggler dropdown-toggle"
+						data-toggle="collapse" data-target="#navbar-footer">
+						<i class="icon-unfold mr-2"></i> Footer
+					</button>
+				</div>
+
+				<div class="navbar-collapse collapse" id="navbar-footer">
+					<span class="navbar-text"> &copy; 2020. </span>
+
+					<ul class="navbar-nav ml-lg-auto">
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-lifebuoy mr-2"></i> Support</a></li>
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-file-text2 mr-2"></i> Docs</a></li>
+
+
+
+					</ul>
+
+					<ul class="navbar-nav ml-lg-auto">
+
+
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-facebook color-fb "></i> </a></li>
+
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-twitter text-blue"></i> </a></li>
+
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-youtube text-red"></i> </a></li>
+
+					</ul>
+				</div>
+			</div>
+			<!-- /footer -->
+
+		</div>
+		<!-- /page content -->
+
+		<!-- Basic modal -->
+		<div id="modal_default" class="modal fade" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Agreement Terms</h5>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+
+					<div class="modal-body">
+						<p>A Terms and Conditions agreement is the agreement that
+							includes the terms, the rules and the guidelines of acceptable
+							behavior and other useful sections to which users must agree in
+							order to use or access your website and mobile app.</p>
+
+						<hr>
+
+						<p>A Terms and Conditions agreement is the agreement that
+							includes the terms, the rules and the guidelines of acceptable
+							behavior and other useful sections to which users must agree in
+							order to use or access your website and mobile app.</p>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /basic modal -->
+
+		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+			aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div id="carouselExample" class="carousel slide"
+							data-ride="carousel">
+							<ol class="carousel-indicators">
+								<li th:each="attachment,iter : ${userProfile.attachments}"
+									data-target="#carouselExample"
+									th:classappend="${iter.index == 0} ? active : '' "
+									th:data-slide-to="${iter.index}"></li>
+								<!-- <li data-target="#carouselExample" data-slide-to="1"></li>
+								<li data-target="#carouselExample" data-slide-to="2"></li>
+								<li data-target="#carouselExample" data-slide-to="3"></li> -->
+							</ol>
+							<div class="carousel-inner">
+								<div class="carousel-item"
+									th:each="attachment,iter : ${userProfile.attachments}"
+									th:classappend="${iter.index == 0} ? active : '' ">
+									<img class="d-block w-100"
+										th:src="${(attachment.file != null && !#strings.isEmpty(attachment.file)) ? '/files/'+attachment.file : '/images/user.png'}"
+										th:alt="${attachment.file}">
+								</div>
+							</div>
+							<a class="carousel-control-prev" href="#carouselExample"
+								role="button" data-slide="prev"> <span
+								class="carousel-control-prev-icon" aria-hidden="true"></span> <span
+								class="sr-only">Previous</span>
+							</a> <a class="carousel-control-next" href="#carouselExample"
+								role="button" data-slide="next"> <span
+								class="carousel-control-next-icon" aria-hidden="true"></span> <span
+								class="sr-only">Next</span>
+							</a>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			function switchStyle() {
+				if (document.getElementById('styleSwitch').checked) {
+					document.getElementById('gallery').classList.add("custom");
+					document.getElementById('exampleModal').classList
+							.add("custom");
+				} else {
+					document.getElementById('gallery').classList
+							.remove("custom");
+					document.getElementById('exampleModal').classList
+							.remove("custom");
+				}
+			}
+		</script>
+</body>
+</html>

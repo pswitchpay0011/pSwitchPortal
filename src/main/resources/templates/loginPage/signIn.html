@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+
+<meta http-equiv="content-type" content="text/html;charset=UTF-8"/><!-- /Added by HTTrack -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>pSwitch SignIn</title>
+
+    <!-- Global stylesheets -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900"
+          rel="stylesheet" type="text/css">
+    <link href="/css/icons/fontawesome/styles.min.css" rel="stylesheet"
+          type="text/css">
+    <link href="/css/icons/icomoon/styles.min.css" rel="stylesheet"
+          type="text/css">
+    <link href="/css/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="/css/bootstrap_page.css" rel="stylesheet" type="text/css">
+    <link href="/css/layout.css" rel="stylesheet" type="text/css">
+    <link href="/css/components.css" rel="stylesheet" type="text/css">
+    <link href="/css/colors.css" rel="stylesheet" type="text/css">
+    <link href="/css/custom.css" rel="stylesheet" type="text/css">
+    <!-- /global stylesheets -->
+
+    <!-- Core JS files -->
+    <script src="/js/main/jquery.min.js"></script>
+    <script src="/js/plugins/forms/validation/validate.min.js"></script>
+    <script src="/js/main/bootstrap.bundle.min.js"></script>
+    <script src="/js/plugins/loaders/blockui.min.js"></script>
+    <!-- /core JS files -->
+
+    <!-- Theme JS files -->
+    <script src="/js/plugins/forms/styling/uniform.min.js"></script>
+
+    <script src="/js/app.js"></script>
+    <script src="/js/custom.js"></script>
+    <script src="/js/demo_pages/login.js"></script>
+    <!-- /theme JS files -->
+
+</head>
+<body>
+
+<!-- Page content -->
+<!--  <div class="page-content login-cover">-->
+
+<!-- Main content
+<div class="content-wrapper">-->
+
+<!-- Content area
+<div class="content d-flex align-items-center">-->
+<div class="container-fluid vh-100 ">
+    <div class="row justify-content-center vh-100">
+        <!--        #3A3285-->
+        <div class="col-md-6 hidden-md-down justify-content-center d-flex align-items-center"
+             style="background-color: white">
+             <!-- #e6e6e5; -->
+            <!--            background-image:url(/images/backgrounds/loginImage.png);-->
+            <img alt="" class="img-fluid img-back" src="/images/backgrounds/left-img.jpg">
+            <div style="background: #0189bd url(/images/backgrounds/left-img.jpg) no-repeat; background-size: cover; background-attachment: fixed;"></div>
+        </div>
+        <div class="col-md-6 col-lg-6 col-xl-6 justify-content-center d-flex align-items-center"
+             style="background-color: #3A3285">
+            <div th:replace="fragment/terms :: termsAndAggrement"></div>
+            <!-- Login form -->
+            <div class="login-form wmin-sm-500" action="/index">
+                <div class="card mb-0">
+                    <!--<ul class="nav nav-tabs nav-justified alpha-grey mb-0">
+                    <li class="nav-item"><a href="#login-tab1" class="nav-link border-y-0 border-left-0 active" data-toggle="tab"><h6 class="my-1">Sign in</h6></a></li>
+                    <li class="nav-item"><a href="#login-tab2" class="nav-link border-y-0 border-right-0" data-toggle="tab"><h6 class="my-1">Register</h6></a></li>
+                </ul> -->
+
+                    <div class="tab-content card-body">
+
+                        <div class="alert alert-danger" role="alert" style="display: none" id="errorAlert">
+                            <p id="errorMessage">Error while saving data</p>
+                        </div>
+
+                        <div class="alert alert-success" role="alert" style="display: none" id="successAlert">
+                            <p id="successMessage">Success</p>
+                        </div>
+                        <!-- error message -->
+                        <div th:if="${param.error}">
+                            <div class="alert alert-danger">
+                                [[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]
+                            </div>
+                        </div>
+
+                        <div th:if="${errorMsg}">
+                            <div class="alert alert-danger">
+                                <p th:text="${errorMsg}"></p>
+                            </div>
+                        </div>
+
+                        <!-- logout message -->
+                        <div th:if="${param.logout}">
+                            <div class="alert alert-info">You have been logged out.</div>
+                        </div>
+
+                        <div th:if="${msg}" class="alert alert-success" role="alert">
+                            <p th:text="${msg}"></p>
+                        </div>
+
+                        <div class="tab-pane fade" id="loginTab" th:classappend="${loginTab}">
+                            <form name="loginForm" id="loginForm" method="post">
+                                <div class="text-center mb-3">
+                                    <img src="/images/logo_dark.png" alt="">
+
+                                    <hr>
+
+                                    <input type="hidden" id="latLng", name="latLng">
+                                    <h5 class="mb-0">Log into Your Account</h5>
+                                    <span class="d-block text-muted">Your credentials</span>
+                                </div>
+
+                                <div class="form-group form-group-feedback form-group-feedback-left">
+                                    <input type="text" class="form-control form-control-lg"
+                                           placeholder="Username" th:value="${username!=null ? username: ''}" id="lusername" name="username">
+                                    <div class="form-control-feedback">
+                                        <i class="icon-user text-blue-800"></i>
+                                    </div>
+                                    <small class="form-text text-danger"></small>
+                                </div>
+
+                                <div class="form-group form-group-feedback form-group-feedback-left">
+                                    <input type="password" class="form-control form-control-lg"
+                                           placeholder="Password" th:value="${password!=null ? password: ''}" id="lpassword" name="password">
+                                    <div class="form-control-feedback">
+                                        <i class="icon-lock2 text-blue-800"></i>
+                                    </div>
+                                    <small class="form-text text-danger"></small>
+                                </div>
+
+                                <div class="form-group d-flex align-items-center">
+                                    <div class="form-check mb-0">
+                                        <label class="form-check-label"> <input
+                                                type="checkbox" name="remember" class="form-input-styled"
+                                                checked data-fouc> Remember
+                                        </label>
+                                    </div>
+
+                                    <a href="#resetPasswordTab" data-toggle="tab" class="ml-auto">Forgot
+                                        password?</a>
+                                </div>
+
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary btn-block">Sign
+                                        in
+                                    </button>
+                                </div>
+
+                                <!--<div class="form-group text-center text-muted content-divider">
+                            <span class="px-2">or sign in with</span>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <button type="button" class="btn btn-outline bg-indigo border-indigo text-indigo btn-icon rounded-round border-2"><i class="icon-facebook"></i></button>
+                            <button type="button" class="btn btn-outline bg-pink-300 border-pink-300 text-pink-300 btn-icon rounded-round border-2 ml-2"><i class="icon-dribbble3"></i></button>
+                            <button type="button" class="btn btn-outline bg-slate-600 border-slate-600 text-slate-600 btn-icon rounded-round border-2 ml-2"><i class="icon-github"></i></button>
+                            <button type="button" class="btn btn-outline bg-info border-info text-info btn-icon rounded-round border-2 ml-2"><i class="icon-twitter"></i></button>
+                        </div> -->
+
+                                <div class="form-group text-center text-muted content-divider">
+                                    <span class="px-2">Don't have an account?</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <a href="/register"
+                                       class="btn btn-light btn-block">Sign up</a>
+                                </div>
+
+                               <span class="form-text text-center text-muted">powered by <span  class="text-primary" >pSwitch services private limited</span> </span>
+                            </form>
+                        </div>
+
+                        <!-- Reset Password -->
+                        <div class="tab-pane fade" id="resetPasswordTab" th:classappend="${resetPasswordTab}">
+
+                            <form action="/account/resetPassword" method="post">
+                                <input type="hidden" name="_csrf" value="9c7fc30a-2f65-4811-b0d4-76930a331c72"/>
+                                <div class="text-center mb-3">
+                                    <img src="/images/logo_dark.png" alt="">
+                                    <hr>
+                                    <h5 class="mb-0">Reset Password</h5>
+
+                                </div>
+
+                                <div class="form-group form-group-feedback form-group-feedback-left">
+                                    <input type="text" class="form-control" id="resetEmail"
+                                           name="resetEmail" required autofocus="autofocus"
+                                           placeholder="Username (Email Address)">
+                                    <div class="form-control-feedback">
+                                        <i class="icon-user text-danger-800"></i>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary btn-block">Send
+                                        Reset Instructions
+                                    </button>
+                                </div>
+
+
+                                <div class="form-group text-center text-muted content-divider">
+                                    <span class="px-2">Don't have an account?</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <a href="/register"
+                                       class="btn btn-light btn-block">Sign up</a>
+                                </div>
+
+                                <span class="form-text text-center text-muted">By
+										continuing, you're confirming that you've read our <a href="#">Terms
+											&amp; Conditions</a> and <a href="#">Cookie Policy</a>
+									</span>
+                            </form>
+                        </div>
+
+                        <!-- Update Password -->
+                        <div class="tab-pane fade" id="updatePassword" th:classappend="${changePassword}">
+
+                            <form name="updatePasswordForm" id="updatePasswordForm"
+                                  method="post">
+                                <input type="hidden" name="_csrf"
+                                                       value="9c7fc30a-2f65-4811-b0d4-76930a331c72"/>
+                                <div class="text-center mb-3">
+                                    <img src="/images/logo_dark.png" alt="">
+                                    <hr>
+                                    <h5 class="mb-0">Update Password</h5>
+                                </div>
+
+                                <div class="form-group form-group-feedback form-group-feedback-left">
+                                    <input type="hidden" id="token" th:value="${token}"
+                                           name="token">
+                                    <div class="form-control-feedback">
+                                        <i class="icon-user text-danger-800"></i>
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-group-feedback form-group-feedback-left">
+                                    <input type="password" class="form-control" id="password"
+                                           name="newPassword" required autofocus="autofocus"
+                                           placeholder="New Password">
+                                    <div class="form-control-feedback">
+                                        <i class="icon-user text-danger-800"></i>
+                                    </div>
+                                    <small class="form-text text-danger"></small>
+                                </div>
+
+                                <div class="form-group form-group-feedback form-group-feedback-left">
+                                    <input type="password" class="form-control" id="confirmPassword"
+                                           name="confirmPassword" required autofocus="autofocus"
+                                           placeholder="Confirm Password">
+                                    <div class="form-control-feedback">
+                                        <i class="icon-user text-danger-800"></i>
+                                    </div>
+                                    <small class="form-text text-danger"></small>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <button type="submit" id="UpdatePwdBtn" class="btn btn-primary btn-block">Update
+                                        Password
+                                    </button>
+                                </div>
+
+
+                                <div class="form-group text-center text-muted content-divider">
+                                    <span class="px-2">Don't have an account?</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <a href="/register"
+                                       class="btn btn-light btn-block">Sign up</a>
+                                </div>
+
+                                <span class="form-text text-center text-muted">By
+										continuing, you're confirming that you've read our <a href="#">Terms
+											&amp; Conditions</a> and <a href="#">Cookie Policy</a>
+									</span>
+                            </form>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        <!-- /login form -->
+
+        <!-- </div>
+          /content area -->
+
+        <!--</div>
+         /main content -->
+        <!--
+        </div>
+         /page content -->
+<script src="/js/ps/signIn.js"></script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>pSwitch - Welcome Retailer</title>
+
+<link rel="shortcut icon" href="assets/images/favicon.ico" />
+
+<div th:replace="fragment/StyleFragment :: style"></div>
+
+</head>
+
+<body>
+
+	<div th:replace="fragment/topnav :: navbar"></div>
+
+	<!-- Page content -->
+	<div class="page-content">
+
+		<div th:replace="fragment/mainSidebar :: sidebar"></div>
+
+		<!-- Main content -->
+		<div class="content-wrapper">
+
+			<!-- Page header -->
+			<div class="page-header">
+				<div class="page-header-content header-elements-md-inline">
+					<div class="page-title d-flex">
+						<h4>
+							<i class="icon-arrow-left52 mr-2"></i> Add Product
+						</h4>
+						<a href="#" class="header-elements-toggle text-default d-md-none"><i
+							class="icon-more"></i></a>
+					</div>
+				</div>
+			</div>
+			<!-- /page header -->
+
+			<!-- Content area -->
+			<div class="content">
+
+				<!-- Form inputs -->
+				<div class="card">
+					<div class="card-body">
+						<div th:if="${errors}" class="alert alert-danger"
+							role="alert">
+							<table>
+								<tr th:each="error : ${errors}">
+									<td class="text-left" th:text="${'* '+ error}">data</td>
+								</tr>
+							</table>
+						</div>
+
+						<form action="#" th:action="@{/service/saveAssociate}"
+							method="post">
+							<!-- Profile info -->
+							<div class="card">
+								<div class="card-header header-elements-inline">
+									<h5 class="card-title">Profile information</h5>
+									<div class="header-elements">
+										<div class="list-icons">
+											<a class="list-icons-item" data-action="collapse"></a>
+										</div>
+									</div>
+								</div>
+
+								<div class="card-body">
+
+									<div th:if="${updateMessage}" class="alert alert-success"
+										role="alert">
+										<p th:text="${updateMessage}"></p>
+									</div>
+
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-6">
+												<label>First Name <span class="text-danger">*</span></label>
+												<input type="text" id="firstName" name="firstName"
+													required="required"
+													th:value="${data!=null ? data.firstName : ''}"
+													class="form-control">
+											</div>
+											<div class="col-md-6">
+												<label>Last Name <span class="text-danger">*</span></label>
+												<input type="text" id="lastName" name="lastName"
+													th:value="${data!=null ? data.lastName : ''}"
+													required="required" class="form-control">
+											</div>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-6">
+												<label>Address line 1 <span class="text-danger">*</span></label>
+												<input type="text" id="address" name="address"
+													th:value="${data!=null ? data.address : ''}"
+													required="required" class="form-control">
+											</div>
+											<div class="col-md-6">
+												<label>Address line 2</label> <input type="text" value=""
+													class="form-control">
+											</div>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-6">
+												<label>Email <span class="text-danger">*</span></label> <input
+													type="text" id="username" name="username"
+													th:value="${data!=null ? data.username : ''}"
+													required="required" class="form-control">
+											</div>
+											<div class="col-md-6">
+												<label>Country <span class="text-danger">*</span></label> <select
+													class="form-control" required="required" name="country"
+													id="country">
+													<option th:each="item : ${countries}" th:value="${item.id}"
+														th:text="${item.name}" />
+												</select>
+											</div>
+										</div>
+									</div>
+
+									<!-- <input type="hidden" id="userId" name="userId"
+										th:value="${user.userId}"> <input type="hidden"
+										id="selectedCountry" name="selectedCountry"
+										th:value="${user.country}"> <input type="hidden"
+										id="selectedState" name="selectedState"
+										th:value="${user.state}"> <input type="hidden"
+										id="selectedCity" name="selectedCity" th:value="${user.city}"> -->
+
+
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-4">
+												<label>State/Province <span class="text-danger">*</span></label>
+												<select class="form-control" name="state" id="state"
+													required="required">
+													<option th:each="item : ${states}" th:value="${item.id}"
+														th:text="${item.name}" />
+												</select>
+											</div>
+											<div class="col-md-4">
+												<label>City <span class="text-danger">*</span></label> <select
+													class="form-control" name="city" id="city"
+													required="required">
+													<option th:each="item : ${cities}" th:value="${item.id}"
+														th:text="${item.name}" />
+												</select>
+											</div>
+											<div class="col-md-4">
+												<label>ZIP code <span class="text-danger">*</span></label> <input
+													type="text" id="zipcode" name="zipcode" required="required"
+													th:value="${data!=null ? data.zipcode : ''}"
+													class="form-control">
+											</div>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-6">
+												<label>Mobile No# <span class="text-danger">*</span></label>
+												<input type="text" id="mobileNumber" name="mobileNumber"
+													th:value="${data!=null ? data.mobileNumber : ''}"
+													required="required" class="form-control"> <span
+													class="form-text text-muted">+99-99-9999-9999</span>
+											</div>
+
+											<!-- <div class="col-md-6">
+												<label>Upload profile image</label> <input accept="image/*"
+													type="file" name="imgProfile" id="imgProfile"
+													class="form-input-styled"> <span
+													class="form-text text-muted">Accepted formats: gif,
+													png, jpg. Max file size 2Mb</span>
+											</div> -->
+										</div>
+									</div>
+									<div class="text-right">
+										<button type="submit" class="btn btn-primary">Save
+											changes</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!-- /form inputs -->
+
+			</div>
+			<!-- /content area -->
+
+
+			<!-- Footer -->
+			<div class="navbar navbar-expand-lg navbar-light">
+				<div class="text-center d-lg-none w-100">
+					<button type="button" class="navbar-toggler dropdown-toggle"
+						data-toggle="collapse" data-target="#navbar-footer">
+						<i class="icon-unfold mr-2"></i> Footer
+					</button>
+				</div>
+
+				<div class="navbar-collapse collapse" id="navbar-footer">
+					<span class="navbar-text"> &copy; 2020. </span>
+
+					<ul class="navbar-nav ml-lg-auto">
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-lifebuoy mr-2"></i> Support</a></li>
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-file-text2 mr-2"></i> Docs</a></li>
+
+					</ul>
+
+					<ul class="navbar-nav ml-lg-auto">
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-facebook color-fb "></i> </a></li>
+
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-twitter text-blue"></i> </a></li>
+
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-youtube text-red"></i> </a></li>
+					</ul>
+				</div>
+			</div>
+			<!-- /footer -->
+
+		</div>
+		<!-- /main content -->
+
+	</div>
+	<!-- /page content -->
+	<script src="/js/ps/dropdown.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>pSwitch - Welcome Retailer</title>
+
+<link rel="shortcut icon" href="/images/favicon.ico" />
+
+<div th:replace="fragment/StyleFragment :: style"></div>
+<script src="/js/demo_pages/form_select2.js"></script>
+
+</head>
+
+<body>
+
+	<div th:replace="fragment/topnav :: navbar"></div>
+
+	<!-- Page content -->
+	<div class="page-content">
+
+		<div th:replace="fragment/mainSidebar :: sidebar"></div>
+
+		<!-- Main content -->
+		<div class="content-wrapper">
+
+			<!-- Page header -->
+			<div class="page-header">
+				<div class="page-header-content header-elements-md-inline">
+					<div class="page-title d-flex">
+						<h4>
+							<i class="icon-arrow-left52 mr-2"></i> Add Product
+						</h4>
+						<a href="#" class="header-elements-toggle text-default d-md-none"><i
+							class="icon-more"></i></a>
+					</div>
+				</div>
+			</div>
+			<!-- /page header -->
+
+			<!-- Content area -->
+			<div class="content">
+
+				<!-- Form inputs -->
+				<div class="card">
+					<div class="card-body">
+						<div th:if="${updateError}" class="alert alert-danger"
+							role="alert">
+							<table>
+								<tr th:each="error : ${updateError}">
+									<td class="text-left" th:text="${'* '+ error}">data</td>
+								</tr>
+							</table>
+						</div>
+
+						<form action="#" th:action="@{/admin/product/save}" method="post"
+							enctype="multipart/form-data">
+							<fieldset class="mb-3">
+
+								<div class="form-group row">
+									<label class="col-form-label col-lg-2">Product Type</label>
+									<div class="col-lg-10">
+
+										<select class="form-control form-control-select"
+											required="required" name="productType" id="productType">
+											<option value="">Select</option>
+											<option th:each="item : ${productType}" th:value="${item.id}"
+												th:selected="${(product !=null and product.productType.name == item.name)}"
+												th:text="${item.name}" />
+										</select>
+									</div>
+								</div>
+
+								<input type="hidden" id="id" name="id" th:if="${product !=null}"
+									th:value="${product.id}"> <input type="hidden"
+									id="productImageFileId" name="productImageFileId"
+									th:if="${product !=null}"
+									th:value="${(product.productImageFile != null && !#strings.isEmpty(product.productImageFile)) ? product.productImageFile : ''}">
+
+								<input type="hidden" id="brochureFileId" name="brochureFileId"
+									th:if="${product !=null}"
+									th:value="${(product.brochureFile != null && !#strings.isEmpty(product.brochureFile)) ? product.brochureFile : ''}">
+
+								<div class="form-group row">
+									<label class="col-form-label col-lg-2">Product Name</label>
+									<div class="col-lg-10">
+										<input type="text" id="productName" name="productName"
+											th:value="${product !=null ? product.productName : ''}"
+											required="required" class="form-control">
+									</div>
+								</div>
+
+								<div class="form-group row">
+
+									<label class="col-form-label col-lg-2">Upload Product
+										Image</label>
+									<div class="col-lg-10">
+										<input type="file" id="productImageFile"
+											name="productImageFile" class="form-input-styled">
+									</div>
+								</div>
+
+
+								<div class="form-group row">
+									<label class="col-form-label col-lg-2">Product
+										Desciption</label>
+									<div class="col-lg-10">
+										<textarea rows="3" cols="3" maxlength="5000"
+											th:text="${product !=null ? product.productDescription : ''}"
+											id="productDescription" required="required"
+											name="productDescription" class="form-control" placeholder=""></textarea>
+										<span class="pull-right label label-default"
+											id="count_message"></span>
+
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label class="col-form-label col-lg-2">Product MRP</label>
+									<div class="col-lg-10">
+										<input type="number" id="MRP" name="MRP"
+											th:value="${product !=null ? product.MRP : ''}"
+											required="required" class="form-control">
+									</div>
+								</div>
+								
+								<div class="form-group row">
+									<label class="col-form-label col-lg-2"> Commission
+										Amount</label>
+									<div class="col-lg-10">
+										<input type="number" id="amount" name="amount"
+											th:value="${product !=null ? product.amount : ''}"
+											required="required" class="form-control">
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label class="col-form-label col-lg-2">Upload Brochure</label>
+									<div class="col-lg-10">
+										<input type="file" id="brochureFile" name="brochureFile"
+											class="form-input-styled">
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label class="col-form-label col-lg-2">Share With</label>
+									<div class="col-lg-10">
+										<select multiple="multiple" required class="form-control muls"
+											size="5" name="userAccess">
+											<option
+												th:selected="${(product !=null and product.adminMenu == 1)}"
+												value="AD">Admin</option>
+											<option
+												th:selected="${(product !=null and product.retailerMenu == 1)}"
+												value="RE">Retailer</option>
+											<option
+												th:selected="${(product !=null and product.distributorMenu == 1)}"
+												value="DS">Distributor</option>
+											<option
+												th:selected="${(product !=null and product.superDistributorMenu == 1)}"
+												value="SD">Super Distributor</option>
+											<option
+												th:selected="${(product !=null and product.businessAssociateMenu == 1)}"
+												value="BA">Business Associate</option>
+										</select>
+									</div>
+								</div>
+
+							</fieldset>
+
+							<div class="text-right">
+								<button type="submit" class="btn btn-primary">
+									Submit <i class="icon-paperplane ml-2"></i>
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!-- /form inputs -->
+
+			</div>
+			<!-- /content area -->
+
+
+			<!-- Footer -->
+			<div class="navbar navbar-expand-lg navbar-light">
+				<div class="text-center d-lg-none w-100">
+					<button type="button" class="navbar-toggler dropdown-toggle"
+						data-toggle="collapse" data-target="#navbar-footer">
+						<i class="icon-unfold mr-2"></i> Footer
+					</button>
+				</div>
+
+				<div class="navbar-collapse collapse" id="navbar-footer">
+					<span class="navbar-text"> &copy; 2020. </span>
+
+					<ul class="navbar-nav ml-lg-auto">
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-lifebuoy mr-2"></i> Support</a></li>
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-file-text2 mr-2"></i> Docs</a></li>
+
+					</ul>
+
+					<ul class="navbar-nav ml-lg-auto">
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-facebook color-fb "></i> </a></li>
+
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-twitter text-blue"></i> </a></li>
+
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-youtube text-red"></i> </a></li>
+					</ul>
+				</div>
+			</div>
+			<!-- /footer -->
+
+		</div>
+		<!-- /main content -->
+
+	</div>
+	<!-- /page content -->
+
+	<script>
+		var text_max = 5000;
+		$('#count_message').html('0 / ' + text_max);
+
+		$('#productDescription').keyup(function() {
+			var text_length = $('#productDescription').val().length;
+			var text_remaining = text_max - text_length;
+			$('#count_message').html(text_length + ' / ' + text_max);
+		});
+	</script>
+</body>
+
+</html>

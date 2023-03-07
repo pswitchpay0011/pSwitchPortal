@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>pSwitch</title>
+
+<link rel="shortcut icon" href="assets/images/favicon.ico" />
+
+<div th:replace="fragment/StyleFragment :: style"></div>
+<script src="/js/demo_pages/form_multiselect.js"></script>
+
+</head>
+
+<body>
+	<div th:replace="fragment/topnav :: navbar"></div>
+	<!-- Page content -->
+	<div class="page-content">
+
+		<div th:replace="fragment/mainSidebar :: sidebar"></div>
+
+		<!-- Main content -->
+		<div class="content-wrapper">
+
+			<!-- Page header -->
+			<div class="page-header">
+				<div class="page-header-content header-elements-md-inline">
+					<div class="page-title d-flex">
+						<h4>
+							<i class="icon-arrow-left52 mr-2"></i> Change Manager
+						</h4>
+						<a href="#" class="header-elements-toggle text-default d-md-none"><i
+							class="icon-more"></i></a>
+					</div>
+				</div>
+			</div>
+			<!-- /page header -->
+
+			<!-- Content area -->
+			<div class="content">
+
+				<!-- Form inputs -->
+				<div class="card">
+					<div class="card-body">
+						<form action="#" th:action="@{/admin/user/updateManager}"
+							method="post">
+							<fieldset class="mb-3">
+
+								<input type="hidden" id="id" name="id"
+									th:if="${userInfo !=null}" th:value="${userInfo.userId}">
+
+								<div class="form-group row">
+									<label class="col-form-label col-lg-2">User Name</label>
+									<div class="col-lg-10">
+										<input type="text" disabled="disabled" class="form-control"
+											required
+											th:value="${(userInfo !=null)? userInfo.firstName+' '+userInfo.lastName : ''}"
+											name="name" id="name">
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label class="col-form-label col-lg-2">Manage</label>
+									<div class="col-lg-10">
+
+										<select class="form-control form-control-select"
+											required="required" name="managerId" id="managerId">
+											<option value="">Select</option>
+											<option th:each="item : ${userList}"
+												th:value="${item.userId}"
+												th:selected="${(userInfo !=null and userInfo.parent !=null and userInfo.parent.userId == item.userId)}"
+												th:text="${item.firstName+' '+item.lastName}" />
+										</select>
+									</div>
+								</div>
+
+
+
+							</fieldset>
+
+							<div class="text-right">
+								<button type="submit" class="btn btn-primary">
+									Submit <i class="icon-paperplane ml-2"></i>
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!-- /form inputs -->
+
+			</div>
+			<!-- /content area -->
+
+
+			<!-- Footer -->
+			<div class="navbar navbar-expand-lg navbar-light">
+				<div class="text-center d-lg-none w-100">
+					<button type="button" class="navbar-toggler dropdown-toggle"
+						data-toggle="collapse" data-target="#navbar-footer">
+						<i class="icon-unfold mr-2"></i> Footer
+					</button>
+				</div>
+
+				<div class="navbar-collapse collapse" id="navbar-footer">
+					<span class="navbar-text"> &copy; 2020. </span>
+
+					<ul class="navbar-nav ml-lg-auto">
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-lifebuoy mr-2"></i> Support</a></li>
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-file-text2 mr-2"></i> Docs</a></li>
+					</ul>
+
+					<ul class="navbar-nav ml-lg-auto">
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-facebook color-fb "></i> </a></li>
+
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-twitter text-blue"></i> </a></li>
+
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-youtube text-red"></i> </a></li>
+
+					</ul>
+				</div>
+			</div>
+			<!-- /footer -->
+
+		</div>
+		<!-- /main content -->
+
+	</div>
+	<!-- /page content -->
+
+</body>
+
+</html>
