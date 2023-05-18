@@ -1,5 +1,6 @@
 package net.in.pSwitch.api;
 
+import net.in.pSwitch.model.UserInfo;
 import net.in.pSwitch.model.database.CDMConfirmation;
 import net.in.pSwitch.model.database.ConfirmTransaction;
 import net.in.pSwitch.model.database.TransactionValidation;
@@ -15,6 +16,7 @@ import net.in.pSwitch.model.response.TransactionValidationResponse;
 import net.in.pSwitch.repository.CDMConfirmationRepository;
 import net.in.pSwitch.repository.ConfirmTransactionRepository;
 import net.in.pSwitch.repository.TransactionValidationRepository;
+import net.in.pSwitch.repository.UserInfoRepository;
 import net.in.pSwitch.service.AuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,15 +25,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
+import java.util.regex.Pattern;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -39,8 +50,14 @@ import java.util.Map;
 public class BankApiController {
 	Logger logger = LoggerFactory.getLogger(BankApiController.class);
 
+	static final String CUSTOM_PATTERN = "YYYY-MM-DD HH:mm:ss";
+	static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(CUSTOM_PATTERN);
+
 	@Autowired
 	private AuthService authService;
+
+	@Autowired
+	private UserInfoRepository userInfoRepository;
 
 	@Autowired
 	private CDMConfirmationRepository cdmConfirmationRepository;
@@ -95,10 +112,15 @@ public class BankApiController {
 			cdm.setReqDtTime(cdmConfirmation.getReqDtTime());
 			cdm.setTxnNumber(cdmConfirmation.getTxnNmbr());
 			cdm.setPMode(cdmConfirmation.getPmode());
+			cdm.setCorpCode(cdm.getCorpCode());
 
 			response.setTxnid(cdmConfirmation.getUtr());
 			response.setApplUserID(cdmConfirmation.getApplUserID());
 
+		if(StringUtils.isEmpty(cdmConfirmation.getCorpCode())){
+			response.setStatus("1");
+			response.setMessage("Invalid client code");
+		}else if(cdmConfirmation.getCorpCode().equalsIgnoreCase("PSPL")) {
 			if(cdmConfirmationRepository.findByUTR(cdmConfirmation.getUtr())==null) {
 				cdmConfirmationRepository.save(cdm);
 				response.setStatus("0");
@@ -107,6 +129,10 @@ public class BankApiController {
 				response.setStatus("1");
 				response.setMessage("Duplicate UTR");
 			}
+		}else{
+			response.setStatus("1");
+			response.setMessage("Incorrect client code");
+		}
 
 //		}catch (NullPointerException e) {
 //			response.setStatus("1");
@@ -140,13 +166,14 @@ public class BankApiController {
 		confirmTransaction.setSndrIfsc(confirmTransactionRequest.getSndrIfsc());
 		confirmTransaction.setTranId(confirmTransactionRequest.getTranId());
 
-
 		if(confirmTransactionRepository.findByUtr(confirmTransactionRequest.getUtr())==null) {
 			confirmTransactionRepository.save(confirmTransaction);
 			response.setErrCd("000");
+			response.setSttsFlg("S");
 			response.setMessage("Account credited");
 		}else{
 			response.setErrCd("004");
+			response.setSttsFlg("F");
 			response.setMessage("Duplicate UTR");
 		}
 
@@ -174,17 +201,107 @@ public class BankApiController {
 		transactionValidation.setSndrNm1(transactionValidationRequest.getSndrNm1());
 		transactionValidation.setSndrIfsc(transactionValidationRequest.getSndrIfsc());
 
+		if(StringUtils.isEmpty(transactionValidationRequest.getUtr()) || !isAlphanumeric(transactionValidationRequest.getUtr())){
+			response.setErrCd("001");
+			response.setSttsFlg("F");
+			response.setMessage("Invalid UTR Number");
+		}else if(!isValidAccount(transactionValidationRequest.getBeneAccNo())){
+			response.setErrCd("001");
+			response.setSttsFlg("F");
+			response.setMessage("Invalid Bene Acc Number");
+		}else if(transactionValidationRequest.getReqDtTime()==null || isValidLocalDate(transactionValidationRequest.getReqDtTime())==null){
+			response.setErrCd("001");
+			response.setSttsFlg("F");
+			response.setMessage("Invalid Request DateTime");
+		}else if(transactionValidationRequest.getTxnAmnt()==null || !isValidAmount(transactionValidationRequest.getTxnAmnt())){
+			response.setErrCd("001");
+			response.setSttsFlg("F");
+			response.setMessage("Invalid Tran Amount");
+		}else if(StringUtils.isEmpty(transactionValidationRequest.getCorpCode())){
+			response.setErrCd("001");
+			response.setSttsFlg("F");
+			response.setMessage("Invalid client code");
+		}else if(transactionValidationRequest.getPmode().equalsIgnoreCase("NEFT") && ( StringUtils.isEmpty(transactionValidationRequest.getSndrNm()) ||
+				StringUtils.isEmpty(transactionValidationRequest.getSndrAcnt()))){
+			response.setErrCd("001");
+			response.setSttsFlg("F");
+			response.setMessage("Invalid Sender Acct/Name");
+		}else if(transactionValidationRequest.getPmode().equalsIgnoreCase("IMPS") && ( StringUtils.isEmpty(transactionValidationRequest.getSndrNm1()) ||
+				StringUtils.isEmpty(transactionValidationRequest.getSndrAcnt1()))){
+			response.setErrCd("001");
+			response.setSttsFlg("F");
+			response.setMessage("Invalid Sender Acct/Name");
+		}else if(transactionValidationRequest.getSndrIfsc()==null || !isValidIFSC(transactionValidationRequest.getSndrIfsc())){
+			response.setErrCd("001");
+			response.setSttsFlg("F");
+			response.setMessage("Invalid Sender Ifsc code");
+		}else if(transactionValidationRequest.getCorpCode().equalsIgnoreCase("PSPL")) {
 
-		if(transactionValidationRepository.findByUtr(transactionValidationRequest.getUtr())==null) {
-			transactionValidationRepository.save(transactionValidation);
-			response.setErrCd("000");
-			response.setMessage("Success");
+			if (transactionValidationRepository.findByUtr(transactionValidationRequest.getUtr()) == null) {
+				transactionValidationRepository.save(transactionValidation);
+				response.setErrCd("000");
+				response.setSttsFlg("S");
+				response.setMessage("Success");
+			} else {
+				response.setErrCd("004");
+				response.setSttsFlg("F");
+				response.setMessage("Duplicate UTR");
+			}
 		}else{
-			response.setErrCd("004");
-			response.setMessage("Duplicate UTR");
+			response.setErrCd("002");
+			response.setSttsFlg("F");
+			response.setMessage("Incorrect client code");
 		}
 
 
 		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
+	private boolean isValidAccount(String beneAccNo) {
+		if(!beneAccNo.toLowerCase().startsWith("pspl"))
+			return false;
+		if (beneAccNo.length()<20)
+			return false;
+
+		String mobNo = beneAccNo.substring(4, 14);
+		String userId = beneAccNo.substring(14);
+
+		if(!userId.chars().allMatch(Character::isDigit) || !mobNo.chars().allMatch(Character::isDigit)){
+			return false;
+		}
+		Optional<UserInfo> optional = userInfoRepository.findById(Integer.parseInt(userId));
+		if(!optional.isPresent()){
+			return false;
+		}else if(!optional.get().getMobileNumber().equals(mobNo)){
+			return false;
+		}
+
+		return true;
+	}
+
+	public Date isValidLocalDate(String dateStr) {
+
+		Date date = null;
+		try {
+			date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateStr);
+		}catch (Exception e) {
+		}
+		return date;
+	}
+
+	public boolean isValidAmount(String amt){
+		final String regExp = "[0-9]+([.][0-9]{1,2})?";
+		return amt.matches(regExp);
+	}
+
+	public boolean isValidIFSC(String ifsc){
+		final String regExp = "^[A-Z]{4}0[A-Z0-9]{6}$";
+		return ifsc.matches(regExp);
+	}
+
+	private final String ALPHANUMERIC_PATTERN = "^[a-zA-Z0-9-]+$";
+
+	public boolean isAlphanumeric(final String input) {
+		return input.matches(ALPHANUMERIC_PATTERN);
 	}
 }

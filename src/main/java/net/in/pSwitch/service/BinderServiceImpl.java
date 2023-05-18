@@ -2,17 +2,11 @@ package net.in.pSwitch.service;
 
 import net.in.pSwitch.authentication.LoginUserInfo;
 import net.in.pSwitch.controller.ApplicationController;
+import net.in.pSwitch.model.GSTINData;
 import net.in.pSwitch.model.Menu;
 import net.in.pSwitch.model.UserInfo;
 import net.in.pSwitch.model.UserWallet;
-import net.in.pSwitch.repository.CityRepository;
-import net.in.pSwitch.repository.CountryRepository;
-import net.in.pSwitch.repository.MenuRepository;
-import net.in.pSwitch.repository.ProductNewsRepository;
-import net.in.pSwitch.repository.RoleRepository;
-import net.in.pSwitch.repository.StatesRepository;
-import net.in.pSwitch.repository.UserInfoRepository;
-import net.in.pSwitch.repository.UserWalletRepository;
+import net.in.pSwitch.repository.*;
 import net.in.pSwitch.utility.StringLiteral;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +44,8 @@ public class BinderServiceImpl implements BinderService {
 	private RoleRepository roleRepository;
 	@Autowired
 	private UserWalletRepository userWalletRepository;
+	@Autowired
+	private GSTINRepository gstinRepository;
 
 
 	@Override
@@ -141,6 +137,11 @@ public class BinderServiceImpl implements BinderService {
 			model.addAttribute("role", userInfo.getRoles());
 
 			UserWallet mUserWallet = userWalletRepository.findByUser(userInfo);
+
+			if(userInfo.isKycCompleted()) {
+				GSTINData gstinData = gstinRepository.findByUser(userInfo.getUserId());
+				model.addAttribute("gstin", gstinData != null ? gstinData.getGstin() : "");
+			}
 
 			model.addAttribute("walletAmount", mUserWallet != null ? mUserWallet.getCurrentAmount() : 0);
 			return model;

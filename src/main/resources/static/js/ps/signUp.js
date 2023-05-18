@@ -89,7 +89,7 @@ const checkPassword = () => {
         valid = true;
     }
 
-    return valid;
+    return checkConfirmPassword();
 };
 
 const checkConfirmPassword = () => {
@@ -161,6 +161,16 @@ const showSuccessText = (input) => {
     error.textContent = '';
 }
 
+$(".toggle-password").click(function() {
+
+  $(this).toggleClass("fa-eye fa-eye-slash");
+  var input = $($(this).attr("toggle"));
+  if (input.attr("type") == "password") {
+    input.attr("type", "text");
+  } else {
+    input.attr("type", "password");
+  }
+});
 
 form.addEventListener('submit', function (e) {
     // prevent the form from submitting

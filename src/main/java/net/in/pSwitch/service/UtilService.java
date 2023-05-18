@@ -12,6 +12,7 @@ public interface UtilService {
 	public void sendVerificationMail(UserInfo userInfo);
 
 	public void sendOTPMail(UserInfo userInfo);
+	public void sendWelcomeEmail(UserInfo userInfo);
 	public void sendKYCCompleteMail(UserInfo userInfo);
 	public void sendLoginDetailMail(UserInfo userInfo);
 

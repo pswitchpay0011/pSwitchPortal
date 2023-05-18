@@ -252,6 +252,39 @@ public class UtilServiceImpl implements UtilService {
 			logger.error("Error: ", e);
 		}
 	}
+	
+	@Override
+	public void sendWelcomeEmail(UserInfo userInfo) {
+		try {
+			logger.info("sendWelcomeEmail");
+			String subject = "Welcome to pSwitch";
+
+			String mailContent = "";
+			ClassLoader classLoader = getClass().getClassLoader();
+			InputStream inputStream = classLoader.getResourceAsStream("templates/email/welcome.html");
+			try {
+				mailContent = readFromInputStream(inputStream);
+			} catch (IOException e) {
+				logger.error("Error: ", e);
+			}
+			mailContent = mailContent.replaceAll("#FNAME#", userInfo.getFirstName());
+			mailContent = mailContent.replaceAll("#ROLE#", userInfo.getRoles().getRoleName());
+			mailContent = mailContent.replaceAll("#FULLNAME#", userInfo.getFullName());
+			mailContent = mailContent.replaceAll("#MOBILE#", userInfo.getMobileNumber());
+			mailContent = mailContent.replaceAll("#EMAIL#", userInfo.getUsername());
+			logger.info("sendMail start");
+			sendMail(userInfo.getUsername(),subject, mailContent);
+			logger.info("sendMail End");
+		} catch (MailException e) {
+			logger.error("Error: ", e);
+		} catch (UnsupportedEncodingException e) {
+			logger.error("Error: ", e);
+		} catch (MessagingException e) {
+			logger.error("Error: ", e);
+		} catch (Exception e) {
+			logger.error("Error: ", e);
+		}
+	}
 
 	@Override
 	public void sendLoginDetailMail(UserInfo userInfo) {

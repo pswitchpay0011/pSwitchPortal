@@ -4,34 +4,15 @@ import net.in.pSwitch.authentication.LoginUser;
 import net.in.pSwitch.authentication.LoginUserInfo;
 import net.in.pSwitch.dto.KycDetails;
 import net.in.pSwitch.dto.UserBankDetailsDTO;
-import net.in.pSwitch.model.BusinessDetails;
-import net.in.pSwitch.model.City;
-import net.in.pSwitch.model.MccType;
-import net.in.pSwitch.model.Response;
-import net.in.pSwitch.model.ShopType;
-import net.in.pSwitch.model.States;
-import net.in.pSwitch.model.UserBankDetails;
-import net.in.pSwitch.model.UserInfo;
-import net.in.pSwitch.model.api.AadhaarOTPResponse;
-import net.in.pSwitch.model.api.AadhaarVerification;
-import net.in.pSwitch.model.api.BankVerificationResponse;
-import net.in.pSwitch.model.api.PanCardVerification;
-import net.in.pSwitch.model.api.PostOffice;
-import net.in.pSwitch.model.api.PostalPincode;
-import net.in.pSwitch.repository.BankListRepository;
-import net.in.pSwitch.repository.BusinessDetailsRepository;
-import net.in.pSwitch.repository.CityRepository;
-import net.in.pSwitch.repository.MCCRepository;
-import net.in.pSwitch.repository.RoleRepository;
-import net.in.pSwitch.repository.ShopTypeRepository;
-import net.in.pSwitch.repository.StatesRepository;
-import net.in.pSwitch.repository.UserBankDetailsRepository;
-import net.in.pSwitch.repository.UserInfoRepository;
-import net.in.pSwitch.repository.UserWalletRepository;
+import net.in.pSwitch.model.*;
+import net.in.pSwitch.model.api.*;
+import net.in.pSwitch.model.wallet.UserBankDetails;
+import net.in.pSwitch.repository.*;
 import net.in.pSwitch.service.BinderService;
 import net.in.pSwitch.service.CashFreeService;
 import net.in.pSwitch.service.UtilServiceImpl;
 import net.in.pSwitch.utility.StringLiteral;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,6 +76,12 @@ public class KycController {
     private BankListRepository bankListRepository;
     @Autowired
     private UserWalletRepository userWalletRepository;
+
+    @Autowired
+    private GSTINRepository gstinRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
 
     @GetMapping({"/", ""})
@@ -247,6 +234,8 @@ public class KycController {
                 bankDetails.setIfscCode(kycDetails.getIfscCode());
                 bankDetails.setUserInfo(userInfo);
                 bankDetails = userBankDetailsRepository.save(bankDetails);
+                bankDetails.setCreatedBy(userInfo.getUserId());
+                bankDetails.setUpdatedBy(userInfo.getUserId());
                 userInfo.setBankDetails(bankDetails);
                 utilService.sendKYCCompleteMail(userInfo);
             }
@@ -284,6 +273,21 @@ public class KycController {
                 userInfo.setAadhaarNumber(aadhaarCard);
                 userInfoRepository.save(userInfo);
             }
+        }
+        return response;
+    }
+    
+    @GetMapping("/getGSTDetails")
+    @ResponseBody
+    public Response<GSTINResponse> getGSTDetails(@RequestParam(value = "gstin", required = true) String gstin, @LoginUser LoginUserInfo loginUserInfo) {
+        Response response = cashFreeService.getGSTDetails(gstin);
+        if(!response.isError()){
+            UserInfo userInfo = binderService.getCurrentUser(loginUserInfo);
+            GSTINData gstinData = modelMapper.map(response.getResult(), GSTINData.class);
+            gstinData.setUserId(loginUserInfo.getId());
+            userInfo.setGstNo(gstinData.getGstin());
+            userInfoRepository.save(userInfo);
+            gstinRepository.save(gstinData);
         }
         return response;
     }
@@ -328,6 +332,8 @@ public class KycController {
                 bankDetails.setIfscCode(ifscCode);
                 bankDetails.setAccountType(accountType);
                 bankDetails.setUserInfo(userInfo);
+                bankDetails.setCreatedBy(userInfo.getUserId());
+                bankDetails.setUpdatedBy(userInfo.getUserId());
                 bankDetails = userBankDetailsRepository.save(bankDetails);
                 userInfo.setBankDetails(bankDetails);
                 userInfoRepository.save(userInfo);
@@ -443,6 +449,8 @@ public class KycController {
                 bankDetails.setAccountNumber(bankDetailsDto.getAccountNumber());
                 bankDetails.setBankName(bankDetailsDto.getBANK_NAME());
                 bankDetails.setIfscCode(bankDetailsDto.getIFSC_CODE());
+                bankDetails.setCreatedBy(userProfile.getUserId());
+                bankDetails.setUpdatedBy(userProfile.getUserId());
                 bankDetails.setUserInfo(userProfile);
                 userBankDetailsRepository.save(bankDetails);
                 userProfile.setBankDetails(bankDetails);

@@ -46,7 +46,7 @@ public class PublicApiController {
 
 
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-	public ResponseEntity<?> generateAuthenticationToken(@RequestBody AuthRequest authenticationRequest){
+	public ResponseEntity<Response> generateAuthenticationToken(@RequestBody AuthRequest authenticationRequest){
 		Response response = new Response();
 		try{
 			response.setResult(authService.authenticate(authenticationRequest));

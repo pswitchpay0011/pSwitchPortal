@@ -23,6 +23,8 @@ import javax.validation.constraints.Size;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.in.pSwitch.model.wallet.UserBankDetails;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -57,6 +59,9 @@ public class UserInfo implements Serializable {
     @Column(name = "last_name")
     private String lastName;
 
+    @Column(name = "middle_name")
+    private String middleName;
+    
     @Column(name = "is_active")
     private Long isActive = 0l;
 

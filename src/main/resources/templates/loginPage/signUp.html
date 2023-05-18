@@ -126,8 +126,8 @@
                                     <div class="col-md-6">
                                         <div class="form-group form-group-feedback form-group-feedback-left">
                                             <input type="text" class="form-control form-control-lg"
-                                                   placeholder="Last Name" id="lastName"
-                                                   th:field="*{lastName}" autofocus="autofocus">
+                                                   placeholder="Middle Name" id="middleName"
+                                                   th:field="*{middleName}" autofocus="autofocus">
                                             <div class="form-control-feedback">
                                                 <i class="icon-user-check text-blue-800"></i>
                                             </div>
@@ -139,6 +139,19 @@
                                 </div>
 
                                 <div class="row">
+                                
+                                	<div class="col-md-6">
+                                        <div class="form-group form-group-feedback form-group-feedback-left">
+                                            <input type="text" class="form-control form-control-lg"
+                                                   placeholder="Last Name" id="lastName"
+                                                   th:field="*{lastName}" autofocus="autofocus">
+                                            <div class="form-control-feedback">
+                                                <i class="icon-user-check text-blue-800"></i>
+                                            </div>
+                                            <small class="form-text text-danger"></small>
+                                        </div>
+                                    </div>
+                                    
                                     <div class="col-md-6">
                                         <div class="form-group form-group-feedback form-group-feedback-left">
                                             <input type="text" class="form-control form-control-lg"
@@ -150,16 +163,19 @@
                                             <small class="form-text text-danger"></small>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group form-group-feedback form-group-feedback-left">
-                                            <input type="text" class="form-control form-control-lg"
-                                                   placeholder="Mobile Number as per aadhaar" id="mobileNumber"
-                                                   th:field="*{mobileNumber}" required autofocus="autofocus">
-                                            <div class="form-control-feedback">
-                                                <i class="icon-mobile text-blue-800"></i>
-                                            </div>
-                                            <small class="form-text text-danger"></small>
-                                        </div>
+                               </div>
+                                    <div class="row">
+	                                    <div class="col-md-12">
+	                                        <div class="form-group form-group-feedback form-group-feedback-left">
+	                                            <input type="text" class="form-control form-control-lg"
+	                                                   placeholder="Mobile Number as per Aadhaar card number" id="mobileNumber"
+	                                                   th:field="*{mobileNumber}" required autofocus="autofocus">
+	                                            <div class="form-control-feedback">
+	                                                <i class="icon-mobile text-blue-800"></i>
+	                                            </div>
+	                                            <small class="form-text text-danger"></small>
+	                                        </div>
+	                                    </div>
                                     </div>
 
                                     <div class="col-md-6 d-none">
@@ -176,28 +192,29 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                
 
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="form-group form-group-feedback form-group-feedback-left">
+                                        <div class="form-group form-group-feedback form-group-feedback-right">
                                             <input type="password" class="form-control form-control-lg"
                                                    placeholder="Password" id="password" th:field="*{password}"
                                                    required autofocus="autofocus">
                                             <div class="form-control-feedback">
-                                                <i class="icon-key text-blue-800"></i>
+                                                <i toggle="#password" class="far fa-eye text-blue-800 toggle-password"></i>
                                             </div>
                                             <small class="form-text text-danger"></small>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group form-group-feedback form-group-feedback-left">
+                                        <div class="form-group form-group-feedback form-group-feedback-right">
                                             <input type="password" class="form-control form-control-lg"
                                                    placeholder="Confirm password" id="confirmPassword"
                                                    required autofocus="autofocus">
-                                            <div class="form-control-feedback">
-                                                <i class="icon-key text-blue-800"></i>
-                                            </div>
+                                            	<div class="form-control-feedback">
+													<i toggle="#confirmPassword" class="far fa-eye text-blue-800 toggle-password"></i>
+												</div>
+                                            
                                             <small class="form-text text-danger"></small>
                                         </div>
                                     </div>
@@ -229,19 +246,23 @@
 
                                 <div class="form-group">
 
-                                    <div class="form-check">
+                                   <!--  <div class="form-check">
                                         <label class="form-check-label"> <input
                                                 type="checkbox" name="remember" class="form-input-styled"
                                                 checked data-fouc> Subscribe to monthly newsletter
                                         </label>
                                     </div>
-
+                                     -->
+                                     
+									<span>Please read the  <a href="#" data-toggle="modal" data-target="#termsAndAggrement">pSwitch Terms of service </a>before signing up.</span>
+									<br>
                                     <div class="form-check">
-                                        <label class="form-check-label"> <input
+                                    
+                                        <label class="form-check-label">
+ <input
                                                 type="checkbox" name="remember" required="required"
                                                 class="form-input-styled"
-                                                data-fouc>Please accept <a href="#" data-toggle="modal"
-                                                                     data-target="#termsAndAggrement">Terms and Conditions</a>
+                                                data-fouc>I have read and agree to the above Terms.
                                         </label>
                                     </div>
                                 </div>
@@ -249,14 +270,14 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="text-left">
-                                            <a type="button" th:href="@{/login}" class="btn btn-default rounded-round"><< Back for Sign In</a>
+                                            <a type="button" th:href="@{/login}" class="btn btn-default rounded-round"><< Back for SIGN IN</a>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="text-right">
                                             <button type="submit" class="btn btn-danger rounded-round">
-                                                Register
+                                               SIGN UP 
                                             </button>
                                         </div>
                                     </div>

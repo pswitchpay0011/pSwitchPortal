@@ -4,6 +4,7 @@ import net.in.pSwitch.model.Response;
 import net.in.pSwitch.model.api.AadhaarOTPResponse;
 import net.in.pSwitch.model.api.AadhaarVerification;
 import net.in.pSwitch.model.api.BankVerificationResponse;
+import net.in.pSwitch.model.api.GSTINResponse;
 import net.in.pSwitch.model.api.PanCardVerification;
 import net.in.pSwitch.model.api.TokenResponse;
 import net.in.pSwitch.repository.ShopTypeRepository;
@@ -120,6 +121,43 @@ public class CashFreeService {
 
         response.setResult(verification);
         response.setMessage(verification.getMessage());
+        return response;
+    }
+    
+    public Response getGSTDetails(String gstin) {
+        String url = VERIFICATION_URL + "gstin";
+
+        Map<String, String> map = new HashMap<>();
+        map.put("GSTIN", gstin);
+        GSTINResponse gstinResponse = null;
+        Response response = new Response();
+        // build the request
+        HttpEntity<Map<String, String>> entity = new HttpEntity<>(map, getHttpHeader());
+        try {
+            ResponseEntity<GSTINResponse> responseEntity = restTemplate.postForEntity(url, entity, GSTINResponse.class);
+            gstinResponse = responseEntity.getBody();
+
+            if (responseEntity.getStatusCode() == HttpStatus.OK) {
+                if (gstinResponse.getValid()) {
+                    gstinResponse.setMessage("GST details get successfully");
+                }
+            } else {
+                response.setError(true);
+            }
+        } catch (RestClientException e) {
+            LOGGER.error("Error: {}", e);
+            gstinResponse = new GSTINResponse();
+            gstinResponse.setMessage("Error while fetching GST details. please try again later");
+            response.setError(true);
+        } catch (Exception e) {
+            LOGGER.error("Error: {}", e);
+            gstinResponse = new GSTINResponse();
+            response.setError(true);
+            gstinResponse.setMessage("Error while fetching GST details. please try again later");
+        }
+
+        response.setResult(gstinResponse);
+        response.setMessage(gstinResponse.getMessage());
         return response;
     }
 

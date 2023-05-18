@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>pSwitch - Welcome Retailer</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>pSwitch - Welcome Retailer</title>
 
-<link rel="shortcut icon" href="images/favicon.ico" />
+	<link rel="shortcut icon" href="images/favicon.ico" />
 
-<div th:replace="fragment/StyleFragment :: style"></div>
+	<div th:replace="fragment/StyleFragment :: style"></div>
+	<script src="/js/plugins/forms/selects/select2.min.js"></script>
+	<script src="/js/demo_pages/picker_date.js"></script>
+	<script src="/js/plugins/forms/wizards/steps.min.js"></script>
+	<script src="/js/custom.js"></script>
+	<script src="/js/demo_pages/datatables_basic.js"></script>
+
 </head>
 
 <body>
@@ -28,912 +34,1036 @@
 			<div class="page-header">
 				<div class="page-header-content header-elements-md-inline">
 					<div class="page-title d-flex">
-						<h4>
-							<i class="icon-arrow-down52 mr-2"></i> User Profile
-						</h4>
-						<a href="#" class="header-elements-toggle text-default d-md-none"><i
-							class="icon-more"></i></a>
+						<h4><i class="icon-arrow-down52 mr-2"></i> Profile</h4>
+						<a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
 					</div>
-					<div
-						class="header-elements d-none text-center text-md-left mb-3 mb-md-0">
-						<div class="btn-group">
 
-							<div th:if="${mpinSet!=null && !mpinSet}">
-								<button type="button" class="btn bg-warning-400 ml-3"
-									data-toggle="modal" data-target="#set-mpin">
-									<i class="icon-mobile mr-2"></i> Set MPIN
-								</button>
-							</div>
-							<div th:if="${mpinSet!=null && mpinSet}">
-								<button type="button" class="btn bg-warning-400 ml-3"
-									data-toggle="modal" data-target="#reset-mpin">
-									<i class="icon-mobile mr-2"></i> Reset MPIN
-								</button>
-							</div>
-						</div>
-					</div>
+
 				</div>
 			</div>
 			<!-- /page header -->
 
 			<!-- Content area -->
 			<div class="content">
+				<div class="row">
 
-				<!-- Inner container -->
-				<div class="d-md-flex align-items-md-start">
+					<div class="col-md-12">
 
-					<!-- Left sidebar component -->
-					<div
-						class="sidebar sidebar-light bg-transparent sidebar-component sidebar-component-left wmin-300 border-0 shadow-0 sidebar-expand-md">
+						<div class="d-md-flex align-items-md-start">
 
-						<!-- Sidebar content -->
-						<div class="sidebar-content">
+							<div class="tab-content w-100">
+								<div class="tab-pane fade active show" id="">
 
-							<!-- Navigation -->
-							<div class="card">
-								<div class="card-body bg-indigo-400 text-center card-img-top"
-									style="background-image: url(/images/backgrounds/panel_bg.png); background-size: contain;">
-									<div class="card-img-actions d-inline-block mb-3">
-										<img class="img-fluid rounded-circle"
-											th:src="${(user.profilePicture != null && !#strings.isEmpty(user.profilePicture)) ? '/files/'+user.profilePicture : '/images/user.png'}"
-											th:alt="${user.firstName}" width="170" height="170">
-									</div>
+									<!-- Profile info -->
+									<div class="card">
+										<div class="card-body">
+											<ul class="nav nav-tabs nav-tabs-highlight">
+												<li class="nav-item"><a href="#basic-tab1" class="nav-link active"
+														data-toggle="tab">Personal Details</a></li>
+												<li class="nav-item"><a href="#basic-tab3" class="nav-link"
+														data-toggle="tab">Downloads</a></li>
+												<li class="nav-item"><a href="#basic-tab4" class="nav-link"
+														data-toggle="tab">Services</a></li>
+												<li class="nav-item "><a href="#basic-tab5" class="nav-link "
+														data-toggle="tab">Password and Security</a></li>
+												<li class="nav-item"><a href="#basic-tab6" class="nav-link"
+														data-toggle="tab">Bank List</a></li>
+											</ul>
 
-									<h4 class="font-weight-semibold mb-0"
-										th:text="${user.firstName + ' '+ user.lastName}">user</h4>
-									<span class="d-block" th:text="${role.roleName}"></span>
-									<span class="d-block" th:text="${'ID: '+user.userPSwitchId}"></span>
+											<div class="tab-content">
+												<div class="tab-pane fade show active" id="basic-tab1">
+													<div class="table-responsive mb-3">
+														<table
+															class="table table-scrollable table-striped table-bordered">
 
-									<div class="list-icons list-icons-extended mt-2">
+															<tbody>
+																<tr>
+																	<td class="text-primary" width="25%">Agent ID</td>
+																	<td th:text="${user.userPSwitchId}"></td>
+																</tr>
+																<tr>
+																	<td class="text-primary">Business Name</td>
+																	<td><span th:text="${user.businessDetails!=null ? user.businessDetails.businessName: ''}" id="businessName"> Pafma Holding unlimited</span></td>
+																</tr>
+																<tr>
+																	<td class="text-primary">Name</td>
+																	<td th:text="${user!=null ? user.getFullName(): ''}"> Faiz Ahmad</td>
+																</tr>
+																<tr>
+																	<td class="text-primary">PAN Number</td>
+																	<td th:text="${user!=null ? user.pancardNumber: ''}"> AOFPA6153F </td>
+																</tr>
+																<tr>
+																	<td class="text-primary">Aadhar Number</td>
+																	<td th:text="${user!=null ? user.aadhaarNumber: ''}"> ********8105</td>
+																</tr>
+																<tr>
+																	<td class="text-primary">GST Number</td>
+																	<td><span th:text="${user!=null ? user.gstNo: ''}"></span>
+																		<button th:if="${user!=null && user.gstNo ==null}" type="button" data-toggle="modal"
+																			data-target="#gst_modal"
+																			class="ml-2 btn bg-primary btn-icon rounded-round"><i
+																				class="icon-plus22"></i></button></td>
+																</tr>
+																<tr>
+																	<td class="text-primary">MCC</td>
+																	<td> <span th:text="${mcc!=null ? mcc: ''}">Travel Agencies and Tour Operators </span><button
+																			data-toggle="modal" data-target="#mcc_modal"
+																			type="button"
+																			class="ml-2 btn bg-primary btn-icon rounded-round"><i
+																				class="icon-pencil5"></i></button></td>
+																</tr>
+																<tr>
+																	<td class="text-primary">Current Mobile Number</td>
+																	<td><span th:text="${user!=null ? user.mobileNumber: ''}"> 9810946254</span> <button type="button"
+																			data-toggle="modal" data-target="#num_modal"
+																			class="ml-2 btn bg-primary btn-icon rounded-round"><i
+																				class="icon-pencil5"></i></button>
+																		<button type="button"
+																			class="ml-2 btn bg-primary btn-icon rounded-round"
+																			data-toggle="modal"
+																			data-target="#new_num_modal"><i
+																				class="icon-phone-plus2"></i></button>
+																	</td>
+																</tr>
+																</tr>
+																<tr>
+																	<td class="text-primary">Current Email ID</td>
+																	<td><span th:text="${user!=null ? user.username: ''}"> user@gmail.com </span><button type="button"
+																			class="ml-2 btn bg-primary btn-icon rounded-round"
+																			data-toggle="modal"
+																			data-target="#mail_modal"><i
+																				class="icon-pencil5"></i></button>
+																		<button type="button"
+																			class="ml-2 btn bg-primary btn-icon rounded-round"
+																			data-toggle="modal"
+																			data-target="#new_mail_modal"><i
+																				class="icon-plus22"></i></button></td>
+																</tr>
 
-										<!-- Master Distributor: NA <br> MD Mobile:
-                                    NA -->
+															</tbody>
+														</table>
+													</div>
 
-										<!--<a href="#" class="list-icons-item text-white" data-popup="tooltip" title="" data-container="body" data-original-title="Google Drive"><i class="icon-google-drive"></i></a>
-                                    <a href="#" class="list-icons-item text-white" data-popup="tooltip" title="" data-container="body" data-original-title="Twitter"><i class="icon-twitter"></i></a>
-                                    <a href="#" class="list-icons-item text-white" data-popup="tooltip" title="" data-container="body" data-original-title="Github"><i class="icon-github"></i></a> -->
-									</div>
-								</div>
+													<div class="row">
 
-								<div class="card-body p-0">
-									<div class="table-responsive">
-										<table class="table">
-											<tbody>
-												<tr>
-													<td>Verification Status</td>
-													<td><span
-														th:text="${user.isVerified ==null || user.isVerified == 0? 'Pending' : ((user.isVerified !=null && user.isVerified == 1) ? 'Verified' : 'Rejected')}"
-														th:class="${user.isVerified == null || user.isVerified == 0? 'text-info' : ((user.isVerified !=null && user.isVerified == 1) ? 'text-success' : 'text-danger')}"></span></td>
-												</tr>
-												<div th:if="${user.parent !=null}">
-													<tr>
-														<td><span
-															th:text="${user.parent.roles !=null? user.parent.roles.roleName: ''}"></span></td>
-														<td><span
-															th:text="${user.parent !=null? user.parent.firstName + ' '+ user.parent.lastName: ''}"></span></td>
-													</tr>
-													<tr>
-														<td>Mobile No.</td>
-														<td><span
-															th:text="${user.parent !=null? user.parent.mobileNumber : ''}"></span></td>
-													</tr>
-												</div>
-											</tbody>
-										</table>
-									</div>
-								</div>
+														<hr>
 
-							</div>
-							<!-- /navigation -->
+														<div class="col-md-6">
 
-							<!-- Latest updates -->
-							<div class="card">
-								<div class="card-header bg-transparent header-elements-inline">
-									<span class="card-title font-weight-semibold">Latest
-										updates</span>
-									<div class="header-elements">
-										<div class="list-icons">
-											<a class="list-icons-item" data-action="collapse"></a>
-										</div>
-									</div>
-								</div>
+															<strong>Address Information</strong>
+															<div class="table-responsive mt-3">
+																<table
+																	class="table table-scrollable table-striped table-bordered">
 
-								<div class="card-body">
-									<ul class="media-list">
-										<li class="media">
-											<div class="mr-3">
-												<a href="#"
-													class="btn bg-transparent border-primary text-primary rounded-round border-2 btn-icon">
-													<i class="icon-git-pull-request"></i>
-												</a>
-											</div>
+																	<tbody>
+																		<tr>
+																			<td class="text-primary" width="27%">Address</td>
+																			<td th:text="${user.businessDetails!=null ? user.businessDetails.address: ''}">414 wave silver tower</td>
+																		</tr>
+																		<tr>
+																			<td class="text-primary">Pincode</td>
+																			<td th:text="${user.businessDetails!=null ? user.businessDetails.zipcode: ''}">201301</td>
+																		</tr>
+																		<tr>
+																			<td class="text-primary">City/District</td>
+																			<td th:text="${city!=null ? city: ''}">GAUTAM BUDDHA NAGAR </td>
+																		</tr>
+																		<tr>
+																			<td class="text-primary">State</td>
+																			<td th:text="${state!=null ? state: ''}">UTTAR PRADESH</td>
+																		</tr>
 
-											<div class="media-body">
-												Lorem Ipsum is simply dummy text of the printing..
-												<div class="text-muted font-size-sm">4 minutes ago</div>
-											</div>
-										</li>
+																	</tbody>
+																</table>
+															</div>
 
-										<li class="media">
-											<div class="mr-3">
-												<a href="#"
-													class="btn bg-transparent border-warning text-warning rounded-round border-2 btn-icon">
-													<i class="icon-git-commit"></i>
-												</a>
-											</div>
+															<div class="actions clearfix text-left mt-2">
+																<a href="#" class="btn btn-primary mt-2"
+																	data-toggle="modal"
+																	data-target="#address_modal">Update Address</a>
+															</div>
 
-											<div class="media-body">
-												Lorem Ipsum is simply dummy text of the printing..
-												<div class="text-muted font-size-sm">36 minutes ago</div>
-											</div>
-										</li>
+														</div>
 
-										<li class="media">
-											<div class="mr-3">
-												<a href="#"
-													class="btn bg-transparent border-info text-info rounded-round border-2 btn-icon">
-													<i class="icon-git-branch"></i>
-												</a>
-											</div>
+														<div class="col-md-6">
 
-											<div class="media-body">
-												Lorem Ipsum is simply dummy text of the printing..
-												<div class="text-muted font-size-sm">2 hours ago</div>
-											</div>
-										</li>
-									</ul>
-								</div>
-							</div>
-							<!-- /latest updates -->
+															<strong>Business Address</strong>
+															<div class="table-responsive mt-3">
+																<table
+																	class="table table-scrollable table-striped table-bordered">
 
-						</div>
-						<!-- /sidebar content -->
+																	<tbody>
+																		<tr>
+																			<td class="text-primary" width="27%">Business Name</td>
+																			<td th:text="${user.businessDetails!=null ? user.businessDetails.businessName: ''}"> 414 wave silver tower</td>
+																		</tr>
+																		<tr>
+																			<td class="text-primary">Type Of Mcc</td>
+																			<td  th:text="${mcc!=null ? mcc: ''}"> sector 18</td>
+																		</tr>
+																		<tr>
+																			<td class="text-primary">Type of Shop</td>
+																			<td th:text="${shop!=null ? shop: ''}"> NA</td>
+																		</tr>
+																	</tbody>
+																</table>
+															</div>
 
-					</div>
-					<!-- /left sidebar component -->
+															<div class="actions clearfix text-left mt-2">
+																<a href="#" class="btn btn-primary mt-2"
+																	data-toggle="modal"
+																	data-target="#business_address_modal">Update
+																	Business Details</a>
+															</div>
 
-
-					<!-- Right content -->
-					<div class="tab-content w-100">
-						<div class="tab-pane fade active show" id="">
-
-							<form action="#" th:action="@{/user/updateProfileInfo}"
-								method="post" enctype="multipart/form-data">
-								<!-- Profile info -->
-								<div class="card">
-									<div class="card-header header-elements-inline">
-										<h5 class="card-title">Profile information</h5>
-										<div class="header-elements">
-											<div class="list-icons">
-												<a class="list-icons-item" data-action="collapse"></a>
-											</div>
-										</div>
-									</div>
-
-									<div class="card-body">
-
-										<div th:if="${updateMessage}" class="alert alert-success"
-											role="alert">
-											<p th:text="${updateMessage}"></p>
-										</div>
-
-										<div th:if="${updateError}" class="alert alert-danger"
-											role="alert">
-											<table>
-												<tr th:each="error : ${updateError}">
-													<td class="text-left" th:text="${'* '+ error}">data</td>
-												</tr>
-											</table>
-										</div>
-										<div class="form-group">
-											<div class="row">
-												<div class="col-md-6">
-													<label>First Name</label> <input type="text"
-																					 th:value="${user.firstName}" id="firstName"
-																					 name="firstName" class="form-control">
-												</div>
-												<div class="col-md-6">
-													<label>Last Name</label> <input type="text"
-																					th:value="${user.lastName}" id="lastName" name="lastName"
-																					class="form-control">
-												</div>
-											</div>
-										</div>
-
-										<div class="form-group">
-											<div class="row">
-												<div class="col-md-6">
-													<label>Company Name</label> <input type="text"
-																					 th:value="${user.companyName}" id="companyName"
-																					 name="companyName" class="form-control">
-												</div>
-												<div class="col-md-6">
-													<label>GST No.</label>
-													<input type="text" th:value="${user.gstNo}" id="gstNo" name="gstNo"
-														   class="form-control">
-												</div>
-											</div>
-										</div>
-
-										<div class="form-group">
-											<div class="row">
-												<div class="col-md-6">
-													<label>Address line 1</label> <input type="text"
-														th:value="${user.address}" id="address" name="address"
-														class="form-control">
-												</div>
-												<div class="col-md-6">
-													<label>Address line 2</label> <input type="text" value=""
-														class="form-control">
-												</div>
-											</div>
-										</div>
-
-										<div class="form-group">
-											<div class="row">
-												<div class="col-md-6">
-													<label>Email</label> <input type="text"
-														th:value="${user.username}" id="username" name="username"
-														class="form-control">
-												</div>
-												<div class="col-md-6">
-													<label>Country</label> <select class="form-control"
-														required="required" th:field="*{user.country}"
-														name="country" id="country">
-														<option th:each="item : ${countries}"
-															th:value="${item.id}" th:text="${item.name}" />
-													</select>
-												</div>
-											</div>
-										</div>
-
-										<input type="hidden" id="userId" name="userId"
-											th:value="${user.userId}"> <input type="hidden"
-											id="selectedCountry" name="selectedCountry"
-											th:value="${user.country}"> <input type="hidden"
-											id="selectedState" name="selectedState"
-											th:value="${user.state}"> <input type="hidden"
-											id="selectedCity" name="selectedCity" th:value="${user.city}">
-
-
-										<div class="form-group">
-											<div class="row">
-												<div class="col-md-4">
-													<label>State/Province</label> <select class="form-control"
-														th:field="*{user.state}" name="state" id="state"
-														required="required">
-														<option th:each="item : ${states}" th:value="${item.id}"
-															th:text="${item.name}" />
-													</select>
-												</div>
-												<div class="col-md-4">
-													<label>City</label> <select class="form-control"
-														th:field="*{user.city}" name="city" id="city"
-														required="required">
-														<option th:each="item : ${cities}" th:value="${item.id}"
-															th:text="${item.name}" />
-													</select>
-												</div>
-												<div class="col-md-4">
-													<label>ZIP code</label> <input type="text"
-														th:value="${user.zipcode}" id="zipcode" name="zipcode"
-														class="form-control">
-												</div>
-											</div>
-										</div>
-
-										<div class="form-group">
-											<div class="row">
-												<div class="col-md-6">
-													<label>Phone #</label> <input type="text"
-														th:value="${user.mobileNumber}" id="mobileNumber"
-														name="mobileNumber" class="form-control"> <a
-														th:if="${user.contactVerified == 0 || user.contactVerified == null }"
-														href="#" onClick="verifyContact();">Verify Contact</a> <span
-														class="text-success" th:if="${user.contactVerified == 1}">Contact
-														Verified </span>
-													<!-- <span
-														class="form-text text-muted">+99-99-9999-9999</span> -->
-												</div>
-
-												<div class="col-md-6">
-													<label>Upload profile image</label> <input accept="image/*"
-														type="file" name="imgProfile" id="imgProfile"
-														class="form-input-styled"> <span
-														class="form-text text-muted">Accepted formats: gif,
-														png, jpg. Max file size 2Mb</span>
-												</div>
-											</div>
-										</div>
-										<div class="text-right">
-											<button type="submit" class="btn btn-primary">Save
-												changes</button>
-										</div>
-									</div>
-								</div>
-							</form>
-							<!-- /profile info -->
-
-							<!-- Bank Details -->
-							<div class="card">
-								<div class="card-header header-elements-inline">
-									<h5 class="card-title">Bank Details</h5>
-									<div class="header-elements">
-										<div class="list-icons">
-											<a class="list-icons-item" data-action="collapse"></a>
-										</div>
-									</div>
-								</div>
-
-								<div class="card-body">
-									<form action="#" method="post"
-										th:action="@{/user/updateUserBankDetails}">
-										<input type="hidden" id="userId" name="userId"
-											th:value="${user.userId}">
-										<div class="form-group">
-											<div class="row">
-												<div class="col-md-6">
-													<label>Account Holder Name</label> <input type="text"
-														th:value="${(user.bankDetails != null && !#strings.isEmpty(user.bankDetails.accountHolderName)) ? user.bankDetails.accountHolderName : ''}"
-														value="" id="accountHolderName" name="accountHolderName"
-														class="form-control">
-												</div>
-
-												<div class="col-md-6">
-													<label>Bank Name</label> <input type="text"
-														th:value="${(user.bankDetails != null && !#strings.isEmpty(user.bankDetails.bankName)) ? user.bankDetails.bankName : ''}"
-														name="BANK_NAME" value="ICICI" class="form-control">
-												</div>
-											</div>
-										</div>
-
-										<div class="form-group">
-											<div class="row">
-												<div class="col-md-6">
-													<label>Account Number</label> <input type="text"
-														th:value="${(user.bankDetails != null && !#strings.isEmpty(user.bankDetails.AccountNumber)) ? user.bankDetails.AccountNumber : ''}"
-														placeholder="11765432010258" id="AccountNumber"
-														, name="AccountNumber" class="form-control">
-												</div>
-
-												<div class="col-md-6">
-													<label>IFSC Code</label> <input type="text"
-														th:value="${(user.bankDetails != null && !#strings.isEmpty(user.bankDetails.ifscCode)) ? user.bankDetails.ifscCode : ''}"
-														placeholder="ICIC0003" id="IFSC_CODE" name="IFSC_CODE"
-														class="form-control">
-												</div>
-											</div>
-										</div>
-
-										<div class="text-right">
-											<button type="submit" class="btn btn-primary">Save
-												changes</button>
-										</div>
-
-									</form>
-								</div>
-							</div>
-							<!-- Bank Details -->
-
-							<!-- Account settings -->
-							<form th:action="@{/user/updateProfilePassword}" method="post">
-								<div class="card">
-									<div class="card-header header-elements-inline">
-										<h5 class="card-title">Account settings</h5>
-										<div class="header-elements">
-											<div class="list-icons">
-												<a class="list-icons-item" data-action="collapse"></a>
-											</div>
-										</div>
-									</div>
-
-									<input type="hidden" id="userId" name="userId"
-										th:value="${user.userId}">
-
-									<div class="card-body">
-										<div class="form-group">
-											<div class="row">
-												<div class="col-md-6">
-													<label>Username</label> <input type="text"
-														readonly="readonly" th:value="${user.userPSwitchId}"
-														id="userPSwitchId" name="userPSwitchId"
-														class="form-control">
-												</div>
-
-												<div class="col-md-6">
-													<label>OTP</label>
-													<div class="input-group">
-														<input type="number" id="pwd_otp" name="pwd_otp"
-															required="required" class="form-control">
-														<div class="input-group-append">
-															<button class="btn btn-warning" type="button"
-																onclick="generatePasswordOTP();">Send OTP</button>
 														</div>
 													</div>
-													<!-- <button type="button" onclick="generatePasswordOTP();"
-															class="btn btn-primary">Generate OTP</button> -->
-
 												</div>
 
-												<!-- <div class="col-md-6">
-													<label>Current password</label> <input type="password"
-														value="password" readonly="readonly" class="form-control">
-												</div> -->
-											</div>
-										</div>
-
-										<div class="form-group">
-											<div class="row">
-												<div class="col-md-6">
-													<label>New password</label> <input type="password"
-														id="newPassword" name="newPassword"
-														placeholder="Enter new password" class="form-control">
+												<div class="tab-pane fade" id="basic-tab2">
+													<div class="form-group">
+														No Banks Found
+													</div>
 												</div>
 
-												<div class="col-md-6">
-													<label>Repeat password</label> <input type="password"
-														id="confirmPassword" name="confirmPassword"
-														placeholder="Repeat new password" class="form-control">
+												<div class="tab-pane fade" id="basic-tab3">
+													<div class="form-group">
+														<button type="button"
+															class="mr-3 btn bg-primary-400 btn-labeled btn-labeled-left rounded-round"><b><i
+																	class="icon-file-pdf"></i></b>TDS
+															Certification</button>
+
+														<button type="button"
+															class="mr-3 btn bg-primary-400 btn-labeled btn-labeled-left rounded-round"><b><i
+																	class="icon-file-pdf"></i></b> PayPoint
+															Certificate</button>
+
+														<button type="button"
+															class="mr-3 btn bg-primary-400 btn-labeled btn-labeled-left rounded-round"><b><i
+																	class="icon-file-pdf"></i></b> RETAILER
+															AGREEMENT_Friday, January 20, 2023 </button>
+													</div>
 												</div>
-											</div>
-										</div>
-										<div class="text-right">
-											<button type="submit" class="btn btn-primary">Save
-												changes</button>
-										</div>
-									</div>
 
-								</div>
-							</form>
-							<!-- /account settings -->
+												<div class="tab-pane fade" id="basic-tab4">
+													<div class="form-group">
+														<div class="table-responsive mb-3">
+															<table
+																class="table table-scrollable table-striped table-bordered">
 
-							<!-- Documents -->
-							<div class="card">
-								<div class="card-header header-elements-inline">
-									<h5 class="card-title">Documents</h5>
-									<div class="header-elements">
-										<div class="list-icons">
-											<button type="button" class="btn btn-success"
-												data-toggle="modal" data-target="#upload_document">
-												Add Document <i class="icon-add ml-2"></i>
-											</button>
-											<a class="list-icons-item" data-action="collapse"></a>
-										</div>
-									</div>
-								</div>
+																<tbody>
 
+																	<tr>
+																		<th>S.No.</th>
+																		<th>Product</th>
+																		<th>Service Type</th>
+																		<th>Domain</th>
+																		<th>Status</th>
+																	</tr>
+																	<tr>
+																		<td>1</td>
+																		<td>ACT Fibernet</td>
+																		<td>Billing</td>
+																		<td>Broadband Postpaid</td>
+																		<td><span
+																				class="badge badge-success">Active</span>
+																		</td>
+																	</tr>
 
-								<div class="card-body">
-									<div class="form-group row">
-										<div class="col-lg-12">
-
-											<div class="row" id="gallery" data-toggle="modal"
-												data-target="#exampleModal">
-												<div class="col-sm-6 col-xl-3"
-													th:each="attachment,iter : ${user.attachments}"
-													th:if="${user.attachments != null}">
-													<div class="card min-height-300">
-														<div class="card-img-actions mx-1 mt-1 doc-img-height ">
-															<img class="card-img img-fluid"
-																th:src="${(attachment.file != null && !#strings.isEmpty(attachment.file)) ? '/files/'+attachment.file : '/images/user.png'}"
-																th:alt="${user.firstName}" width="170" height="170"
-																data-target="#carouselExample"
-																th:data-slide-to="${iter.index}">
-															<!-- <div class="card-img-actions-overlay card-img">
-																<a href="assets/images/adhaar.jpg"
-																	class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round"
-																	data-popup="lightbox" rel="group"> <i
-																	class="icon-enlarge"></i>
-																</a>
-															</div> -->
+																</tbody>
+															</table>
 														</div>
 
-														<div class="card-body">
-															<div class="d-flex align-items-start flex-nowrap ">
-																<div>
-																	<h6 class="font-weight-semibold mr-2"
-																		th:text="${attachment.documentType}"></h6>
-																	<h6 class="font-weight-semibold mr-2"
-																		th:text="${attachment.documentNumber}">5485 5000
-																		8000</h6>
-																	<p>
-																		Verification : <span th:text="${attachment.status}"></span>
-																	</p>
-																	<hr>
-																	<span class="text-danger"
-																		th:text="${attachment.documentDescription}">Lorem
-																		Ipsum is simply dummy text of the printing and
-																		typesetting industry.</span>
+													</div>
+												</div>
+
+												<div class="tab-pane fade" id="basic-tab5">
+													<div class="form-group">
+														<div class="row">
+
+																<div class="col-md-6">
+																	<form th:action="@{/user/updateProfilePassword}" method="post">
+																	<div class="row">
+																		<div class="col-md-12">
+																			<div class="form-group">
+																				<label
+																					class="text-primary font-weight-bold">Current
+																					Password</label>
+
+																				<input type="password"
+																					class="form-control" id="oldPassword" name="oldPassword"
+																					value="">
+
+																				<span toggle="#oldPassword"
+																					class="fa fa-fw fa-eye field-icon toggle-password"></span>
+
+																			</div>
+																		</div>
+
+																		<div class="col-md-12 mt-3">
+																			<div class="form-group">
+																				<label
+																					class="text-primary font-weight-bold">New
+																					Password</label>
+
+																				<input type="password" class="form-control"
+																					   id="newPassword" name="newPassword" value="">
+
+																				<span toggle="#newPassword"
+																					class="fa fa-fw fa-eye field-icon toggle-password"></span>
+
+																			</div>
+																		</div>
+																		<div class="col-md-12 mt-3">
+																			<div class="form-group">
+																				<label
+																					class="text-primary font-weight-bold">Re-Type
+																					New Password</label>
+
+																				<input type="password" class="form-control"
+																					   id="confirmPassword" name="confirmPassword" value="">
+
+																				<span toggle="#confirmPassword"
+																					class="fa fa-fw fa-eye field-icon toggle-password"></span>
+
+																			</div>
+																		</div>
+																	</div>
+
+																	<div class="actions clearfix text-right mt-2">
+																		<button type="submit" class="btn btn-primary mt-2">Change
+																			Password</button>
+																	</div>
+																	</form>
 																</div>
 
-																<div class="list-icons list-icons-extended ml-auto">
-																	<a
-																		th:href="${(attachment.file != null && !#strings.isEmpty(attachment.file)) ? '/files/'+attachment.file : '/images/user.png'}"
-																		target="_blank" class="list-icons-item"><i
-																		class="icon-download top-0"></i></a> <a
-																		th:if="${user.isVerified != 1}"
-																		th:href="${(attachment.id != null && !#strings.isEmpty(attachment.id)) ? '/user/deleteDocument/'+attachment.id : '#'}"
-																		class="list-icons-item"><i
-																		class="icon-trash top-0"></i></a>
+															<div class="col-md-5">
+																<strong>Help Text</strong>
+																<ul class="mt-4 list-unstyled list">
+																	<li><i
+																			class="icon-checkmark2 mr-1 icon-2x text-primary"></i>Password
+																		Length should be in between 8 and 15 characters.
+																	</li>
+																	<li><i class="icon-checkmark2 mr-1 icon-2x"></i> Old
+																		password and new password must be different.
+																	</li>
+																	<li><i
+																			class="icon-checkmark2 mr-1 icon-2x text-primary"></i>The
+																		password should not be the same as or part of
+																		the user ID.</li>
+																	<li><i class="icon-checkmark2 mr-1 icon-2x"></i>Last
+																		3 password can not be set as New Password.</li>
+																	<li><i
+																			class="icon-checkmark2 mr-1 icon-2x text-primary"></i>New
+																		Password should be alphanumeric with at least 1
+																		Non-Alphanumeric Character</li>
+																</ul>
+															</div>
+														</div>
+
+														<div>
+
+															<hr>
+
+															<div class="col-md-6">
+
+																<strong>Security</strong>
+
+																<div class="form-group custom-checkbox mt-3">
+																	<input type="checkbox" required=""
+																		class="custom-control-input"
+																		id="custom_checkbox_stacked_unchecked"
+																		name="remember">
+																	<label class="custom-control-label  ml-4 mb-2"
+																		for="custom_checkbox_stacked_unchecked"> Enable
+																		OTP Validation </label>
+
+																	<div class="actions clearfix text-left mt-2">
+																		<a href="#"
+																			class="btn btn-primary mt-2">Update</a>
+																	</div>
+																</div>
+															</div>
+
+														</div>
+													</div>
+												</div>
+
+												<div class="tab-pane fade" id="basic-tab6">
+													<div class="form-group">
+														<div class="row">
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Bank</label>
+																	<select class="form-control">
+																		<option value="opt1">Select Bank</option>
+																		<option value="opt2">Bank 1</option>
+																		<option value="opt2">Bank 2</option>
+																		<option value="opt2">Bank 3</option>
+
+																	</select>
+																</div>
+															</div>
+
+															<div class="col-md-6">
+																<div class="form-group">
+																	<label>Account Type:</label>
+																	<select class="form-control">
+																		<option value="opt1">Select Account Type
+																		</option>
+																		<option value="opt2">Saving Account</option>
+																		<option value="opt3">Current Account</option>
+
+																	</select>
+																</div>
+															</div>
+
+															<div class="col-md-6 mt-2">
+																<div class="form-group">
+																	<label>Account Number</label>
+																	<input type="text" name="name" class="form-control"
+																		placeholder="Enter Account No.">
+																</div>
+															</div>
+
+															<div class="col-md-6 mt-2">
+																<div class="form-group">
+																	<label>IFSC Code</label>
+																	<input type="text" name="name" class="form-control"
+																		placeholder="Enter Bank IFSC Code">
 																</div>
 															</div>
 														</div>
+
+														<div class="actions clearfix text-right mt-2">
+															<a href="#" class="btn btn-primary mt-2">Add Bank</a>
+														</div>
+
+														<hr>
+
+														<div class="table-responsive mb-3">
+															<table
+																class="table table-scrollable table-striped table-bordered">
+
+																<tbody>
+
+																	<tr>
+																		<th>Bank</th>
+																		<th>IFSC Code</th>
+																		<th>Account No</th>
+																		<th>Account Holder Name</th>
+																		<th>Account Type</th>
+																		<th>Status</th>
+																		<th>Created On</th>
+																	</tr>
+																	<tr>
+																		<td>ICICI BANK</td>
+																		<td>ICIC0001070</td>
+																		<td>107005009921</td>
+																		<td>PAFMA HOLDINGS UNLIM</td>
+																		<td>CA</td>
+																		<td>
+																			<span
+																				class="badge badge-success">Approved</span>
+																		</td>
+																		<td>20 Jan 2023 15:12:31 PM</td>
+																	</tr>
+
+																</tbody>
+
+															</table>
+														</div>
 													</div>
 												</div>
+
 											</div>
 										</div>
 									</div>
+									<!-- /profile info -->
+
 								</div>
+
+								<div class="tab-pane fade" id="schedule">
+
+									<!-- Available hours -->
+									<div class="card">
+										<div class="card-header header-elements-inline">
+											<h6 class="card-title">Available hours</h6>
+											<div class="header-elements">
+												<div class="list-icons">
+													<a class="list-icons-item" data-action="collapse"></a>
+													<a class="list-icons-item" data-action="reload"></a>
+													<a class="list-icons-item" data-action="remove"></a>
+												</div>
+											</div>
+										</div>
+
+										<div class="card-body">
+											<div class="chart-container">
+												<div class="chart has-fixed-height" id="available_hours"></div>
+											</div>
+										</div>
+									</div>
+									<!-- /available hours -->
+
+
+									<!-- Schedule -->
+									<div class="card">
+										<div class="card-header header-elements-inline">
+											<h5 class="card-title">My schedule</h5>
+											<div class="header-elements">
+												<div class="list-icons">
+													<a class="list-icons-item" data-action="collapse"></a>
+													<a class="list-icons-item" data-action="reload"></a>
+													<a class="list-icons-item" data-action="remove"></a>
+												</div>
+											</div>
+										</div>
+
+										<div class="card-body">
+											<div class="my-schedule"></div>
+										</div>
+									</div>
+									<!-- /schedule -->
+
+								</div>
+
+								<div class="tab-pane fade" id="orders">
+
+
+								</div>
+								<!-- /right content -->
+
 							</div>
-							<!-- /Documents -->
-
-							<!-- Profile info -->
-							<!-- <form th:action="@{/user/updateProfileDocument}" method="post"
-								enctype="multipart/form-data">
-								<div class="card">
-									<div class="card-header header-elements-inline">
-										<h5 class="card-title">Documents</h5>
-										<div class="header-elements">
-											<div class="list-icons">
-												<a class="list-icons-item" data-action="collapse"></a>
-											</div>
-										</div>
-									</div>
-									<input type="hidden" id="userId" name="userId"
-										th:value="${user.userId}">
-									<div class="card-body">
-										<div class="form-group">
-											<div class="row">
-												<div class="col-md-3">
-													<img
-														th:src="${(user.pancardPic != null && !#strings.isEmpty(user.pancardPic)) ? '/files/'+user.pancardPic : '/images/pan-card.jpg'}"
-														th:alt="${user.aadhaarCardPic}" src="images/pan-card.jpg"
-														alt="" class="img-fluid">
-
-												</div>
-												<div class="col-md-3">
-													<label>Pan Card Number</label> <input type="text"
-														required="required" value="125487952036984"
-														th:value="${user.pancardNumber}" id="pancardNumber"
-														name="pancardNumber" class="form-control">
-
-												</div>
-												<div class="col-md-6">
-													<label>Update Pan Card Image</label> <input
-														accept="image/*" type="file" id="imgPancard"
-														name="imgPancard" class="form-input-styled"> <span
-														class="form-text text-muted">Accepted formats: gif,
-														png, jpg. Max file size 2Mb</span>
-												</div>
-
-
-											</div>
-										</div>
-
-										<div class="form-group">
-											<div class="row">
-												<div class="col-md-3">
-													<img
-														th:src="${(user.aadhaarCardPic != null && !#strings.isEmpty(user.aadhaarCardPic)) ? '/files/'+user.aadhaarCardPic : '/images/adhaar-img.jpg'}"
-														th:alt="${user.aadhaarCardPic}"
-														src="/images/adhaar-img.jpg" alt="" class="img-fluid">
-
-												</div>
-												<div class="col-md-3">
-													<label>Adhaar Card Number</label> <input type="text"
-														required="required" value="125487952036984"
-														th:value="${user.aadhaarNumber}" id="aadhaarNumber"
-														name="aadhaarNumber" class="form-control">
-
-												</div>
-												<div class="col-md-6">
-													<label>Update Adhaar Card Image</label> <input
-														accept="image/*" type="file" id="imgAadhaarCard"
-														name="imgAadhaarCard" class="form-input-styled"> <span
-														class="form-text text-muted">Accepted formats: gif,
-														png, jpg. Max file size 2Mb</span>
-												</div>
-											</div>
-
-										</div>
-										<div class="text-right">
-											<button type="submit" class="btn btn-primary">Save
-												changes</button>
-										</div>
-									</div>
-								</div>
-							</form> -->
-							<!-- /profile info -->
-
-							<form th:action="@{/user/sendForApproval}" method="post">
-
-								<!-- Profile info -->
-								<div class="card">
-									<div class="card-body">
-										<div class="row">
-
-											<div class="col-md-2">
-												<button type="button" class="btn btn-danger"
-													data-toggle="modal" data-target="#termsAndAggrement">Agreement
-												</button>
-											</div>
-
-											<input type="hidden" id="userId" name="userId"
-												th:value="${user.userId}">
-
-											<div class="col-md-7">
-												<div class="custom-control custom-checkbox">
-													<input type="checkbox" class="custom-control-input"
-														id="custom_checkbox_stacked_unchecked" required="required">
-													<label class="custom-control-label text-red"
-														for="custom_checkbox_stacked_unchecked">I
-														acknowledge that i will follow and agree to terms and
-														conditions</label>
-												</div>
-
-											</div>
-
-											<div class="col-md-3 text-right">
-												<button type="submit" class="btn btn-primary">Send
-													for Approval</button>
-												<!-- <a th:href="@{/index}" class="btn btn-primary">Cancel</a> -->
-											</div>
-										</div>
-									</div>
-								</div>
-								<!-- /profile info -->
-							</form>
 						</div>
-
-						<div class="tab-pane fade" id="schedule">
-
-							<!-- Available hours -->
-							<div class="card">
-								<div class="card-header header-elements-inline">
-									<h6 class="card-title">Available hours</h6>
-									<div class="header-elements">
-										<div class="list-icons">
-											<a class="list-icons-item" data-action="collapse"></a> <a
-												class="list-icons-item" data-action="reload"></a> <a
-												class="list-icons-item" data-action="remove"></a>
-										</div>
-									</div>
-								</div>
-
-								<div class="card-body">
-									<div class="chart-container">
-										<div class="chart has-fixed-height" id="available_hours"></div>
-									</div>
-								</div>
-							</div>
-							<!-- /available hours -->
-
-
-							<!-- Schedule -->
-							<div class="card">
-								<div class="card-header header-elements-inline">
-									<h5 class="card-title">My schedule</h5>
-									<div class="header-elements">
-										<div class="list-icons">
-											<a class="list-icons-item" data-action="collapse"></a> <a
-												class="list-icons-item" data-action="reload"></a> <a
-												class="list-icons-item" data-action="remove"></a>
-										</div>
-									</div>
-								</div>
-
-								<div class="card-body">
-									<div class="my-schedule"></div>
-								</div>
-							</div>
-							<!-- /schedule -->
-
-						</div>
-
-
-						<div class="tab-pane fade" id="orders"></div>
-						<!-- /right content -->
-
-					</div>
-					<!-- /inner container -->
-
-				</div>
-				<!-- /content area -->
-
-
-			</div>
-			<!-- /main content -->
-
-			<!-- Footer -->
-			<div class="navbar navbar-expand-lg navbar-light">
-				<div class="text-center d-lg-none w-100">
-					<button type="button" class="navbar-toggler dropdown-toggle"
-						data-toggle="collapse" data-target="#navbar-footer">
-						<i class="icon-unfold mr-2"></i> Footer
-					</button>
-				</div>
-
-				<div class="navbar-collapse collapse" id="navbar-footer">
-					<span class="navbar-text"> &copy; 2020. </span>
-
-					<ul class="navbar-nav ml-lg-auto">
-						<li class="nav-item"><a href="#" class="navbar-nav-link"
-							target="_blank"><i class="icon-lifebuoy mr-2"></i> Support</a></li>
-						<li class="nav-item"><a href="#" class="navbar-nav-link"
-							target="_blank"><i class="icon-file-text2 mr-2"></i> Docs</a></li>
-
-
-					</ul>
-
-					<ul class="navbar-nav ml-lg-auto">
-
-
-						<li class="nav-item"><a href="#" class="navbar-nav-link"
-							target="_blank"><i class="icon-facebook color-fb "></i> </a></li>
-
-						<li class="nav-item"><a href="#" class="navbar-nav-link"
-							target="_blank"><i class="icon-twitter text-blue"></i> </a></li>
-
-						<li class="nav-item"><a href="#" class="navbar-nav-link"
-							target="_blank"><i class="icon-youtube text-red"></i> </a></li>
-
-					</ul>
-				</div>
-			</div>
-			<!-- /footer -->
-
-		</div>
-		<!-- /page content -->
-
-		<!-- Basic modal -->
-		<div th:replace="fragment/terms :: termsAndAggrement"></div>
-		<!-- /basic modal -->
-
-
-		<!-- Attachment modal -->
-		<div id="upload_document" class="modal fade" tabindex="-1">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">Upload Document</h5>
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-					</div>
-
-					<div class="modal-body">
-						<form th:action="@{/user/updateAttachment}" method="post"
-							enctype="multipart/form-data">
-
-							<input type="hidden" id="userId" name="userId"
-								th:value="${user.userId}">
-
-							<div class="form-group row">
-								<label class="col-lg-3 col-form-label">Document Type:</label>
-								<div class="col-lg-9">
-									<select required="required" name="documentType"
-										id="documentType" class="form-control form-control-select2">
-										<option value="">Select Document</option>
-										<option value="OTHER">Other Document</option>
-										<option value="AADHAAR">Aadhaar Card</option>
-										<option value="PANCARD">PAN Card</option>
-										<option value="VOTERID">Voter ID</option>
-										<option value="DRIVINGLICENCE">Driving Licence</option>
-									</select>
-								</div>
-							</div>
-
-							<div class="form-group row">
-								<label class="col-lg-3 col-form-label">Document Number:</label>
-								<div class="col-lg-9">
-									<input type="text" name="documentNumber" id="documentNumber"
-										class="form-control"
-										placeholder="Enter Above Selected Document Number">
-								</div>
-							</div>
-
-
-
-							<div class="form-group row">
-								<label class="col-lg-3 col-form-label">Upload Document:</label>
-								<div class="col-lg-9">
-									<input id="imgDocument" name="imgDocument" accept="image/*"
-										type="file" class="form-input-styled" data-fouc> <span
-										class="form-text text-muted">Accepted formats: gif,
-										png, jpg. Max file size 2Mb</span>
-								</div>
-							</div>
-
-							<div class="text-right">
-								<button type="submit" class="btn btn-primary">
-									Submit <i class="icon-paperplane ml-2"></i>
-								</button>
-							</div>
-						</form>
 					</div>
 				</div>
 			</div>
-		</div>
-		<!-- Attachment modal -->
-
-		<!-- Attachment modal -->
-		<div id="verify_modal" class="modal fade" tabindex="-1">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">Verify Mobile No.</h5>
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-					</div>
-
-					<div class="modal-body">
-						<form th:action="@{/user/verifyContactNo}" method="post"
-							enctype="multipart/form-data">
-
-							<input type="hidden" id="userId" name="userId"
-								th:value="${user.userId}">
-
-							<div class="form-group row">
-								<label class="col-lg-3 col-form-label">OTP:</label>
-								<div class="col-lg-9">
-									<input type="text" name="otp" id="otp" class="form-control"
-										placeholder="Enter Generated OTP">
-								</div>
-							</div>
-
-							<div class="text-right">
-								<button type="submit" class="btn btn-primary">
-									Submit <i class="icon-paperplane ml-2"></i>
-								</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- Attachment modal -->
+			<!-- /page content -->
 
 
-		<!-- Custom Styling Toggle. For demo purposes only. -->
-		<!-- <div class="switch-wrap">
-			<label class="switch"> <input type="checkbox"
-				id="styleSwitch" onclick="switchStyle();"> <span
-				class="slider round"></span>
-			</label> <span class="switch-text">Toggle between <em>Bootstrap
-					defaults</em> and <em>custom styling</em>.
-			</span>
-		</div> -->
-		<div th:if="${!mpinSet}">
-
-			<div id="set-mpin" class="modal fade" tabindex="-1">
+			<!-- gst modal -->
+			<div id="gst_modal" class="modal fade" tabindex="-1">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title">SET MPIN</h5>
+							<h5 class="modal-title">Update GST Number</h5>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<label>GST Number</label>
+										<input type="text" name="GSTIN", id="GSTIN" class="form-control" placeholder="Enter GSTIN ">
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary"  onclick="getGSTDetails()" data-dismiss="modal">Save Changes</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /gst modal -->
+
+			<!-- mcc modal -->
+			<div id="mcc_modal" class="modal fade" tabindex="-1">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Update MCC Code</h5>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<label>MCC Code</label>
+
+										<select class="form-control select-search"
+												data-placeholder="Select Type of MCC"
+												name="typeOfMcc" id="typeOfMcc" data-fouc>
+											<option></option>
+											<optgroup label="Select MCC Type">
+												<option th:each="item : ${typeOfMCC}"
+														th:selected="${(user.businessDetails !=null and !#strings.isEmpty(user.businessDetails.typeOfMcc) and user.businessDetails.typeOfMcc == item.id)}"
+														th:value="${item.id}"
+														th:text="${item.mccType}" />
+												<option value="1">Other</option>
+											</optgroup>
+										</select>
+
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary" data-dismiss="modal">Save Changes</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /mcc modal -->
+
+			<!-- num modal -->
+			<div id="num_modal" class="modal fade" tabindex="-1">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Update Mobile Number</h5>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<form class="wizard-form steps-basic" action="#" data-fouc>
+											<h6>Password</h6>
+											<fieldset class="mb-3">
+												<div class="row">
+													<div class="col-md-12">
+														<div class="form-group">
+															<label>Password:</label>
+															<input type="password" name="name" class="form-control" placeholder="Enter Your Password">
+														</div>
+													</div>
+												</div>
+											</fieldset>
+
+											<h6>Mobile Number</h6>
+											<fieldset class="mb-3">
+												<div class="row">
+													<div class="col-md-12">
+														<div class="form-group">
+															<label>Enter New Mobile Number:</label>
+															<input type="number" name="num" placeholder="New Mobile Number" class="form-control mb-2">
+															<p>(OTP Verification will be done for new number. If the number is correct, simply click on Save button)</p>
+														</div>
+													</div>
+												</div>
+											</fieldset>
+
+											<h6>OTP Verification</h6>
+											<fieldset class="mb-3">
+												<div class="row">
+													<div class="col-md-12">
+														<div class="form-group ">
+															<label>Verification Code</label>
+															<input type="text" name="otp" placeholder="" class="form-control">
+															<p class="text-right mt-2"><a href="#">Resend Verification Code</a></p>
+														</div>
+													</div>
+												</div>
+											</fieldset>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /num modal -->
+
+			<!-- new num modal -->
+			<div id="new_num_modal" class="modal fade" tabindex="-1">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">
+								Add Alternate Mobile Number</h5>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<form class="wizard-form steps-basic" action="#" data-fouc>
+											<h6>Password</h6>
+											<fieldset class="mb-3">
+												<div class="row">
+													<div class="col-md-12">
+														<div class="form-group">
+															<label>Password:</label>
+															<input type="password" name="name" class="form-control"
+																placeholder="Enter Your Password">
+														</div>
+													</div>
+												</div>
+											</fieldset>
+
+											<h6>Mobile Number</h6>
+											<fieldset class="mb-3">
+												<div class="row">
+													<div class="col-md-12">
+														<div class="form-group">
+															<label>Enter New Mobile Number:</label>
+															<input type="number" name="num"
+																placeholder="New Mobile Number"
+																class="form-control mb-2">
+															<p>(OTP Verification will be done for new number. If the
+																number is correct, simply click on Save button)</p>
+														</div>
+													</div>
+												</div>
+											</fieldset>
+
+											<h6>OTP Verification</h6>
+											<fieldset class="mb-3">
+												<div class="row">
+													<div class="col-md-12">
+														<div class="form-group ">
+															<label>Verification Code</label>
+															<input type="text" name="otp" placeholder=""
+																class="form-control">
+															<p class="text-right mt-2"><a href="#">Resend Verification
+																	Code</a></p>
+														</div>
+													</div>
+												</div>
+											</fieldset>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /new num modal -->
+
+			<!-- mail modal -->
+			<div id="mail_modal" class="modal fade" tabindex="-1">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Update Email Address</h5>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<form class="wizard-form steps-basic" action="#" method="post" data-fouc>
+											<h6>Password</h6>
+											<fieldset class="mb-3">
+
+
+												<div class="row">
+													<div class="col-md-12">
+														<div class="form-group">
+															<label>Password:</label>
+															<input type="password" name="name" class="form-control"
+																placeholder="Enter Your Password">
+														</div>
+													</div>
+
+												</div>
+
+
+											</fieldset>
+
+											<h6>Email ID</h6>
+											<fieldset class="mb-3">
+												<div class="row">
+													<div class="col-md-12">
+														<div class="form-group">
+															<label>Enter New Email Address</label>
+															<input type="email" name="num" placeholder="New Email ID"
+																class="form-control mb-2">
+															<p>(OTP Verification will be done for new email id. If the
+																email id is correct, simply click on Save button)</p>
+														</div>
+													</div>
+
+
+												</div>
+
+
+											</fieldset>
+
+											<h6>OTP Verification</h6>
+											<fieldset class="mb-3">
+												<div class="row">
+													<div class="col-md-12">
+														<div class="form-group ">
+															<label>Verification Code</label>
+															<input type="text" name="otp" placeholder=""
+																class="form-control">
+															<p class="text-right mt-2"><a href="#">Resend Verification
+																	Code</a></p>
+														</div>
+													</div>
+
+
+												</div>
+											</fieldset>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /mail modal -->
+
+			<!-- New mail modal -->
+			<div id="new_mail_modal" class="modal fade" tabindex="-1">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Add Alternate Email Address</h5>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<form class="wizard-form steps-basic" action="#" data-fouc>
+											<h6>Password</h6>
+											<fieldset class="mb-3">
+
+
+												<div class="row">
+													<div class="col-md-12">
+														<div class="form-group">
+															<label>Password:</label>
+															<input type="password" name="name" class="form-control"
+																placeholder="Enter Your Password">
+														</div>
+													</div>
+
+												</div>
+
+
+											</fieldset>
+
+											<h6>Email ID</h6>
+											<fieldset class="mb-3">
+												<div class="row">
+													<div class="col-md-12">
+														<div class="form-group">
+															<label>Enter New Email Address</label>
+															<input type="email" name="num"
+																placeholder="Enter New Email Address"
+																class="form-control mb-2">
+															<p>(OTP Verification will be done for new email id. If the
+																email id is correct, simply click on Save button)</p>
+														</div>
+													</div>
+
+
+												</div>
+
+
+											</fieldset>
+
+											<h6>OTP Verification</h6>
+											<fieldset class="mb-3">
+												<div class="row">
+													<div class="col-md-12">
+														<div class="form-group ">
+															<label>Verification Code</label>
+															<input type="text" name="otp" placeholder=""
+																class="form-control">
+															<p class="text-right mt-2"><a href="#">Resend Verification
+																	Code</a></p>
+														</div>
+													</div>
+
+
+												</div>
+											</fieldset>
+
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /mail modal -->
+
+			<!-- address modal -->
+			<div id="address_modal" class="modal fade" tabindex="-1">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Update Address</h5>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<table class="table table-scrollable table-striped table-bordered">
+											<tbody>
+												<tr>
+													<td class="text-primary" width="25%">Address</td>
+													<td> <input type="text" name="address" id="address" placeholder="please enter address"
+																th:value="${user.businessDetails!=null ? user.businessDetails.address: ''}"
+															class="form-control"></td>
+												</tr>
+												<tr>
+													<td class="text-primary">Pincode</td>
+													<td><input type="text" name="zipcode" id="zipcode" placeholder="please enter pincode"
+															   th:value="${user.businessDetails!=null ? user.businessDetails.zipcode: ''}"
+															   class="form-control">
+													</td>
+												</tr>
+												<tr>
+													<td class="text-primary">State</td>
+													<td><input type="text" name="state" id="state" placeholder="please enter state"
+															   th:value="${state!=null ? state: ''}"
+															   class="form-control"> </td>
+												</tr>
+												<tr>
+													<td class="text-primary">City/District</td>
+													<td><input type="text" name="city" id="city" placeholder="please enter city"
+															   th:value="${city!=null ? city: ''}"
+															class="form-control"> </td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+									<div class="actions clearfix text-left mt-2">
+										<a href="#" class="btn btn-primary mt-2" data-toggle="modal"
+											data-target="#address_modal">Save</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /address modal -->
+
+			<!-- business address modal -->
+			<div id="business_address_modal" class="modal fade" tabindex="-1">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Business Address Update</h5>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<table class="table table-scrollable table-striped table-bordered">
+
+											<tr>
+												<td class="text-primary" width="27%">Business Name</td>
+												<td th:text="${user.businessDetails!=null ? user.businessDetails.businessName: ''}"> 414 wave silver tower</td>
+											</tr>
+											<tr>
+												<td class="text-primary">Type Of Mcc</td>
+												<td  th:text="${mcc!=null ? mcc: ''}"> sector 18</td>
+											</tr>
+											<tr>
+												<td class="text-primary">Type of Shop</td>
+												<td th:text="${shop!=null ? shop: ''}"> NA</td>
+											</tr>
+
+											<tbody>
+												<tr>
+													<td class="text-primary" width="25%">Business Name</td>
+													<td> <input type="text" name=""
+																th:value="${user.businessDetails!=null ? user.businessDetails.businessName: ''}"
+															class="form-control"></td>
+												</tr>
+												<tr>
+													<td class="text-primary">Type Of Mcc</td>
+													<td><input type="text" name="" th:text="${mcc!=null ? mcc: ''}"
+															class="form-control"> </td>
+												</tr>
+												<tr>
+													<td class="text-primary">Type of Shop</td>
+													<td><input type="text" name="" th:text="${shop!=null ? shop: ''}" class="form-control">
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+									<div>
+										<iframe
+											src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d56053.59190153858!2d77.3449042!3d28.58929035!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1677917324996!5m2!1sen!2sin"
+											width="100%" height="300" style="border:0;" allowfullscreen=""
+											loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+									</div>
+
+									<div class="actions clearfix text-left mt-2">
+										<a href="#" class="btn btn-primary mt-2" data-toggle="modal"
+											data-target="#address_modal">Save</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /mail modal -->
+
+			<!-- Basic modal -->
+			<div th:replace="fragment/terms :: termsAndAggrement"></div>
+			<!-- /basic modal -->
+
+
+			<!-- Attachment modal -->
+			<div id="upload_document" class="modal fade" tabindex="-1">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Upload Document</h5>
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
 						</div>
 
 						<div class="modal-body">
-							<form th:action="@{/user/setMPIN}" method="post">
+							<form th:action="@{/user/updateAttachment}" method="post" enctype="multipart/form-data">
+
+								<input type="hidden" id="userId" name="userId" th:value="${user.userId}">
 
 								<div class="form-group row">
-									<label class="col-form-label col-lg-4">New PIN <span
-										class="text-red">*</span></label>
-									<div class="col-lg-8">
-										<input type="number" maxlength="6" min="6" name="mpin"
-											class="form-control">
+									<label class="col-lg-3 col-form-label">Document Type:</label>
+									<div class="col-lg-9">
+										<select required="required" name="documentType" id="documentType"
+											class="form-control form-control-select2">
+											<option value="">Select Document</option>
+											<option value="OTHER">Other Document</option>
+											<option value="AADHAAR">Aadhaar Card</option>
+											<option value="PANCARD">PAN Card</option>
+											<option value="VOTERID">Voter ID</option>
+											<option value="DRIVINGLICENCE">Driving Licence</option>
+										</select>
 									</div>
 								</div>
 
 								<div class="form-group row">
-									<label class="col-form-label col-lg-4">OTP <span
-										class="text-red">*</span></label>
-									<div class="col-lg-8">
-										<div class="input-group">
-											<input type="number" id="mpin_otp" name="mpin_otp"
-												required="required" class="form-control">
-											<div class="input-group-append">
-												<button class="btn btn-warning" type="button"
-													onclick="generateMPINOTP();">Request OTP</button>
-											</div>
-										</div>
+									<label class="col-lg-3 col-form-label">Document Number:</label>
+									<div class="col-lg-9">
+										<input type="text" name="documentNumber" id="documentNumber"
+											class="form-control" placeholder="Enter Above Selected Document Number">
+									</div>
+								</div>
+
+
+
+								<div class="form-group row">
+									<label class="col-lg-3 col-form-label">Upload Document:</label>
+									<div class="col-lg-9">
+										<input id="imgDocument" name="imgDocument" accept="image/*" type="file"
+											class="form-input-styled" data-fouc> <span
+											class="form-text text-muted">Accepted formats: gif,
+											png, jpg. Max file size 2Mb</span>
 									</div>
 								</div>
 
@@ -947,9 +1077,101 @@
 					</div>
 				</div>
 			</div>
+			<!-- Attachment modal -->
 
-		</div>
-		<div id="reset-mpin" class="modal fade" tabindex="-1">
+			<!-- Attachment modal -->
+			<div id="verify_modal" class="modal fade" tabindex="-1">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Verify Mobile No.</h5>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+
+						<div class="modal-body">
+							<form th:action="@{/user/verifyContactNo}" method="post" enctype="multipart/form-data">
+
+								<input type="hidden" id="userId" name="userId" th:value="${user.userId}">
+
+								<div class="form-group row">
+									<label class="col-lg-3 col-form-label">OTP:</label>
+									<div class="col-lg-9">
+										<input type="text" name="otp" id="otp" class="form-control"
+											placeholder="Enter Generated OTP">
+									</div>
+								</div>
+
+								<div class="text-right">
+									<button type="submit" class="btn btn-primary">
+										Submit <i class="icon-paperplane ml-2"></i>
+									</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Attachment modal -->
+
+
+			<!-- Custom Styling Toggle. For demo purposes only. -->
+			<!-- <div class="switch-wrap">
+			<label class="switch"> <input type="checkbox"
+				id="styleSwitch" onclick="switchStyle();"> <span
+				class="slider round"></span>
+			</label> <span class="switch-text">Toggle between <em>Bootstrap
+					defaults</em> and <em>custom styling</em>.
+			</span>
+		</div> -->
+			<div th:if="${!mpinSet}">
+
+				<div id="set-mpin" class="modal fade" tabindex="-1">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title">SET MPIN</h5>
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+							</div>
+
+							<div class="modal-body">
+								<form th:action="@{/user/setMPIN}" method="post">
+
+									<div class="form-group row">
+										<label class="col-form-label col-lg-4">New PIN <span
+												class="text-red">*</span></label>
+										<div class="col-lg-8">
+											<input type="number" maxlength="6" min="6" name="mpin" class="form-control">
+										</div>
+									</div>
+
+									<div class="form-group row">
+										<label class="col-form-label col-lg-4">OTP <span
+												class="text-red">*</span></label>
+										<div class="col-lg-8">
+											<div class="input-group">
+												<input type="number" id="mpin_otp" name="mpin_otp" required="required"
+													class="form-control">
+												<div class="input-group-append">
+													<button class="btn btn-warning" type="button"
+														onclick="generateMPINOTP();">Request OTP</button>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="text-right">
+										<button type="submit" class="btn btn-primary">
+											Submit <i class="icon-paperplane ml-2"></i>
+										</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div id="reset-mpin" class="modal fade" tabindex="-1">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
@@ -962,29 +1184,26 @@
 
 								<div class="form-group row">
 									<label class="col-form-label col-lg-4">OLD PIN <span
-										class="text-red">*</span></label>
+											class="text-red">*</span></label>
 									<div class="col-lg-8">
-										<input type="number" maxlength="6" min="6" name="old_mpin"
-											class="form-control">
-									</div>
-								</div>
-								
-								<div class="form-group row">
-									<label class="col-form-label col-lg-4">New PIN <span
-										class="text-red">*</span></label>
-									<div class="col-lg-8">
-										<input type="number" maxlength="6" min="6" name="mpin"
-											class="form-control">
+										<input type="number" maxlength="6" min="6" name="old_mpin" class="form-control">
 									</div>
 								</div>
 
 								<div class="form-group row">
-									<label class="col-form-label col-lg-4">OTP <span
-										class="text-red">*</span></label>
+									<label class="col-form-label col-lg-4">New PIN <span
+											class="text-red">*</span></label>
+									<div class="col-lg-8">
+										<input type="number" maxlength="6" min="6" name="mpin" class="form-control">
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label class="col-form-label col-lg-4">OTP <span class="text-red">*</span></label>
 									<div class="col-lg-8">
 										<div class="input-group">
-											<input type="number" id="mpin_otp" name="mpin_otp"
-												required="required" class="form-control">
+											<input type="number" id="mpin_otp" name="mpin_otp" required="required"
+												class="form-control">
 											<div class="input-group-append">
 												<button class="btn btn-warning" type="button"
 													onclick="generateMPINOTP();">Request OTP</button>
@@ -1004,62 +1223,59 @@
 				</div>
 			</div>
 
-		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-			aria-hidden="true">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<div id="carouselExample" class="carousel slide"
-							data-ride="carousel">
-							<ol class="carousel-indicators">
-								<li th:each="attachment,iter : ${user.attachments}"
-									data-target="#carouselExample"
-									th:classappend="${iter.index == 0} ? active : '' "
-									th:data-slide-to="${iter.index}"></li>
-								<!-- <li data-target="#carouselExample" data-slide-to="1"></li>
+			<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div id="carouselExample" class="carousel slide" data-ride="carousel">
+								<ol class="carousel-indicators">
+									<li th:each="attachment,iter : ${user.attachments}" data-target="#carouselExample"
+										th:classappend="${iter.index == 0} ? active : '' "
+										th:data-slide-to="${iter.index}"></li>
+									<!-- <li data-target="#carouselExample" data-slide-to="1"></li>
 								<li data-target="#carouselExample" data-slide-to="2"></li>
 								<li data-target="#carouselExample" data-slide-to="3"></li> -->
-							</ol>
-							<div class="carousel-inner">
-								<div class="carousel-item"
-									th:each="attachment,iter : ${user.attachments}"
-									th:classappend="${iter.index == 0} ? active : '' ">
-									<img class="d-block w-100"
-										th:src="${(attachment.file != null && !#strings.isEmpty(attachment.file)) ? '/files/'+attachment.file : '/images/user.png'}"
-										th:alt="${attachment.file}">
+								</ol>
+								<div class="carousel-inner">
+									<div class="carousel-item" th:each="attachment,iter : ${user.attachments}"
+										th:classappend="${iter.index == 0} ? active : '' ">
+										<img class="d-block w-100"
+											th:src="${(attachment.file != null && !#strings.isEmpty(attachment.file)) ? '/files/'+attachment.file : '/images/user.png'}"
+											th:alt="${attachment.file}">
+									</div>
 								</div>
+								<a class="carousel-control-prev" href="#carouselExample" role="button"
+									data-slide="prev"> <span class="carousel-control-prev-icon"
+										aria-hidden="true"></span> <span class="sr-only">Previous</span>
+								</a> <a class="carousel-control-next" href="#carouselExample" role="button"
+									data-slide="next"> <span class="carousel-control-next-icon"
+										aria-hidden="true"></span> <span class="sr-only">Next</span>
+								</a>
 							</div>
-							<a class="carousel-control-prev" href="#carouselExample"
-								role="button" data-slide="prev"> <span
-								class="carousel-control-prev-icon" aria-hidden="true"></span> <span
-								class="sr-only">Previous</span>
-							</a> <a class="carousel-control-next" href="#carouselExample"
-								role="button" data-slide="next"> <span
-								class="carousel-control-next-icon" aria-hidden="true"></span> <span
-								class="sr-only">Next</span>
-							</a>
 						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-							data-dismiss="modal">Close</button>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	<script src="/js/ps/profile.js"></script>
 	<script src="/js/ps/dropdown.js"></script>
 	<script>
+	 $(document).ready(function () {
+		$('#typeOfMcc').select2();
+	});
 		function verifyContact() {
 			$.ajax({
-				url : "/user/generateOTP",
-				success : function(result) {
+				url: "/user/generateOTP",
+				success: function (result) {
 					if (result === "success") {
 						$("#verify_modal").modal();
 					}
@@ -1069,8 +1285,8 @@
 
 		function generatePasswordOTP() {
 			$.ajax({
-				url : "/user/generatePasswordOTP",
-				success : function(result) {
+				url: "/user/generatePasswordOTP",
+				success: function (result) {
 					/* if (result === "success") {
 						$("#verify_modal").modal();
 					} */
@@ -1080,8 +1296,8 @@
 
 		function generateMPINOTP() {
 			$.ajax({
-				url : "/user/generateMPINOTP",
-				success : function(result) {
+				url: "/user/generateMPINOTP",
+				success: function (result) {
 					alert(result);
 					/* if (result === "success") {
 						$("#verify_modal").modal();
@@ -1097,9 +1313,23 @@
 			} else {
 				document.getElementById('gallery').classList.remove("custom");
 				document.getElementById('exampleModal').classList
-						.remove("custom");
+					.remove("custom");
 			}
 		}
 	</script>
+	<script id="rendered-js" >
+		$(".toggle-password").click(function () {
+
+		  $(this).toggleClass("fa-eye fa-eye-slash");
+		  var input = $($(this).attr("toggle"));
+		  if (input.attr("type") == "password") {
+			input.attr("type", "text");
+		  } else {
+			input.attr("type", "password");
+		  }
+		});
+		//# sourceURL=pen.js
+	</script>
 </body>
+
 </html>

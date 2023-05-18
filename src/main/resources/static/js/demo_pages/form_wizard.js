@@ -401,6 +401,48 @@ function verifyPanCard() {
     }
 }
 
+function formatGST() {
+    let value = $('#GSTIN').val();
+    value = value.replace(/[^a-zA-Z 0-9]+/g, '').substring(0, 15);
+    $("#GSTIN").val(value);
+}
+
+function getGSTDetails() {
+    var regExp = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+    var value = $('#GSTIN').val();
+    value = value.substring(0, 15);
+    $("#GSTIN").val(value);
+    if (value.length == 15) {
+        if (value.match(regExp)) {
+            $("#GSTIN").prop('disabled', true);
+            const params = {
+                gstin: value
+            };
+            ajaxCall("/kyc/getGSTDetails", params, 'GET', function(data) {
+                if (data.error == true) {
+                    $("#GSTIN").prop('disabled', false);
+                }else{		
+	 				$("#businessName").val(data.result.legal_name_of_business);
+					var address = data.result.principal_place_address.toUpperCase().replace(data.result.legal_name_of_business.toUpperCase(), '');
+					
+					
+					const zipRegex = /\b\d{6}\b/g; 
+					const zipCode = data.result.principal_place_address.match(zipRegex)[0];
+					$("#zipcode").val(zipCode);
+					address = address.replace(zipCode, '');
+					address = address.trim().replace(/^,|,$/g, '');
+					$("#address").val(address);
+					zipcodeCheck();
+				}
+            }, function(error) {}, function(complete) {});
+        } else {
+            showError('Please enter 15 digits for a valid GSTIN.');
+        }
+    } else {
+        showError('Please enter 15 digits for a valid GSTIN.');
+    }
+}
+
 function verifyBankInfo() {
     const accountNumber = $('#accountNumber').val();
     const ifscCode = $('#ifscCode').val();
@@ -466,6 +508,11 @@ function zipcodeCheck() {
                 html += '</option>';
                 $('#city').html(html);
                 $("#city").val(data.result.District);
+
+ 				/*var address = $('#address').val();
+				address = address.replace(zipCode, '');
+				address = address.trim().replace(/^,|,$/g, '');
+				$("#address").val(address);*/
 
                 $("#zipcode").prop('disabled', false);
                 $("#zipSpinner").hide();

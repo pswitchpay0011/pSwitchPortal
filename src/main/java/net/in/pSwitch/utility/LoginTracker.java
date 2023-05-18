@@ -34,26 +34,26 @@ public class LoginTracker {
             loginInfo.setUserIp(address.getHostAddress());
             System.out.println("IP address: " + address.getHostAddress());
 
-            getClientMACAddress(address.getHostAddress());
-            Enumeration<NetworkInterface> n = NetworkInterface.getNetworkInterfaces();
-            for (; n.hasMoreElements(); ) {
-                NetworkInterface e = n.nextElement();
-
-                Enumeration<InetAddress> a = e.getInetAddresses();
-                for (; a.hasMoreElements(); ) {
-                    try {
-                        InetAddress addr = a.nextElement();
-                        if (!addr.isLinkLocalAddress()) {
-                            loginInfo.setUserMac(getMacAddress(addr));
-                            System.out.println("MAC address: " + getMacAddress(addr));
-                        }
-                    } catch (Exception e1) {
-                        logger.error("Error: ", e1);
-                    }
-                }
-            }
+//            getClientMACAddress(address.getHostAddress());
+//            Enumeration<NetworkInterface> n = NetworkInterface.getNetworkInterfaces();
+//            for (; n.hasMoreElements(); ) {
+//                NetworkInterface e = n.nextElement();
+//
+//                Enumeration<InetAddress> a = e.getInetAddresses();
+//                for (; a.hasMoreElements(); ) {
+//                    try {
+//                        InetAddress addr = a.nextElement();
+//                        if (!addr.isLinkLocalAddress()) {
+//                            loginInfo.setUserMac(getMacAddress(addr));
+//                            System.out.println("MAC address: " + getMacAddress(addr));
+//                        }
+//                    } catch (Exception e1) {
+//                        logger.error("Error: ", e1);
+//                    }
+//                }
+//            }
         } catch (Exception e) {
-            logger.error("Error: ", e);
+            logger.error("Error: ", e.getMessage());
         }
         loginTracker.save(loginInfo);
     }
@@ -75,9 +75,9 @@ public class LoginTracker {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace(System.out);
+        	logger.error("Error: ", e.getMessage());
         }
-        System.out.println("macAddress: " + macAddress);
+       
         return macAddress;
     }
 

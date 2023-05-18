@@ -99,6 +99,11 @@
                                         <p th:text="${errorMsg}"></p>
                                     </div>
                                 </div>
+                                
+                                <div  th:if="${confirmationMessage}" class="alert alert-success" role="alert">
+								  <h5 class="alert-heading" th:text="${confirmationHeader}">Success</h5>
+								  <p th:text="${confirmationMessage}"></p>
+								</div>
 
                                 <div class="row">
                                     <div class="col-md-12">

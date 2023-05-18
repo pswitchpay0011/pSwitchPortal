@@ -84,7 +84,9 @@ const checkPassword = () => {
 
     if (!isRequired(password)) {
         showErrorText(passwordEl, 'Password cannot be blank.');
-    } else {
+    }else if (!isPasswordSecure(password)) {
+        showErrorText(passwordEl, 'Password must has at least 8 characters that include at least 1 lowercase character, 1 uppercase characters, 1 number, and 1 special character in (!@#$%^&*)');
+    }  else {
         showSuccessText(passwordEl);
         valid = true;
     }
@@ -160,11 +162,11 @@ updatePasswordForm.addEventListener('submit', function (e) {
     // validate fields
     let
         isPasswordValid = checkPassword(),
-        // isLatLngValid = checkLatLng(),
+        isLatLngValid = checkLatLng(),
         isConfirmPasswordValid = checkConfirmPassword();
 
     let isFormValid = isPasswordValid &&
-        // isLatLngValid &&
+        isLatLngValid &&
         isConfirmPasswordValid;
 
     // submit to the server if the form is valid
@@ -178,15 +180,15 @@ updatePasswordForm.addEventListener('submit', function (e) {
 loginForm.addEventListener('submit', function (e) {
     // prevent the form from submitting
     e.preventDefault();
-    // getLocation();
+    getLocation();
     // validate fields
     let
         isPasswordValid = checkLPassword(),
-        // isLatLngValid = checkLatLng(),
+        isLatLngValid = checkLatLng(),
         isUsername = checkLUsername();
 
     let isFormValid = isPasswordValid &&
-        // isLatLngValid &&
+        isLatLngValid &&
         isUsername;
 
     // submit to the server if the form is valid
@@ -214,6 +216,17 @@ loginForm.addEventListener('submit', function (e) {
         // $("#loginForm").attr('action', '/authenticate');
         // loginForm.submit();
     }
+});
+
+$(".toggle-password").click(function() {
+
+  $(this).toggleClass("fa-eye fa-eye-slash");
+  var input = $($(this).attr("toggle"));
+  if (input.attr("type") == "password") {
+    input.attr("type", "text");
+  } else {
+    input.attr("type", "password");
+  }
 });
 
 const checkConfirmPassword = () => {

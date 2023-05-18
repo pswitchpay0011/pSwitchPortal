@@ -6,6 +6,7 @@ import lombok.Data;
 public class UserRegistrationDTO {
     private String firstName;
     private String lastName;
+    private String middleName;
     private String role;
     private String password;
     private String username;

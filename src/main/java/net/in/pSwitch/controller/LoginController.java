@@ -248,6 +248,7 @@ public class LoginController {
             userProfile.setFirstName(user.getFirstName());
             userProfile.setLastName(user.getLastName());
             userProfile.setMobileNumber(user.getMobileNumber());
+            userProfile.setMiddleName(user.getMiddleName());
 //		userProfile.setState(Long.parseLong(user.getState()));
 //		userProfile.setCountry(Long.parseLong(user.getCountry()));
 //		userProfile.setZipcode(user.getZipcode());
@@ -296,8 +297,12 @@ public class LoginController {
 //                    Authentication authentication = new UsernamePasswordAuthenticationToken(authorities, null,
 //                            authorities.getAuthorities());
 //                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                    model.addAttribute("confirmationMessage",
-                            "A confirmation verification email has been sent to " + userProfile.getUsername());
+                	
+                	
+                	 model.addAttribute("confirmationMessage",
+                             "Complete verification by providing the OTP sent to your email and mobile number. Do check the spam folder as well.");
+                			
+        			 model.addAttribute("confirmationHeader","Thanks you for signing up!");
                     setCookie(savedUserProfile, response);
 
 //                    try {
@@ -366,9 +371,9 @@ public class LoginController {
             String mOtp = request.getParameter("motp");
             String eOtp = request.getParameter("eotp");
             if (!StringUtils.isEmpty(mOtp) && !StringUtils.isEmpty(eOtp)) {
-                model = binderService.bindUserDetails(model, loginUserInfo);
+                //model = binderService.bindUserDetails(model, loginUserInfo);
                 if (model != null) {
-                    UserInfo userInfo = (UserInfo) model.getAttribute("user");
+                    UserInfo userInfo = binderService.getCurrentUser(loginUserInfo);
                     if (utilService.decodedData(userInfo.getContactOTP()).equals(mOtp) && utilService.decodedData(userInfo.getVerificationCode()).equals(eOtp)) {
                         userInfo.setAccountState(StringLiteral.ACCOUNT_CREATION_STATE_STEP_2);
 
@@ -400,8 +405,15 @@ public class LoginController {
 //                        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
                         userInfoRepository.save(userInfo);
+                        utilService.sendWelcomeEmail(userInfo);
+                        smsManager.sendWelcomeMsg(userInfo);
                         return "redirect:/kyc";
                     } else {
+                    	
+                    	 model.addAttribute("mob","(+91*****"+userInfo.getMobileNumber().substring(6)+")");
+                         model.addAttribute("mail","("+userInfo.getUsername().substring(0,2)+"*****"+
+                        		 userInfo.getUsername().substring(userInfo.getUsername().indexOf("@"))+")");
+                         
                         model.addAttribute("errorMsg", "Invalid OTP of Email and Mobile!");
                     }
                 } else {

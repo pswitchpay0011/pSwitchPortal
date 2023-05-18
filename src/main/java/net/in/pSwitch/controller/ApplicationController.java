@@ -2,18 +2,8 @@ package net.in.pSwitch.controller;
 
 import net.in.pSwitch.authentication.LoginUser;
 import net.in.pSwitch.authentication.LoginUserInfo;
-import net.in.pSwitch.model.Banner;
-import net.in.pSwitch.model.City;
-import net.in.pSwitch.model.MPIN;
-import net.in.pSwitch.model.Product;
-import net.in.pSwitch.model.States;
-import net.in.pSwitch.model.UserInfo;
-import net.in.pSwitch.repository.CityRepository;
-import net.in.pSwitch.repository.MPINRepository;
-import net.in.pSwitch.repository.ProductRepository;
-import net.in.pSwitch.repository.RoleRepository;
-import net.in.pSwitch.repository.StatesRepository;
-import net.in.pSwitch.repository.UserInfoRepository;
+import net.in.pSwitch.model.*;
+import net.in.pSwitch.repository.*;
 import net.in.pSwitch.service.BannerService;
 import net.in.pSwitch.service.BinderService;
 import net.in.pSwitch.service.UtilService;
@@ -28,14 +18,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -49,6 +34,10 @@ public class ApplicationController {
 	private UserInfoRepository userInfoRepository;
 	@Autowired
 	private BinderService binderService;
+	@Autowired
+	private ShopTypeRepository shopTypeRepository;
+	@Autowired
+	private MCCRepository mccRepository;
 	@Autowired
 	private ProductRepository productRepository;
 	@Autowired
@@ -129,6 +118,30 @@ public class ApplicationController {
 	public String profile(Model model, @LoginUser LoginUserInfo loginUserInfo) {
 		model = binderService.bindUserDetails(model, loginUserInfo);
 		UserInfo userInfo = (UserInfo) model.getAttribute("user");
+
+		if(userInfo.getBusinessDetails()!=null) {
+			Optional<MccType> optional = mccRepository.findById(userInfo.getBusinessDetails().getTypeOfMcc());
+			if(optional.isPresent())
+				model.addAttribute("mcc", optional.get().getMccType());
+
+			Optional<ShopType> shopType = shopTypeRepository.findById(userInfo.getBusinessDetails().getTypeOfShop());
+			if(shopType.isPresent())
+				model.addAttribute("shop", shopType.get().getBusinessType());
+
+			Optional<City> city = cityRepository.findById(userInfo.getBusinessDetails().getCity());
+			if(city.isPresent())
+				model.addAttribute("city", city.get().getName());
+
+			Optional<States> state = statesRepository.findById(userInfo.getBusinessDetails().getState());
+			if(state.isPresent())
+				model.addAttribute("state", state.get().getName());
+		}
+
+		model.addAttribute("typeOfMCC", mccRepository.findAllOrderByMccType());
+		Map<String, List<ShopType>> listOfShops = shopTypeRepository.findAll().stream()
+				.sorted(Comparator.comparing(ShopType::getIndustry))
+				.collect(Collectors.groupingBy(ShopType::getBusinessType));
+		model.addAttribute("typeOfShops", listOfShops);
 		MPIN mpin = mpinRepository.findByUser(userInfo);
 		model.addAttribute("mpinSet", mpin != null && mpin.getPin() != null);
 		return "profile";

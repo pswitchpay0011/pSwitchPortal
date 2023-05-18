@@ -18,8 +18,8 @@ import net.in.pSwitch.model.MPIN;
 import net.in.pSwitch.model.Product;
 import net.in.pSwitch.model.Status;
 import net.in.pSwitch.model.Transaction;
-import net.in.pSwitch.model.UserBankDetails;
 import net.in.pSwitch.model.UserInfo;
+import net.in.pSwitch.model.wallet.UserBankDetails;
 import net.in.pSwitch.repository.AttachmentRepository;
 import net.in.pSwitch.repository.CompanyBankDetailsRepository;
 import net.in.pSwitch.repository.FundRequestRepository;
@@ -564,6 +564,8 @@ public class UserAccountController {
 				bankDetails.setAccountNumber(bankDetailsDto.getAccountNumber());
 				bankDetails.setBankName(bankDetailsDto.getBANK_NAME());
 				bankDetails.setIfscCode(bankDetailsDto.getIFSC_CODE());
+				bankDetails.setCreatedBy(userProfile.getUserId());
+                bankDetails.setUpdatedBy(userProfile.getUserId());
 				bankDetails.setUserInfo(userProfile);
 				userBankDetailsRepository.save(bankDetails);
 				userProfile.setBankDetails(bankDetails);
@@ -770,19 +772,10 @@ public class UserAccountController {
 			errorMessage.add("Password must be between 2 and 32 characters");
 			model.addAttribute("updateError", errorMessage);
 		} else {
-//			Optional<UserInfo> userOptional = userInfoRepository.findById(Integer.parseInt(passwordDto.getUserId()));
-//			if (userOptional != null) {
-//				UserInfo userProfile = userOptional.get();
 				UserInfo userProfile = binderService.getCurrentUser(loginUserInfo);
-				if (userProfile.getPasswordResetOTP().equals(passwordDto.getPwd_otp())) {
-					userProfile.setPwd(utilService.encodedData(passwordDto.getNewPassword()));
-					userInfoRepository.save(userProfile);
-					model.addAttribute("updateMessage", "Password update successfully");
-				} else {
-					errorMessage.add("Invalid OTP, Please enter valid OTP from registered mobile number");
-					model.addAttribute("updateError", errorMessage);
-				}
-//			}
+				userProfile.setPwd(utilService.encodedData(passwordDto.getNewPassword()));
+				userInfoRepository.save(userProfile);
+				model.addAttribute("updateMessage", "Password update successfully");
 		}
 
 		model = binderService.bindUserDetails(model, loginUserInfo);

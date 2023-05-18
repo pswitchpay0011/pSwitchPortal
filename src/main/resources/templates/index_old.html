@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>pSwitch - Welcome Retailer</title>
+
+<div th:replace="fragment/StyleFragment :: style"></div>
+</head>
+
+<body>
+
+	<div th:replace="fragment/topnav :: navbar"></div>
+
+	<!-- Page content -->
+	<div class="page-content">
+		<div th:replace="fragment/mainSidebar :: sidebar"></div>
+
+		<!-- Main content -->
+		<div class="content-wrapper">
+
+			<!-- Page header -->
+			<div class="page-header">
+				<div class="page-header-content header-elements-md-inline">
+					<div class="page-title d-flex">
+						<h4>
+							<i class="icon-arrow-left52 mr-2"></i> Dashboard
+						</h4>
+						<a href="#" class="header-elements-toggle text-default d-md-none"><i
+							class="icon-more"></i></a>
+					</div>
+				</div>
+			</div>
+			<!-- /page header -->
+
+			<!-- Content area -->
+			<div class="content pt-0">
+<!--				<div class="alert bg-primary text-white" th:if="${!user.kycCompleted}" id="kycAlert">-->
+<!--&lt;!&ndash;					<button type="button" class="><span>&times;</span></button>&ndash;&gt;-->
+<!--					<span class="font-weight-semibold">KYC status Under Process !</span> We will inform you when verification complete. No Service access during KYC verification-->
+<!--				</div>-->
+
+				<!-- Main charts -->
+				<div class="row">
+
+					<div class="col-sm-3">
+						<!-- Available hours -->
+						<div class="card text-center">
+							<div class="card-body">
+								<!-- Progress counter -->
+								<div class="svg-center position-relative" id="dmt"></div>
+								<!-- /progress counter -->
+
+								<!-- Bars -->
+								<div id="dmt-bars"></div>
+								<!-- /bars -->
+							</div>
+						</div>
+						<!-- /available hours -->
+					</div>
+
+					<div class="col-sm-3">
+
+						<!-- Productivity goal -->
+						<div class="card text-center">
+							<div class="card-body">
+
+								<!-- Progress counter -->
+								<div class="svg-center position-relative" id="abp"></div>
+								<!-- /progress counter -->
+
+								<!-- Bars -->
+								<div id="abp-bars"></div>
+								<!-- /bars -->
+
+							</div>
+						</div>
+						<!-- /productivity goal -->
+
+					</div>
+
+					<div class="col-sm-3">
+
+						<!-- Productivity goal -->
+						<div class="card text-center">
+							<div class="card-body">
+
+								<!-- Progress counter -->
+								<div class="svg-center position-relative" id="aeps"></div>
+								<!-- /progress counter -->
+
+								<!-- Bars -->
+								<div id="aeps-bars"></div>
+								<!-- /bars -->
+
+							</div>
+						</div>
+						<!-- /productivity goal -->
+
+					</div>
+
+					<div class="col-sm-3">
+
+						<!-- Productivity goal -->
+						<div class="card text-center">
+							<div class="card-body">
+
+								<!-- Progress counter -->
+								<div class="svg-center position-relative" id="ins"></div>
+								<!-- /progress counter -->
+
+								<!-- Bars -->
+								<div id="ins-bars"></div>
+								<!-- /bars -->
+
+							</div>
+						</div>
+						<!-- /productivity goal -->
+
+					</div>
+				</div>
+				<!-- /main charts -->
+
+
+				<!-- Dashboard content -->
+				<div class="row">
+					<div class="col-xl-8">
+						<!-- Quick stats boxes -->
+
+						<div id="carouselExampleControls" class="carousel slide mb-3"
+							th:with="noEl = 3,totalSize = ${#lists.size(banners)} - 1"
+							data-ride="carousel" auto=yes>
+
+							<div class="carousel-inner">
+								<div
+									th:each=" listIndex: ${#numbers.sequence(0, totalSize, noEl)}"
+									th:class="${listIndex eq 0 }? 'carousel-item active' : 'carousel-item'"
+									th:with="maxValue = ${ totalSize lt (listIndex + noEl -1) ? totalSize : listIndex + noEl -1}">
+									<div class="row">
+										<div class="col-lg-4"
+											th:each="index : ${#numbers.sequence(listIndex, maxValue)}">
+											<div class="card p-1">
+												<img class="img-fluid"
+													th:src="${(banners[index].bannerImage != null && !#strings.isEmpty(banners[index].bannerImage)) ? '/files/'+banners[index].bannerImage : '/images/user.png'}"
+													th:alt="${banners[index].bannerName}">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<a class="carousel-control-prev" href="#carouselExampleControls"
+								role="button" data-slide="prev"> <span
+								class="carousel-control-prev-icon" aria-hidden="true"></span> <span
+								class="sr-only">Previous</span>
+							</a> <a class="carousel-control-next" href="#carouselExampleControls"
+								role="button" data-slide="next"> <span
+								class="carousel-control-next-icon" aria-hidden="true"></span> <span
+								class="sr-only">Next</span>
+							</a>
+						</div>
+
+
+						<!--<div class="col-lg-4">
+
+                            <img src="/images/banner1.jpg" class="img-fluid" alt="">
+
+                        </div>
+
+                        <div class="col-lg-4">
+                            <img src="/images/banner2.jpg" class="img-fluid" alt="">
+
+                        </div>
+
+                        <div class="col-lg-4">
+
+                            <img src="/images/banner3.jpg" class="img-fluid" alt="">
+
+                        </div> -->
+
+						<!-- /quick stats boxes -->
+
+						<!-- Daily sales -->
+						<div class="card">
+							<div class="card-header header-elements-inline">
+								<h6 class="card-title">Daily sales stats</h6>
+								<div class="header-elements">
+									<span class="font-weight-bold text-danger-600 ml-2">₹
+										4,378</span>
+									<div class="list-icons ml-3">
+										<div class="dropdown">
+											<a href="#" class="list-icons-item dropdown-toggle"
+												data-toggle="dropdown"><i class="icon-cog3"></i></a>
+											<div class="dropdown-menu dropdown-menu-right">
+												<a href="#" class="dropdown-item"><i class="icon-sync"></i>
+													Update data</a> <a href="#" class="dropdown-item"><i
+													class="icon-list-unordered"></i> Detailed log</a> <a href="#"
+													class="dropdown-item"><i class="icon-pie5"></i>
+													Statistics</a>
+												<div class="dropdown-divider"></div>
+												<a href="#" class="dropdown-item"><i class="icon-cross3"></i>
+													Clear list</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="card-body">
+								<div class="chart" id="sales-heatmap"></div>
+							</div>
+
+							<div class="table-responsive">
+								<table class="table text-nowrap">
+									<thead>
+										<tr>
+											<th class="w-100">Application</th>
+											<th>Time</th>
+											<th>Price</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>
+												<div class="d-flex align-items-center">
+													<div class="mr-3">
+														<a href="#"
+															class="btn bg-primary-400 rounded-round btn-icon btn-sm">
+															<span class="letter-icon"></span>
+														</a>
+													</div>
+													<div>
+														<a href="#"
+															class="text-default font-weight-semibold letter-icon-title">Sigma
+															application</a>
+														<div class="text-muted font-size-sm">
+															<i class="icon-checkmark3 font-size-sm mr-1"></i> New
+															order
+														</div>
+													</div>
+												</div>
+											</td>
+											<td><span class="text-muted font-size-sm">06:28
+													pm</span></td>
+											<td>
+												<h6 class="font-weight-semibold mb-0">₹ 49.90</h6>
+											</td>
+										</tr>
+
+										<tr>
+											<td>
+												<div class="d-flex align-items-center">
+													<div class="mr-3">
+														<a href="#"
+															class="btn bg-danger-400 rounded-round btn-icon btn-sm">
+															<span class="letter-icon"></span>
+														</a>
+													</div>
+													<div>
+														<a href="#"
+															class="text-default font-weight-semibold letter-icon-title">Alpha
+															application</a>
+														<div class="text-muted font-size-sm">
+															<i class="icon-spinner11 font-size-sm mr-1"></i> Renewal
+														</div>
+													</div>
+												</div>
+											</td>
+											<td><span class="text-muted font-size-sm">04:52
+													pm</span></td>
+											<td>
+												<h6 class="font-weight-semibold mb-0">₹ 90.50</h6>
+											</td>
+										</tr>
+
+										<tr>
+											<td>
+												<div class="d-flex align-items-center">
+													<div class="mr-3">
+														<a href="#"
+															class="btn bg-indigo-400 rounded-round btn-icon btn-sm">
+															<span class="letter-icon"></span>
+														</a>
+													</div>
+													<div>
+														<a href="#"
+															class="text-default font-weight-semibold letter-icon-title">Delta
+															application</a>
+														<div class="text-muted font-size-sm">
+															<i class="icon-lifebuoy font-size-sm mr-1"></i> Support
+														</div>
+													</div>
+												</div>
+											</td>
+											<td><span class="text-muted font-size-sm">01:26
+													pm</span></td>
+											<td>
+												<h6 class="font-weight-semibold mb-0">₹ 60.00</h6>
+											</td>
+										</tr>
+
+										<tr>
+											<td>
+												<div class="d-flex align-items-center">
+													<div class="mr-3">
+														<a href="#"
+															class="btn bg-success-400 rounded-round btn-icon btn-sm">
+															<span class="letter-icon"></span>
+														</a>
+													</div>
+													<div>
+														<a href="#"
+															class="text-default font-weight-semibold letter-icon-title">Omega
+															application</a>
+														<div class="text-muted font-size-sm">
+															<i class="icon-lifebuoy font-size-sm mr-1"></i> Support
+														</div>
+													</div>
+												</div>
+											</td>
+											<td><span class="text-muted font-size-sm">11:46
+													am</span></td>
+											<td>
+												<h6 class="font-weight-semibold mb-0">₹ 55.00</h6>
+											</td>
+										</tr>
+
+										<tr>
+											<td>
+												<div class="d-flex align-items-center">
+													<div class="mr-3">
+														<a href="#"
+															class="btn bg-danger-400 rounded-round btn-icon btn-sm">
+															<span class="letter-icon"></span>
+														</a>
+													</div>
+													<div>
+														<a href="#"
+															class="text-default font-weight-semibold letter-icon-title">Alpha
+															application</a>
+														<div class="text-muted font-size-sm">
+															<i class="icon-spinner11 font-size-sm mr-2"></i> Renewal
+														</div>
+													</div>
+												</div>
+											</td>
+											<td><span class="text-muted font-size-sm">10:29
+													am</span></td>
+											<td>
+												<h6 class="font-weight-semibold mb-0">₹ 90.50</h6>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<!-- /daily sales -->
+
+
+						<!-- Quick stats boxes -->
+						<div class="row">
+							<div class="col-lg-4">
+
+								<!-- Members online -->
+								<div class="card bg-teal-400">
+									<div class="card-body">
+										<div class="d-flex">
+											<h3 class="font-weight-semibold mb-0">0</h3>
+											<span
+												class="badge bg-teal-800 badge-pill align-self-center ml-auto">+0%</span>
+										</div>
+
+										<div>
+											Coming Soon...
+											<div class="font-size-sm opacity-75">0 avg</div>
+										</div>
+									</div>
+
+									<div class="container-fluid">
+										<div id="members-online"></div>
+									</div>
+								</div>
+								<!-- /members online -->
+
+							</div>
+
+							<div class="col-lg-4">
+
+								<!-- Current server load -->
+								<div class="card bg-pink-400">
+									<div class="card-body">
+										<div class="d-flex">
+											<h3 class="font-weight-semibold mb-0">0%</h3>
+
+										</div>
+
+										<div>
+											Coming Soon...
+											<div class="font-size-sm opacity-75">0 avg</div>
+										</div>
+									</div>
+
+									<div id="server-load"></div>
+								</div>
+								<!-- /current server load -->
+
+							</div>
+
+							<div class="col-lg-4">
+
+								<!-- Today's revenue -->
+								<div class="card bg-blue-400">
+									<div class="card-body">
+										<div class="d-flex">
+											<h3 class="font-weight-semibold mb-0">₹ 0</h3>
+
+										</div>
+
+										<div>
+											Coming Soon...
+											<div class="font-size-sm opacity-75">₹ 0 avg</div>
+										</div>
+									</div>
+
+									<div id="today-revenue-dashboard"></div>
+								</div>
+								<!-- /today's revenue -->
+
+							</div>
+						</div>
+						<!-- /quick stats boxes -->
+
+
+						<!-- Latest posts -->
+						<div class="card">
+							<div class="card-header header-elements-inline">
+								<h6 class="card-title">Latest Updates</h6>
+							</div>
+
+							<div class="card-body pb-0">
+								<div class="row">
+									<div class="col-xl-6">
+										<div class="media flex-column flex-sm-row mt-0 mb-3">
+											<div class="mr-sm-3 mb-2 mb-sm-0">
+												<div class="card-img-actions">
+													<a href="#"> <img
+														src="/images/placeholders/placeholder.jpg"
+														class="img-fluid img-preview rounded" alt=""> <span
+														class="card-img-actions-overlay card-img"><i
+															class="icon-play3 icon-2x"></i></span>
+													</a>
+												</div>
+											</div>
+
+											<div class="media-body">
+												<h6 class="media-title">
+													<a href="#">Post Heading</a>
+												</h6>
+												Lorem Ipsum is simply dummy text of the printing and
+												typesetting industry.
+											</div>
+										</div>
+
+
+									</div>
+
+									<div class="col-xl-6">
+										<div class="media flex-column flex-sm-row mt-0 mb-3">
+											<div class="mr-sm-3 mb-2 mb-sm-0">
+												<div class="card-img-actions">
+													<a href="#"> <img
+														src="/images/placeholders/placeholder.jpg"
+														class="img-fluid img-preview rounded" alt=""> <span
+														class="card-img-actions-overlay card-img"><i
+															class="icon-play3 icon-2x"></i></span>
+													</a>
+												</div>
+											</div>
+
+											<div class="media-body">
+												<h6 class="media-title">
+													<a href="#">Post Heading</a>
+												</h6>
+												Lorem Ipsum is simply dummy text of the printing and
+												typesetting industry.
+											</div>
+										</div>
+
+
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /latest posts -->
+
+					</div>
+
+					<div class="col-xl-4">
+
+						<div class="card min-height-300">
+							<div class="card-header header-elements-inline">
+								<h6 class="card-title">Latest product</h6>
+							</div>
+
+							<div id="carouselExampleControls1" class="carousel slide"
+								data-ride="carousel">
+								<div class="carousel-inner">
+									<div class="carousel-item"
+										th:each="product,iter : ${latestProducts}"
+										th:classappend="${iter.index == 0} ? active : '' ">
+										<div class="card-img-actions mx-1 mt-1 doc-img-height ">
+											<img class="card-img img-fluid"
+												alt=""> <img class="card-img img-fluid"
+												th:src="${(product.productImageFile != null && !#strings.isEmpty(product.productImageFile)) ? '/files/'+product.productImageFile : '/images/noImage.jpeg'}"
+												th:alt="${user.firstName}">
+										</div>
+
+										<div class="card-body">
+											<div class="d-flex align-items-start flex-nowrap ">
+												<div>
+													<h6 class="font-weight-semibold mr-2"
+														th:text="${product.productName}">Product Name 1</h6>
+
+													<span th:text="${product.productDescription}">Lorem
+														Ipsum is simply dummy text of the printing and typesetting
+														industry.</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+
+						<!-- My messages -->
+						<div class="card">
+							<div class="card-header header-elements-inline">
+								<h6 class="card-title">My messages</h6>
+								<div class="header-elements">
+									<span><i class="icon-history text-warning mr-2"></i> Jul
+										7, 10:30</span> <span class="badge bg-success align-self-start ml-3">Online</span>
+								</div>
+							</div>
+
+							<!-- Numbers -->
+							<div class="card-body py-0">
+								<div class="row text-center">
+									<div class="col-4">
+										<div class="mb-3">
+											<h5 class="font-weight-semibold mb-0">2,345</h5>
+											<span class="text-muted font-size-sm">this week</span>
+										</div>
+									</div>
+
+									<div class="col-4">
+										<div class="mb-3">
+											<h5 class="font-weight-semibold mb-0">3,568</h5>
+											<span class="text-muted font-size-sm">this month</span>
+										</div>
+									</div>
+
+									<div class="col-4">
+										<div class="mb-3">
+											<h5 class="font-weight-semibold mb-0">32,693</h5>
+											<span class="text-muted font-size-sm">all messages</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- /numbers -->
+
+
+							<!-- Area chart -->
+							<div id="messages-stats"></div>
+							<!-- /area chart -->
+
+
+							<!-- Tabs -->
+							<ul
+								class="nav nav-tabs nav-tabs-solid nav-justified bg-indigo-400 border-x-0 border-bottom-0 border-top-indigo-300 mb-0">
+								<li class="nav-item"><a href="#messages-tue"
+									class="nav-link font-size-sm text-uppercase active"
+									data-toggle="tab"> Tuesday </a></li>
+
+								<li class="nav-item"><a href="#messages-mon"
+									class="nav-link font-size-sm text-uppercase" data-toggle="tab">
+										Monday </a></li>
+
+								<li class="nav-item"><a href="#messages-fri"
+									class="nav-link font-size-sm text-uppercase" data-toggle="tab">
+										Friday </a></li>
+							</ul>
+							<!-- /tabs -->
+
+
+							<!-- Tabs content -->
+							<div class="tab-content card-body">
+								<div class="tab-pane active fade show" id="messages-tue">
+									<ul class="media-list">
+										<li class="media">
+											<div class="mr-3 position-relative">
+												<img src="/images/placeholders/placeholder.jpg"
+													class="rounded-circle" width="36" height="36" alt="">
+												<span
+													class="badge bg-danger-400 badge-pill badge-float border-2 border-white">8</span>
+											</div>
+
+											<div class="media-body">
+												<div class="d-flex justify-content-between">
+													<a href="#">James Alexander</a> <span
+														class="font-size-sm text-muted">14:58</span>
+												</div>
+
+												The constitutionally inventoried precariously...
+											</div>
+										</li>
+
+										<li class="media">
+											<div class="mr-3 position-relative">
+												<img src="/images/placeholders/placeholder.jpg"
+													class="rounded-circle" width="36" height="36" alt="">
+												<span
+													class="badge bg-danger-400 badge-pill badge-float border-2 border-white">6</span>
+											</div>
+
+											<div class="media-body">
+												<div class="d-flex justify-content-between">
+													<a href="#">Margo Baker</a> <span
+														class="font-size-sm text-muted">12:16</span>
+												</div>
+
+												Pinched a well more moral chose goodness...
+											</div>
+										</li>
+
+										<li class="media">
+											<div class="mr-3">
+												<img src="/images/placeholders/placeholder.jpg"
+													class="rounded-circle" width="36" height="36" alt="">
+											</div>
+
+											<div class="media-body">
+												<div class="d-flex justify-content-between">
+													<a href="#">Jeremy Victorino</a> <span
+														class="font-size-sm text-muted">09:48</span>
+												</div>
+
+												Pert thickly mischievous clung frowned well...
+											</div>
+										</li>
+
+										<li class="media">
+											<div class="mr-3">
+												<img src="/images/placeholders/placeholder.jpg"
+													class="rounded-circle" width="36" height="36" alt="">
+											</div>
+
+											<div class="media-body">
+												<div class="d-flex justify-content-between">
+													<a href="#">Beatrix Diaz</a> <span
+														class="font-size-sm text-muted">05:54</span>
+												</div>
+
+												Nightingale taped hello bucolic fussily cardinal...
+											</div>
+										</li>
+
+										<li class="media">
+											<div class="mr-3">
+												<img src="/images/placeholders/placeholder.jpg"
+													class="rounded-circle" width="36" height="36" alt="">
+											</div>
+
+											<div class="media-body">
+												<div class="d-flex justify-content-between">
+													<a href="#">Richard Vango</a> <span
+														class="font-size-sm text-muted">01:43</span>
+												</div>
+
+												Amidst roadrunner distantly pompously where...
+											</div>
+										</li>
+									</ul>
+								</div>
+
+								<div class="tab-pane fade" id="messages-mon">
+									<ul class="media-list">
+										<li class="media">
+											<div class="mr-3">
+												<img src="/images/placeholders/placeholder.jpg"
+													class="rounded-circle" width="36" height="36" alt="">
+											</div>
+
+											<div class="media-body">
+												<div class="d-flex justify-content-between">
+													<a href="#">Isak Temes</a> <span
+														class="font-size-sm text-muted">Tue, 19:58</span>
+												</div>
+
+												Reasonable palpably rankly expressly grimy...
+											</div>
+										</li>
+
+										<li class="media">
+											<div class="mr-3">
+												<img src="/images/placeholders/placeholder.jpg"
+													class="rounded-circle" width="36" height="36" alt="">
+											</div>
+
+											<div class="media-body">
+												<div class="d-flex justify-content-between">
+													<a href="#">Vittorio Cosgrove</a> <span
+														class="font-size-sm text-muted">Tue, 16:35</span>
+												</div>
+
+												Arguably therefore more unexplainable fumed...
+											</div>
+										</li>
+
+										<li class="media">
+											<div class="mr-3">
+												<img src="/images/placeholders/placeholder.jpg"
+													class="rounded-circle" width="36" height="36" alt="">
+											</div>
+
+											<div class="media-body">
+												<div class="d-flex justify-content-between">
+													<a href="#">Hilary Talaugon</a> <span
+														class="font-size-sm text-muted">Tue, 12:16</span>
+												</div>
+
+												Nicely unlike porpoise a kookaburra past more...
+											</div>
+										</li>
+
+										<li class="media">
+											<div class="mr-3">
+												<img src="/images/placeholders/placeholder.jpg"
+													class="rounded-circle" width="36" height="36" alt="">
+											</div>
+
+											<div class="media-body">
+												<div class="d-flex justify-content-between">
+													<a href="#">Bobbie Seber</a> <span
+														class="font-size-sm text-muted">Tue, 09:20</span>
+												</div>
+
+												Before visual vigilantly fortuitous tortoise...
+											</div>
+										</li>
+
+										<li class="media">
+											<div class="mr-3">
+												<img src="/images/placeholders/placeholder.jpg"
+													class="rounded-circle" width="36" height="36" alt="">
+											</div>
+
+											<div class="media-body">
+												<div class="d-flex justify-content-between">
+													<a href="#">Walther Laws</a> <span
+														class="font-size-sm text-muted">Tue, 03:29</span>
+												</div>
+
+												Far affecting more leered unerringly dishonest...
+											</div>
+										</li>
+									</ul>
+								</div>
+
+								<div class="tab-pane fade" id="messages-fri">
+									<ul class="media-list">
+										<li class="media">
+											<div class="mr-3">
+												<img src="/images/placeholders/placeholder.jpg"
+													class="rounded-circle" width="36" height="36" alt="">
+											</div>
+
+											<div class="media-body">
+												<div class="d-flex justify-content-between">
+													<a href="#">Owen Stretch</a> <span
+														class="font-size-sm text-muted">Mon, 18:12</span>
+												</div>
+
+												Tardy rattlesnake seal raptly earthworm...
+											</div>
+										</li>
+
+										<li class="media">
+											<div class="mr-3">
+												<img src="/images/placeholders/placeholder.jpg"
+													class="rounded-circle" width="36" height="36" alt="">
+											</div>
+
+											<div class="media-body">
+												<div class="d-flex justify-content-between">
+													<a href="#">Jenilee Mcnair</a> <span
+														class="font-size-sm text-muted">Mon, 14:03</span>
+												</div>
+
+												Since hello dear pushed amid darn trite...
+											</div>
+										</li>
+
+										<li class="media">
+											<div class="mr-3">
+												<img src="/images/placeholders/placeholder.jpg"
+													class="rounded-circle" width="36" height="36" alt="">
+											</div>
+
+											<div class="media-body">
+												<div class="d-flex justify-content-between">
+													<a href="#">Alaster Jain</a> <span
+														class="font-size-sm text-muted">Mon, 13:59</span>
+												</div>
+
+												Dachshund cardinal dear next jeepers well...
+											</div>
+										</li>
+
+										<li class="media">
+											<div class="mr-3">
+												<img src="/images/placeholders/placeholder.jpg"
+													class="rounded-circle" width="36" height="36" alt="">
+											</div>
+
+											<div class="media-body">
+												<div class="d-flex justify-content-between">
+													<a href="#">Sigfrid Thisted</a> <span
+														class="font-size-sm text-muted">Mon, 09:26</span>
+												</div>
+
+												Lighted wolf yikes less lemur crud grunted...
+											</div>
+										</li>
+
+										<li class="media">
+											<div class="mr-3">
+												<img src="/images/placeholders/placeholder.jpg"
+													class="rounded-circle" width="36" height="36" alt="">
+											</div>
+
+											<div class="media-body">
+												<div class="d-flex justify-content-between">
+													<a href="#">Sherilyn Mckee</a> <span
+														class="font-size-sm text-muted">Mon, 06:38</span>
+												</div>
+
+												Less unicorn a however careless husky...
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<!-- /tabs content -->
+
+						</div>
+						<!-- /my messages -->
+
+
+					</div>
+				</div>
+				<!-- /dashboard content -->
+
+			</div>
+			<!-- /content area -->
+
+
+			<!-- Footer -->
+			<div class="navbar navbar-expand-lg navbar-light">
+				<div class="text-center d-lg-none w-100">
+					<button type="button" class="navbar-toggler dropdown-toggle"
+						data-toggle="collapse" data-target="#navbar-footer">
+						<i class="icon-unfold mr-2"></i> Footer
+					</button>
+				</div>
+
+				<div class="navbar-collapse collapse" id="navbar-footer">
+					<span class="navbar-text"> &copy; 2020. </span>
+
+					<ul class="navbar-nav ml-lg-auto">
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-lifebuoy mr-2"></i> Support</a></li>
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-file-text2 mr-2"></i> Docs</a></li>
+					</ul>
+
+					<ul class="navbar-nav ml-lg-auto">
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-facebook color-fb "></i> </a></li>
+
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-twitter text-blue"></i> </a></li>
+
+						<li class="nav-item"><a href="#" class="navbar-nav-link"
+							target="_blank"><i class="icon-youtube text-red"></i> </a></li>
+
+					</ul>
+				</div>
+			</div>
+			<!-- /footer -->
+
+		</div>
+		<!-- /main content -->
+
+	</div>
+	<!-- /page content -->
+
+</body>
+</html>

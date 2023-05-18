@@ -85,6 +85,10 @@
                                 [[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]
                             </div>
                         </div>
+                        
+                        <div th:if="${confirmationMessage}"
+                                 class="alert alert-success" role="alert"
+                                 th:text="${confirmationMessage}"></div>
 
                         <div th:if="${errorMsg}">
                             <div class="alert alert-danger">
@@ -143,10 +147,12 @@
                                         password?</a>
                                 </div>
 
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary btn-block">Sign
-                                        in
-                                    </button>
+                                <div class="form-group text-center">
+<!--                                	<div class="text-right">-->
+	                                	
+	                                    	<button type="submit" class="btn btn-primary">SIGN IN</button>
+	                                    
+<!--                                    </div>-->
                                 </div>
 
                                 <!--<div class="form-group text-center text-muted content-divider">
@@ -164,9 +170,9 @@
                                     <span class="px-2">Don't have an account?</span>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group text-center">
                                     <a href="/register"
-                                       class="btn btn-light btn-block">Sign up</a>
+                                       class="btn btn-light">SIGN UP</a>
                                 </div>
 
                                <span class="form-text text-center text-muted">powered by <span  class="text-primary" >pSwitch services private limited</span> </span>
@@ -182,7 +188,7 @@
                                     <img src="/images/logo_dark.png" alt="">
                                     <hr>
                                     <h5 class="mb-0">Reset Password</h5>
-
+									<span class="d-block text-muted">Enter the email you used to sign up</span>
                                 </div>
 
                                 <div class="form-group form-group-feedback form-group-feedback-left">
@@ -194,15 +200,23 @@
                                     </div>
                                 </div>
 
+								<div class="row">
+                                    <div class="col-md-6">
+		                                <div class="form-group">
+		                                    <button type="submit" class="btn btn-primary btn-block">Send
+		                                        Reset Instructions
+		                                    </button>
+		                                </div>
+	                                </div>
 
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary btn-block">Send
-                                        Reset Instructions
-                                    </button>
-                                </div>
+                                    <div class="col-md-6">
+										 <div class="form-group">
+                                    		<a href="login.html" class="btn btn-light btn-block">Login Instead?</a>
+                                		</div>
+                                    </div>
+								</div>
 
-
-                                <div class="form-group text-center text-muted content-divider">
+                               <!--  <div class="form-group text-center text-muted content-divider">
                                     <span class="px-2">Don't have an account?</span>
                                 </div>
 
@@ -214,7 +228,7 @@
                                 <span class="form-text text-center text-muted">By
 										continuing, you're confirming that you've read our <a href="#">Terms
 											&amp; Conditions</a> and <a href="#">Cookie Policy</a>
-									</span>
+									</span> -->
                             </form>
                         </div>
 
@@ -239,22 +253,22 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group form-group-feedback form-group-feedback-left">
+                                <div class="form-group form-group-feedback form-group-feedback-right">
                                     <input type="password" class="form-control" id="password"
                                            name="newPassword" required autofocus="autofocus"
                                            placeholder="New Password">
                                     <div class="form-control-feedback">
-                                        <i class="icon-user text-danger-800"></i>
+                                         <i toggle="#password" class="far fa-eye text-blue-800 toggle-password"></i>
                                     </div>
                                     <small class="form-text text-danger"></small>
                                 </div>
 
-                                <div class="form-group form-group-feedback form-group-feedback-left">
+                                <div class="form-group form-group-feedback form-group-feedback-right">
                                     <input type="password" class="form-control" id="confirmPassword"
                                            name="confirmPassword" required autofocus="autofocus"
                                            placeholder="Confirm Password">
                                     <div class="form-control-feedback">
-                                        <i class="icon-user text-danger-800"></i>
+                                         <i toggle="#confirmPassword" class="far fa-eye text-blue-800 toggle-password"></i>
                                     </div>
                                     <small class="form-text text-danger"></small>
                                 </div>
