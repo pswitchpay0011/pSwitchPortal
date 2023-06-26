@@ -139,7 +139,7 @@ public class CustomerInfoService {
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
-        requestBody.add("initiator_id", "9962981729");
+        requestBody.add("initiator_id", "9962981729d");
         requestBody.add("id_type", "mobile_number");
         requestBody.add("id", "8870778821");
         requestBody.add("otp_ref_id", "d3e00033-ebd1-5492-a631-53f0dbf00d69");
