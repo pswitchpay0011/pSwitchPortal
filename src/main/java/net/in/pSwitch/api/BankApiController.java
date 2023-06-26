@@ -1,5 +1,6 @@
 package net.in.pSwitch.api;
 
+import net.in.pSwitch.eko.HmacSHA256;
 import net.in.pSwitch.model.UserInfo;
 import net.in.pSwitch.model.database.CDMConfirmation;
 import net.in.pSwitch.model.database.ConfirmTransaction;
@@ -95,6 +96,9 @@ public class BankApiController {
 			response.setMessage(e.getMessage());
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 		}
+
+		HmacSHA256.activateEKyc();
+
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 

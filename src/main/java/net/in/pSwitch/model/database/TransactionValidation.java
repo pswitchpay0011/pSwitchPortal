@@ -5,10 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -43,4 +47,12 @@ public class TransactionValidation {
     private String sndrNm1;
     @JsonProperty("sndr_ifsc")
     private String sndrIfsc;
+
+    @CreationTimestamp
+    @Column(name = "created_on", nullable = false)
+    private LocalDateTime createdOn;
+
+    @UpdateTimestamp
+    @Column(name = "updated_on", nullable = false)
+    private LocalDateTime UpdatedOn;
 }
