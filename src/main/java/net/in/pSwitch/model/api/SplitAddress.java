@@ -4,10 +4,24 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Entity
+@Table(name = "aadhaar_split_Address")
 public class SplitAddress {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "split_address_id", nullable = false)
+    private Integer id;
+
     @JsonProperty("country")
     private String country;
     @JsonProperty("dist")

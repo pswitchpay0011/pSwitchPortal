@@ -1,6 +1,6 @@
 package net.in.pSwitch.utility;
 
-import net.in.pSwitch.model.UserInfo;
+import net.in.pSwitch.model.user.UserInfo;
 import net.in.pSwitch.service.UtilService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

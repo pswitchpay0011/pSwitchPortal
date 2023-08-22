@@ -1,5 +1,7 @@
 package net.in.pSwitch.model;
 
+import net.in.pSwitch.model.user.UserInfo;
+
 import java.util.Calendar;
 import java.util.Date;
 

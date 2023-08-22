@@ -1,6 +1,7 @@
 package net.in.pSwitch.dto;
 
 import lombok.Data;
+import org.springframework.util.StringUtils;
 
 @Data
 public class UserRegistrationDTO {
@@ -18,18 +19,24 @@ public class UserRegistrationDTO {
     private String zipcode;
     private String country;
 
+    private String masterDistributor;
+    private String distributor;
+    private String email;
+
     private String latLng;
 
-    /*
-     * public UserRegistrationDto() {
-     *
-     * }
-     *
-     * public UserRegistrationDto(String firstName, String lastName, String username,
-     * Role role, String password) { super(); this.firstName = firstName;
-     * this.lastName = lastName; this.role = role; this.username = username; this.password
-     * = password; }
-     */
+    private String dob;
 
-
+    public Long getStateCode(){
+        if(!StringUtils.isEmpty(state)) {
+            return Long.parseLong(state);
+        }
+        return 0l;
+    }
+    public Long getCityCode(){
+        if(!StringUtils.isEmpty(city)) {
+            return Long.parseLong(city);
+        }
+        return 0l;
+    }
 }

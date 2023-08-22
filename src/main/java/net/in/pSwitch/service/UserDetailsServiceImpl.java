@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import net.in.pSwitch.model.UserInfo;
+import net.in.pSwitch.model.user.UserInfo;
 import net.in.pSwitch.repository.UserInfoRepository;
 
 public class UserDetailsServiceImpl implements UserDetailsService {

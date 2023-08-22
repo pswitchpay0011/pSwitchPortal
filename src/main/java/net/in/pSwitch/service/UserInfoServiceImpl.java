@@ -5,7 +5,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+import net.in.pSwitch.authentication.LoginUserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +23,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.in.pSwitch.controller.ApplicationController;
 import net.in.pSwitch.dao.UserInfoSpecifications;
-import net.in.pSwitch.model.Role;
-import net.in.pSwitch.model.UserInfo;
+import net.in.pSwitch.model.user.Role;
+import net.in.pSwitch.model.user.UserInfo;
 import net.in.pSwitch.repository.RoleRepository;
 import net.in.pSwitch.repository.UserInfoRepository;
 import net.in.pSwitch.utility.StringLiteral;
@@ -38,23 +40,35 @@ public class UserInfoServiceImpl implements UserInfoService {
 	private UserInfoRepository userInfoRepository;
 	@Autowired
 	private RoleRepository roleRepository;
+	@Autowired
+	private BinderService binderService;
 
 	@Override
-	public Page<UserInfo> findAll(String queryString, Pageable pageable) {
+	public Page<UserInfo> findAll(String queryString, Pageable pageable, Integer createdBy) {
 
 		UserInfoSpecifications specifications = new UserInfoSpecifications(queryString);
 
-		return userInfoRepository.findAll(specifications, pageable);
+		if(createdBy==null) {
+			return userInfoRepository.findAll(specifications, pageable);
+		}else{
+			return userInfoRepository.findAllCreatedBy(createdBy, specifications, pageable);
+		}
 	}
 
 	@Override
-	public Page<UserInfo> findAllByRole(Role role, String queryString, Pageable pageable) {
+	public Page<UserInfo> findAllByRole(Role role, String queryString, Pageable pageable, Integer createdBy) {
 		UserInfoSpecifications specifications = new UserInfoSpecifications(role, queryString);
-		return userInfoRepository.findAll(specifications, pageable);
+		if(createdBy==null) {
+			return userInfoRepository.findAll(specifications, pageable);
+		}else{
+			return userInfoRepository.findAllCreatedBy(createdBy, specifications, pageable);
+		}
 	}
 
 	@Override
-	public String getDataForDatatable(Map<String, Object> params) {
+	public String getDataForDatatable(Map<String, Object> params, LoginUserInfo loginUserInfo) {
+		UserInfo currentUser = binderService.getCurrentUser(loginUserInfo);
+
 		int draw = params.containsKey("draw") ? Integer.parseInt(params.get("draw").toString()) : 1;
 		int length = params.containsKey("length") ? Integer.parseInt(params.get("length").toString()) : 30;
 		int start = params.containsKey("start") ? Integer.parseInt(params.get("start").toString()) : 30;
@@ -76,15 +90,19 @@ public class UserInfoServiceImpl implements UserInfoService {
 		String queryString = (String) (params.get("search[value]"));
 		String searchRole = (String) (params.get("searchRole"));
 
+		Integer createdBy=null;
+		if (!currentUser.getRoles().getRoleCode().equals(StringLiteral.ROLE_CODE_ADMIN)){
+			createdBy = currentUser.getUserId();
+		}
 		Role role = null;
 		if (searchRole != null) {
 			role = roleRepository.findByRoleCode(searchRole);
 		}
 		Page<UserInfo> customers = null;
 		if (role != null) {
-			customers = findAllByRole(role, queryString, pageRequest);
+			customers = findAllByRole(role, queryString, pageRequest, createdBy);
 		} else {
-			customers = findAll(queryString, pageRequest);
+			customers = findAll(queryString, pageRequest, createdBy);
 		}
 
 		long totalRecords = customers.getTotalElements();
@@ -93,73 +111,85 @@ public class UserInfoServiceImpl implements UserInfoService {
 		customers.forEach(customer -> {
 
 			if (!"Admin".equalsIgnoreCase(customer.getUserPSwitchId())) {
-				Map<String, Object> cellData = new HashMap<>();
-				cellData.put("userId", customer.getUserId());
-				cellData.put("userPSwitchId", customer.getUserPSwitchId());
-				cellData.put("firstName", (customer.getFirstName() + " " + customer.getLastName()).trim());
-				cellData.put("roles", customer.getRoles().getRoleName());
-				cellData.put("createdDate", Utility.getFormatedDate(customer.getCreatedDate()));
-				cellData.put("managerName",
-						customer.getParent() != null
-								? (customer.getParent().getFirstName() + " " + customer.getParent().getLastName())
-										.trim()
-								: "NA");
-				cellData.put("city", customer.getCity());
-				cellData.put("country", customer.getCountry());
-				cellData.put("mobileNumber", customer.getMobileNumber());
-				String status = "";
-				if (customer.getIsActive() != null && 1l == customer.getIsActive()) {
-					status = "<span class='badge badge-success'>Active</span>";
-				} else {
-					status = "<span class='badge badge-danger'>Disable</span>";
+				try {
+					Map<String, Object> cellData = new HashMap<>();
+					cellData.put("userId", customer.getUserId());
+					cellData.put("userPSwitchId", customer.getUserPSwitchId()==null? "NA" : customer.getUserPSwitchId());
+					cellData.put("firstName", (customer.getFirstName() + " " + customer.getLastName()).trim());
+					if(customer.getRoles()==null)
+						return;
+					cellData.put("roles", customer.getRoles().getRoleName());
+					cellData.put("createdDate", Utility.getFormatedDate(customer.getCreatedDate()));
+
+					if(customer.getUserMapping()!=null) {
+						Optional<UserInfo> parent = userInfoRepository.findById(customer.getUserMapping().getParentUser());
+
+						cellData.put("managerName",
+								parent.isPresent()
+										? parent.get().getFullName().trim()
+										: "NA");
+					}else{
+						cellData.put("managerName","NA");
+					}
+					cellData.put("city", customer.getCity());
+					cellData.put("country", customer.getCountry());
+					cellData.put("mobileNumber", customer.getMobileNumber());
+					String status = "";
+					if (customer.getIsActive() != null && 1l == customer.getIsActive()) {
+						status = "<span class='badge badge-success'>Active</span>";
+					} else {
+						status = "<span class='badge badge-danger'>Disable</span>";
+					}
+
+					String verfication = "";
+
+					if (customer.getAgreementAccept() != null && 1l == customer.getAgreementAccept()) {
+						verfication = "<span class='badge badge-success'>Profile Completed</span>";
+					} else {
+						verfication = "<span class='badge badge-danger'>Profile In-Completed</span>";
+					}
+
+					if (customer.getIsVerified() != null && 1l == customer.getIsVerified()) {
+						verfication += " <span class='badge badge-success'>Verified</span>";
+					} else if (customer.getIsVerified() != null && 2l == customer.getIsVerified()) {
+						verfication += " <span class='badge badge-danger'>Rejected</span>";
+					} else {
+						verfication += " <span class='badge badge-info'>Pending</span>";
+					}
+
+					String changeAction = "";
+					if (StringLiteral.ROLE_CODE_RETAILER.equalsIgnoreCase(customer.getRoles().getRoleCode())
+							|| StringLiteral.ROLE_CODE_DISTRIBUTOR.equalsIgnoreCase(customer.getRoles().getRoleCode())
+							|| StringLiteral.ROLE_CODE_SUPER_DISTRIBUTOR
+							.equalsIgnoreCase(customer.getRoles().getRoleCode())) {
+						changeAction = "<a href='/admin/user/changeManager/" + customer.getUserId() + "'"
+								+ " class='dropdown-item'><i class='fas fa-users-cog'></i>" + "Change Manager</a>";
+					}
+
+					String action = "<div class='list-icons'>" + "	<div class='dropdown'>"
+							+ "		<a href='#' class='list-icons-item' data-toggle='dropdown'>"
+							+ "			<i class='icon-menu9'></i>" + "		</a>"
+							+ "		<div class='dropdown-menu dropdown-menu-right'>"
+							+ "			<a href='/admin/user/enable/" + customer.getUserId() + "'"
+							+ "				class='dropdown-item'><i class='icon-checkmark'></i>"
+							+ "				Enabled</a> <a " + "href='/admin/user/disble/" + customer.getUserId() + "'"
+							+ "				class='dropdown-item'><i class='icon-blocked'></i>"
+							+ "				Disabled</a>" + "" + "			<div th:classappend='"
+							+ ((customer.getAgreementAccept() == null || customer.getAgreementAccept() == 0) ? "'d-none'"
+							: "''")
+							+ "'>" + "				<a href='/admin/user/verified/" + customer.getUserId() + "'"
+							+ "					class='dropdown-item'><i class='fas fa-user-check'></i>"
+							+ "					Verified</a> <a " + "href='/admin/user/reject/" + customer.getUserId() + "'"
+							+ "					class='dropdown-item'><i class='fas fa-user-times'></i>"
+							+ "					Not-Verified</a> " + changeAction + "</div></div></div></div>";
+
+					cellData.put("action", action);
+					cellData.put("status", status);
+					cellData.put("verfication", verfication);
+					cells.add(cellData);
+				}catch (Exception e){
+					logger.error("Error while generating data", e);
 				}
-
-				String verfication = "";
-
-				if (customer.getAgreementAccept() != null && 1l == customer.getAgreementAccept()) {
-					verfication = "<span class='badge badge-success'>Profile Completed</span>";
-				} else {
-					verfication = "<span class='badge badge-danger'>Profile In-Completed</span>";
-				}
-
-				if (customer.getIsVerified() != null && 1l == customer.getIsVerified()) {
-					verfication += " <span class='badge badge-success'>Verified</span>";
-				} else if (customer.getIsVerified() != null && 2l == customer.getIsVerified()) {
-					verfication += " <span class='badge badge-danger'>Rejected</span>";
-				} else {
-					verfication += " <span class='badge badge-info'>Pending</span>";
-				}
-
-				String changeAction = "";
-				if (StringLiteral.ROLE_CODE_RETAILER.equalsIgnoreCase(customer.getRoles().getRoleCode())
-						|| StringLiteral.ROLE_CODE_DISTRIBUTOR.equalsIgnoreCase(customer.getRoles().getRoleCode())
-						|| StringLiteral.ROLE_CODE_SUPER_DISTRIBUTOR
-								.equalsIgnoreCase(customer.getRoles().getRoleCode())) {
-					changeAction = "<a href='/admin/user/changeManager/" + customer.getUserId() + "'"
-							+ " class='dropdown-item'><i class='fas fa-users-cog'></i>" + "Change Manager</a>";
-				}
-
-				String action = "<div class='list-icons'>" + "	<div class='dropdown'>"
-						+ "		<a href='#' class='list-icons-item' data-toggle='dropdown'>"
-						+ "			<i class='icon-menu9'></i>" + "		</a>"
-						+ "		<div class='dropdown-menu dropdown-menu-right'>"
-						+ "			<a href='/admin/user/enable/" + customer.getUserId() + "'"
-						+ "				class='dropdown-item'><i class='icon-checkmark'></i>"
-						+ "				Enabled</a> <a " + "href='/admin/user/disble/" + customer.getUserId() + "'"
-						+ "				class='dropdown-item'><i class='icon-blocked'></i>"
-						+ "				Disabled</a>" + "" + "			<div th:classappend='"
-						+ ((customer.getAgreementAccept() == null || customer.getAgreementAccept() == 0) ? "'d-none'"
-								: "''")
-						+ "'>" + "				<a href='/admin/user/verified/" + customer.getUserId() + "'"
-						+ "					class='dropdown-item'><i class='fas fa-user-check'></i>"
-						+ "					Verified</a> <a " + "href='/admin/user/reject/" + customer.getUserId() + "'"
-						+ "					class='dropdown-item'><i class='fas fa-user-times'></i>"
-						+ "					Not-Verified</a> " + changeAction + "</div></div></div></div>";
-
-				cellData.put("action", action);
-				cellData.put("status", status);
-				cellData.put("verfication", verfication);
-				cells.add(cellData);
 			}
 		});
 

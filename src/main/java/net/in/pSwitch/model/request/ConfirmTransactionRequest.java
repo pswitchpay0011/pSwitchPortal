@@ -5,13 +5,25 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
+@Entity
+@Table(name = "ConfirmTransactionRequest")
 public class ConfirmTransactionRequest {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
     @JsonProperty("UTR")
     private String utr;
     @JsonProperty("Bene_acc_no")
@@ -38,6 +50,11 @@ public class ConfirmTransactionRequest {
     private String sndrIfsc;
     @JsonProperty("Tran_id")
     private String tranId;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
+
+    @JsonProperty("Stts_flg")
+    private String sttsFlg;
+    @JsonProperty("Err_cd")
+    private String errCd;
+    @JsonProperty("message")
+    private String message;
 }

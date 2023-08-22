@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import net.in.pSwitch.model.MPIN;
-import net.in.pSwitch.model.UserInfo;
+import net.in.pSwitch.model.user.UserInfo;
 
 @Repository
 public interface MPINRepository extends JpaRepository<MPIN, Integer>, JpaSpecificationExecutor<MPIN> {

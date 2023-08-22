@@ -17,6 +17,7 @@ public class StringLiteral {
 	public static final String ROLE_CODE_RETAILER = "RE";
 	public static final String ROLE_CODE_DISTRIBUTOR = "DS";
 	public static final String ROLE_CODE_SUPER_DISTRIBUTOR = "SD";
+	public static final String ROLE_CODE_SALES_EMPLOYEE = "SE";
 	public static final String ROLE_CODE_FINANCE = "FN";
 	public static final String ROLE_CODE_MANAGER_FINANCE = "MFN";
 
@@ -25,6 +26,7 @@ public class StringLiteral {
 	public static final String ROLE_NAME_API_ROLE = "Pswitch API";
 	public static final String ROLE_NAME_ADMIN = "Admin";
 	public static final String ROLE_NAME_OFFICE_ADMIN = "Office Admin";
+	public static final String ROLE_NAME_SALES_EMPLOYEE = "Sales Employee";
 	public static final String ROLE_NAME_BUSINESS_ASSOCIATE = "Business Associate";
 	public static final String ROLE_NAME_MANAGER_BUSINESS_ASSOCIATE = "Manger Business Associate";
 	public static final String ROLE_NAME_RETAILER = "Retailer";

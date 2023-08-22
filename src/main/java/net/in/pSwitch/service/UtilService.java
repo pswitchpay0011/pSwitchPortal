@@ -3,7 +3,7 @@ package net.in.pSwitch.service;
 import java.util.List;
 
 import net.in.pSwitch.model.Product;
-import net.in.pSwitch.model.UserInfo;
+import net.in.pSwitch.model.user.UserInfo;
 
 public interface UtilService {
 

@@ -1,7 +1,7 @@
 package net.in.pSwitch.model.response;
 
 import lombok.Data;
-import net.in.pSwitch.model.Role;
+import net.in.pSwitch.model.user.Role;
 
 @Data
 public class AuthResponse {

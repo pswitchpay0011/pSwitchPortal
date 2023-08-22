@@ -7,7 +7,7 @@ import net.in.pSwitch.model.MPIN;
 import net.in.pSwitch.model.Status;
 import net.in.pSwitch.model.Transaction;
 import net.in.pSwitch.model.constant.TransactionType;
-import net.in.pSwitch.model.UserInfo;
+import net.in.pSwitch.model.user.UserInfo;
 import net.in.pSwitch.model.UserWallet;
 import net.in.pSwitch.repository.FundRequestRepository;
 import net.in.pSwitch.repository.MPINRepository;

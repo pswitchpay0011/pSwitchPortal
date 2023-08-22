@@ -3,6 +3,7 @@ package net.in.pSwitch.controller;
 import net.in.pSwitch.authentication.LoginUser;
 import net.in.pSwitch.authentication.LoginUserInfo;
 import net.in.pSwitch.model.*;
+import net.in.pSwitch.model.user.UserInfo;
 import net.in.pSwitch.repository.*;
 import net.in.pSwitch.service.BannerService;
 import net.in.pSwitch.service.BinderService;

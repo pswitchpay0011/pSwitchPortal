@@ -1,4 +1,4 @@
-package net.in.pSwitch.model;
+package net.in.pSwitch.model.user;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

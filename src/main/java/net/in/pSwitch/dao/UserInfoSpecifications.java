@@ -7,8 +7,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import net.in.pSwitch.model.Role;
-import net.in.pSwitch.model.UserInfo;
+import net.in.pSwitch.model.user.Role;
+import net.in.pSwitch.model.user.UserInfo;
 
 public class UserInfoSpecifications implements org.springframework.data.jpa.domain.Specification<UserInfo> {
 

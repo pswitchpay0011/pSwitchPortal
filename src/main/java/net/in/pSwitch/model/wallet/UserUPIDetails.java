@@ -2,7 +2,7 @@ package net.in.pSwitch.model.wallet;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.in.pSwitch.model.UserInfo;
+import net.in.pSwitch.model.user.UserInfo;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

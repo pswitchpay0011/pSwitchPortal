@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import net.in.pSwitch.model.Product;
 import net.in.pSwitch.model.ProductFlexiCommission;
-import net.in.pSwitch.model.UserInfo;
+import net.in.pSwitch.model.user.UserInfo;
 import net.in.pSwitch.dto.ProductFlexiCommissionDTO;
 import net.in.pSwitch.repository.ProductFlexiCommissionRepository;
 import net.in.pSwitch.repository.ProductRepository;

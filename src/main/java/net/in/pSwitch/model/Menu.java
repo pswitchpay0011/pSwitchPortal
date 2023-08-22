@@ -54,6 +54,9 @@ public class Menu implements Serializable {
 	@Column(name = "admin_menu")
 	private long adminMenu = 0;
 
+	@Column(name = "sales_emp_menu")
+	private Long salesEmpMenu = 0l;
+
 	@Column(name = "retailer_menu")
 	private long retailerMenu = 0;
 
@@ -217,6 +220,7 @@ public class Menu implements Serializable {
 		this.distributorMenu = show;
 		this.superDistributorMenu = show;
 		this.businessAssociateMenu = show;
+		this.salesEmpMenu = show;
 	}
 
 	public long getMenuOrder() {

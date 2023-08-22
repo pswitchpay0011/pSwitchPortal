@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import net.in.pSwitch.model.Product;
 import net.in.pSwitch.model.ProductFlexiCommission;
-import net.in.pSwitch.model.UserInfo;
+import net.in.pSwitch.model.user.UserInfo;
 
 @Repository
 public interface ProductFlexiCommissionRepository

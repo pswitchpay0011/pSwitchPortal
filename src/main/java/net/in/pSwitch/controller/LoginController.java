@@ -7,14 +7,12 @@ import net.in.pSwitch.authentication.LoginUser;
 import net.in.pSwitch.authentication.LoginUserInfo;
 import net.in.pSwitch.dto.UserRegistrationDTO;
 import net.in.pSwitch.model.PasswordResetToken;
-import net.in.pSwitch.model.UserInfo;
-import net.in.pSwitch.repository.CountryRepository;
+import net.in.pSwitch.model.user.UserInfo;
 import net.in.pSwitch.repository.PasswordResetRepository;
 import net.in.pSwitch.repository.ProductRepository;
 import net.in.pSwitch.repository.RoleRepository;
 import net.in.pSwitch.repository.UserInfoRepository;
 import net.in.pSwitch.service.BinderService;
-import net.in.pSwitch.service.UserDetailsImpl;
 import net.in.pSwitch.service.UtilService;
 import net.in.pSwitch.utility.LoginTracker;
 import net.in.pSwitch.utility.SMSManager;
@@ -39,7 +37,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,7 +50,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import java.net.Inet4Address;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -98,7 +94,7 @@ public class LoginController {
     private ProductRepository productRepository;
 
     @RequestMapping("/userLogout")
-    public String fetchSignoutSite(HttpServletRequest request, HttpServletResponse response) {
+    public String fetchSignOutSite(HttpServletRequest request, HttpServletResponse response) {
         Cookie cookie = new Cookie(LoginCheck.COOKIE_NAME, "");
         cookie.setPath("/");
         cookie.setMaxAge(0);
@@ -182,10 +178,8 @@ public class LoginController {
         // that the current user is authenticated. So it passes the
         // Spring Security Configurations successfully.
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-
-
         cookie.setPath("/");
-        cookie.setMaxAge((refreshTokenTimeOut + 10) * 60);
+        cookie.setMaxAge(tokenTimeout * 60);
 
         response.addCookie(cookie);
         response.addCookie(new Cookie(CustomJwtAuthenticationFilter.COOKIE_REFRESH_TOKEN, jwtService.doGenerateRefreshToken(user, Optional.of(LocalDateTime.now().plusMinutes(refreshTokenTimeOut)))));

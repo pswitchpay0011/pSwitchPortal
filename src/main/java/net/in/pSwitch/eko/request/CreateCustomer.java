@@ -14,4 +14,6 @@ public class CreateCustomer {
     @JsonProperty("residence_address")
     private String residenceAddress;
     private String pipe;
+    @JsonProperty("mobile_number")
+    private String mobileNumber;
 }

@@ -4,7 +4,7 @@ import net.in.pSwitch.model.EmailDetails;
 import net.in.pSwitch.model.PasswordResetToken;
 import net.in.pSwitch.model.Product;
 import net.in.pSwitch.model.States;
-import net.in.pSwitch.model.UserInfo;
+import net.in.pSwitch.model.user.UserInfo;
 import net.in.pSwitch.model.VerificationToken;
 import net.in.pSwitch.repository.PasswordResetRepository;
 import net.in.pSwitch.repository.StatesRepository;
@@ -187,7 +187,7 @@ public class UtilServiceImpl implements UtilService {
 			cipher.init(Cipher.DECRYPT_MODE, secretKey);
 			return new String(cipher.doFinal(Base64.getDecoder().decode(data.getBytes("UTF-8"))));
 		} catch (Exception e) {
-			logger.error("Error: {}", e);
+			logger.error("Error: {}", e.getLocalizedMessage());
 		}
 		return null;
 	}
@@ -252,6 +252,40 @@ public class UtilServiceImpl implements UtilService {
 			logger.error("Error: ", e);
 		}
 	}
+
+	public void sendLoginDetailsEmail(UserInfo userInfo) {
+		try {
+			logger.info("sendLoginDetailsEmail");
+			String subject = "pSwitch - Account Created";
+
+			String mailContent = "";
+			ClassLoader classLoader = getClass().getClassLoader();
+			InputStream inputStream = classLoader.getResourceAsStream("templates/email/associateCredential.html");
+			try {
+				mailContent = readFromInputStream(inputStream);
+			} catch (IOException e) {
+				logger.error("Error: ", e);
+			}
+			mailContent = mailContent.replaceAll("#FNAME#", userInfo.getFirstName());
+			mailContent = mailContent.replaceAll("#ROLE#", userInfo.getRoles().getRoleName());
+
+			Optional<UserInfo> createdBy =  userInfoRepository.findById(userInfo.getUserMapping().getCreatedBy());
+
+			mailContent = mailContent.replaceAll("#CREATEDBY#", createdBy.get().getFullName().trim());
+			mailContent = mailContent.replaceAll("#PASSWORD#", decodedData(userInfo.getPwd()));
+			logger.info("sendMail start");
+			sendMail(userInfo.getUsername(),subject, mailContent);
+			logger.info("sendMail End");
+		} catch (MailException e) {
+			logger.error("Error: ", e);
+		} catch (UnsupportedEncodingException e) {
+			logger.error("Error: ", e);
+		} catch (MessagingException e) {
+			logger.error("Error: ", e);
+		} catch (Exception e) {
+			logger.error("Error: ", e);
+		}
+	}
 	
 	@Override
 	public void sendWelcomeEmail(UserInfo userInfo) {
@@ -288,13 +322,18 @@ public class UtilServiceImpl implements UtilService {
 
 	@Override
 	public void sendLoginDetailMail(UserInfo userInfo) {
+		sendLoginDetailsEmail(userInfo);
 
+		userInfo.setVerificationCode(encodedData(generateOTP()));
+		userInfo.setContactOTP(encodedData(smsManager.sendOTP(userInfo.getMobileNumber().trim())));
+		userInfoRepository.save(userInfo);
+		sendOTPMail(userInfo);
 	}
 	@Override
 	public void sendVerificationMobileAndEmail(UserInfo userInfo) {
 		userInfo.setVerificationCode(encodedData(generateOTP()));
 		userInfo.setContactOTP(encodedData(smsManager.sendOTP(userInfo.getMobileNumber().trim())));
-		userInfoRepository.save(userInfo);
+		userInfo.setUserId(userInfoRepository.save(userInfo).getUserId());
 		sendOTPMail(userInfo);
 	}
 

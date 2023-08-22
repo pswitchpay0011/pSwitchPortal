@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import net.in.pSwitch.model.FundRequest;
-import net.in.pSwitch.model.UserInfo;
+import net.in.pSwitch.model.user.UserInfo;
 
 public interface FundRequestRepository  extends JpaRepository<FundRequest, Integer>, JpaSpecificationExecutor<FundRequest> {
 

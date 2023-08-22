@@ -2,6 +2,7 @@ package net.in.pSwitch.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.in.pSwitch.model.user.UserInfo;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

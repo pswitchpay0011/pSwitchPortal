@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>pSwitch - Welcome Retailer</title>
+
+    <link rel="shortcut icon" href="/images/favicon.ico"/>
+
+    <div th:replace="fragment/StyleFragment :: style"></div>
+    <!-- /theme JS files -->
+    <!-- JS files For This Page-->
+    <script src="/js/plugins/extensions/rowlink.js"></script>
+    <script src="/js/plugins/visualization/echarts/echarts.min.js"></script>
+    <script src="/js/plugins/forms/styling/uniform.min.js"></script>
+    <script src="/js/plugins/forms/selects/select2.min.js"></script>
+    <script src="/js/plugins/ui/fullcalendar/core/main.min.js"></script>
+    <script src="/js/plugins/ui/fullcalendar/daygrid/main.min.js"></script>
+    <script src="/js/plugins/ui/fullcalendar/timegrid/main.min.js"></script>
+    <script src="/js/plugins/ui/fullcalendar/interaction/main.min.js"></script>
+
+    <script src="/js/app.js"></script>
+    </script>
+    <script src="/js/custom.js"></script>
+    <script src="/js/demo_pages/user_pages_profile_tabbed.js"></script>
+    <script src="/js/demo_charts/echarts/light/bars/tornado_negative_stack.js"></script>
+    <script src="/js/demo_charts/pages/profile/light/balance_stats.js"></script>
+    <script src="/js/demo_charts/pages/profile/light/available_hours.js"></script>
+
+    <script src="/js/demo_pages/picker_date.js"></script>
+    <script src="/js/plugins/forms/wizards/steps.min.js"></script>
+
+    <script src="/js/demo_pages/datatables_basic.js"></script>
+
+
+    <script src="/js/demo_pages/form_select2.js"></script>
+    <script src="/js/demo_pages/form_checkboxes_radios.js"></script>
+
+    <!-- /theme JS files -->
+
+
+    <style>
+		body{background-color:#fff;}
+
+		.field-icon {
+  float: right;
+  margin-right: 10px;
+  margin-top: -25px;
+  position: relative;
+  z-index: 2;
+}
+
+
+
+
+    </style>
+    <style>
+        .overlayLoading {
+            text-align: center;
+            display: none;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 999;
+            background: rgba(255, 255, 255, 0.8) url("/images/loading.gif") center no-repeat;
+        }
+
+        /*body{*/
+        /*    text-align: center;*/
+        /*}*/
+        /* Turn off scrollbar when body element has the loading class */
+        body.loading {
+            overflow: hidden;
+        }
+
+        /* Make spinner image visible when body element has the loading class */
+        body.loading .overlayLoading {
+            display: block;
+        }
+
+
+
+    </style>
+
+</head>
+
+<body>
+
+<div th:replace="fragment/topnav :: navbar"></div>
+
+<!-- Page content -->
+<div class="page-content">
+
+    <div th:replace="fragment/mainSidebar :: sidebar"></div>
+
+    <!-- Main content -->
+    <div class="content-wrapper">
+
+        <!-- Page header -->
+        <div class="page-header">
+            <div class="page-header-content header-elements-md-inline">
+                <div class="page-title d-flex">
+                    <h4><i class="icon-arrow-down52 mr-2"></i> Money Transfer</h4>
+                    <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+                </div>
+
+
+            </div>
+        </div>
+        <!-- /page header -->
+
+        <!-- Content area -->
+        <div class="content">
+            <div class="row">
+
+                <div class="col-md-12">
+
+                    <div class="d-md-flex align-items-md-start">
+
+                        <div class="tab-content w-100">
+                            <div class="tab-pane fade active show" id="">
+
+                                <!-- Profile info -->
+                                <div class="">
+                                    <div class="">
+                                        <ul class="nav nav-tabs nav-tabs-highlight">
+                                            <li class="nav-item"><a href="#basic-tab1" class="nav-link active"
+                                                                    data-toggle="tab">New Transaction</a></li>
+                                            <li class="nav-item"><a href="#basic-tab2" class="nav-link"
+                                                                    data-toggle="tab">Claim Refund</a></li>
+                                            <li class="nav-item"><a href="#basic-tab3" class="nav-link"
+                                                                    data-toggle="tab">Manage DMT Transactions</a></li>
+                                        </ul>
+
+                                        <div class="alert alert-danger" role="alert" style="display: none"
+                                             id="errorAlert">
+                                            <p id="errorMessage">Error while saving data</p>
+                                        </div>
+
+                                        <div class="alert alert-success" role="alert" style="display: none"
+                                             id="successAlert">
+                                            <p id="successMessage">Success</p>
+                                        </div>
+
+                                        <div class="tab-content">
+                                            <div class="tab-pane fade show active" id="basic-tab1">
+                                                <div class="">
+
+                                                    <div class="col-md-6 mb-3 ">
+                                                        <div class="card service-box">
+                                                            <div class="card-header header-elements-inline pl-0 mb-1">
+                                                                <h5 class="card-title "><i
+                                                                        class="icon-arrow-down52 mr-1"></i> STEP 1:
+                                                                    Search Sender(Remitter)</h5>
+                                                                <div class="header-elements">
+                                                                    <div class="list-icons">
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="card-body p-0">
+                                                                <form action="#">
+                                                                    <div class="form-group">
+                                                                        <label>Sender (Remitter) Mobile No.:</label>
+                                                                        <div class="input-group">
+                                                                            <input type="number" class="form-control"
+                                                                                   name="mobileNumber" id="mobileNumber"
+                                                                                   placeholder="">
+                                                                            <span class="input-group-append">
+												<button class="btn btn-primary" onclick="getRemitterDetails()"
+                                                        type="button">Check</button>
+											</span>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <div class="text-right">
+                                                                <a href="#" data-toggle="modal"
+                                                                   data-target="#new_remitter"><i
+                                                                        class="fa fa-plus-circle "></i> Register New
+                                                                    Sender (Remitter) </a> |
+                                                                <a href="#" data-toggle="modal"
+                                                                   data-target="#add-beneficiary"><i
+                                                                        class="fa fa-plus-circle "></i> Add Beneficiary
+                                                                </a>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <!--                                                    <div class="col-md-6 mb-3 " id="new_remitter">-->
+                                                    <!--                                                        <div class="card service-box">-->
+                                                    <!--                                                            <div class="card-header header-elements-inline pl-0 mb-1">-->
+                                                    <!--                                                                <h5 class="card-title "><i-->
+                                                    <!--                                                                        class="icon-arrow-down52 mr-1"></i> Register New-->
+                                                    <!--                                                                    Remitter</h5>-->
+                                                    <!--                                                                <div class="header-elements">-->
+                                                    <!--                                                                    <div class="list-icons">-->
+
+                                                    <!--                                                                    </div>-->
+                                                    <!--                                                                </div>-->
+                                                    <!--                                                            </div>-->
+
+                                                    <!--                                                            <div class="card-body p-0">-->
+                                                    <!--                                                                <form action="#">-->
+
+                                                    <!--                                                                    <div class="row">-->
+                                                    <!--                                                                        <div class="col-md-6">-->
+                                                    <!--                                                                            <div class="form-group">-->
+                                                    <!--                                                                                <label>First Name: <span-->
+                                                    <!--                                                                                        class="text-danger">*</span></label>-->
+
+                                                    <!--                                                                                <input type="text" name="fname"-->
+                                                    <!--                                                                                       id="fname"-->
+                                                    <!--                                                                                       class="form-control required"-->
+                                                    <!--                                                                                       placeholder="">-->
+                                                    <!--                                                                            </div>-->
+                                                    <!--                                                                        </div>-->
+
+                                                    <!--                                                                        <div class="col-md-6">-->
+                                                    <!--                                                                            <div class="form-group">-->
+                                                    <!--                                                                                <label>Last Name <span-->
+                                                    <!--                                                                                        class="text-danger">*</span></label>-->
+                                                    <!--                                                                                <input type="text" name="lname"-->
+                                                    <!--                                                                                       id="lname"-->
+                                                    <!--                                                                                       class="form-control required"-->
+                                                    <!--                                                                                       placeholder="">-->
+                                                    <!--                                                                            </div>-->
+                                                    <!--                                                                        </div>-->
+
+                                                    <!--                                                                        <div class="col-md-12">-->
+                                                    <!--                                                                            <div class="form-group">-->
+                                                    <!--                                                                                <label>Address<span class="text-danger">*</span></label>-->
+                                                    <!--                                                                                <textarea rows="2" cols="3"-->
+                                                    <!--                                                                                          name="address" id="address"-->
+                                                    <!--                                                                                          class="form-control"></textarea>-->
+                                                    <!--                                                                            </div>-->
+                                                    <!--                                                                        </div>-->
+
+                                                    <!--                                                                        <div class="col-md-6">-->
+                                                    <!--                                                                            <div class="form-group">-->
+                                                    <!--                                                                                <label>Pic Code<span-->
+                                                    <!--                                                                                        class="text-danger">*</span></label>-->
+                                                    <!--                                                                                <input type="number" name="zipcode"-->
+                                                    <!--                                                                                       id="zipcode"-->
+                                                    <!--                                                                                       class="form-control"-->
+                                                    <!--                                                                                       onkeyup="zipcodeCheck()"-->
+                                                    <!--                                                                                       required="required"-->
+                                                    <!--                                                                                       placeholder="Pincode">-->
+                                                    <!--                                                                                <div class="form-control-feedback"-->
+                                                    <!--                                                                                     id="zipSpinner"-->
+                                                    <!--                                                                                     style="display: none">-->
+                                                    <!--                                                                                    <i class="icon-spinner2 spinner"></i>-->
+                                                    <!--                                                                                </div>-->
+                                                    <!--                                                                            </div>-->
+                                                    <!--                                                                        </div>-->
+
+                                                    <!--                                                                        <div class="col-md-6">-->
+                                                    <!--                                                                            <div class="form-group">-->
+                                                    <!--                                                                                <label>State<span-->
+                                                    <!--                                                                                        class="text-danger">*</span></label>-->
+                                                    <!--                                                                                <select class="form-control select-search"-->
+                                                    <!--                                                                                        data-placeholder="Select State"-->
+                                                    <!--                                                                                        name="state" id="state"-->
+                                                    <!--                                                                                        data-fouc>-->
+                                                    <!--                                                                                    <option></option>-->
+                                                    <!--                                                                                    <optgroup label="Select State">-->
+                                                    <!--                                                                                        <option th:each="item : ${states}"-->
+                                                    <!--                                                                                                th:selected="${(kycDetails !=null && !#strings.isEmpty(kycDetails.state) and kycDetails.getStateCode() == item.id)}"-->
+                                                    <!--                                                                                                th:value="${item.id}"-->
+                                                    <!--                                                                                                th:text="${item.name}"/>-->
+                                                    <!--                                                                                    </optgroup>-->
+                                                    <!--                                                                                </select>-->
+                                                    <!--                                                                            </div>-->
+                                                    <!--                                                                        </div>-->
+
+                                                    <!--                                                                        <div class="col-md-6">-->
+                                                    <!--                                                                            <div class="form-group">-->
+                                                    <!--                                                                                <label>City/District <span-->
+                                                    <!--                                                                                        class="text-danger">*</span></label>-->
+                                                    <!--                                                                                <select class="form-control select-search"-->
+                                                    <!--                                                                                        data-placeholder="Select District"-->
+                                                    <!--                                                                                        name="city" id="city" data-fouc>-->
+                                                    <!--                                                                                    <option></option>-->
+                                                    <!--                                                                                    <optgroup label="Select city">-->
+                                                    <!--                                                                                        <option th:each="item : ${cities}"-->
+                                                    <!--                                                                                                th:value="${item.id}"-->
+                                                    <!--                                                                                                th:text="${item.name}"/>-->
+                                                    <!--                                                                                    </optgroup>-->
+                                                    <!--                                                                                </select>-->
+                                                    <!--                                                                            </div>-->
+                                                    <!--                                                                        </div>-->
+
+                                                    <!--                                                                        <div class="col-md-6">-->
+                                                    <!--                                                                            <div class="form-group">-->
+                                                    <!--                                                                                <label>Mobile number <span-->
+                                                    <!--                                                                                        class="text-danger">*</span></label>-->
+                                                    <!--                                                                                <input type="text" name="remitterMobileNumber"-->
+                                                    <!--                                                                                       id="remitterMobileNumber"-->
+                                                    <!--                                                                                       class="form-control required"-->
+                                                    <!--                                                                                       placeholder="">-->
+                                                    <!--                                                                            </div>-->
+                                                    <!--                                                                        </div>-->
+                                                    <!--                                                                    </div>-->
+
+                                                    <!--                                                                </form>-->
+                                                    <!--                                                            </div>-->
+                                                    <!--                                                            <div class=" text-right">-->
+                                                    <!--                                                                <button type="button" class="btn bg-primary"-->
+                                                    <!--                                                                        onclick="registerRemitter()">-->
+                                                    <!--                                                                    Register<i class="icon-paperplane ml-2"></i>-->
+                                                    <!--                                                                </button>-->
+                                                    <!--                                                                &lt;!&ndash; data-toggle="modal" data-target="#add-sender"&ndash;&gt;-->
+                                                    <!--                                                            </div>-->
+
+                                                    <!--                                                        </div>-->
+                                                    <!--                                                    </div>-->
+
+                                                </div>
+                                            </div>
+
+                                            <div class="tab-pane fade" id="basic-tab2">
+
+                                                <div class="table-responsive mb-3">
+                                                    <table class="table table-scrollable table-striped table-bordered">
+
+                                                        <tbody>
+
+                                                        <tr>
+                                                            <th>Action</th>
+                                                            <th>Transaction ID</th>
+                                                            <th>TXN Date</th>
+                                                            <th>Operator TXN ID Bank RRN</th>
+                                                            <th>Remitter Details</th>
+                                                            <th>Beneficiary Details</th>
+                                                            <th>Amount</th>
+                                                            <th>Service Charges</th>
+                                                            <th>IMPS/NEFT</th>
+                                                            <th>Status</th>
+                                                            <th>Is Refunded</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                        </tr>
+
+
+                                                        </tbody>
+
+
+                                                    </table>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="tab-pane fade" id="basic-tab3">
+                                                <div class="table-responsive mb-3">
+                                                    <table class="table table-scrollable table-striped table-bordered">
+
+                                                        <tbody>
+
+                                                        <tr>
+                                                            <th>Action</th>
+                                                            <th>Transaction ID</th>
+                                                            <th>TXN Date</th>
+                                                            <th>Operator TXN ID Bank RRN</th>
+                                                            <th>Remitter Details</th>
+                                                            <th>Beneficiary Details</th>
+                                                            <th>Amount</th>
+                                                            <th>Service Charges</th>
+                                                            <th>IMPS/NEFT</th>
+                                                            <th>Status</th>
+                                                            <th>Is Refunded</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                        </tr>
+
+
+                                                        </tbody>
+
+
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /profile info -->
+
+                            </div>
+
+                            <div class="tab-pane fade" id="schedule">
+
+                                <!-- Available hours -->
+                                <div class="card">
+                                    <div class="card-header header-elements-inline">
+                                        <h6 class="card-title">Available hours</h6>
+                                        <div class="header-elements">
+                                            <div class="list-icons">
+                                                <a class="list-icons-item" data-action="collapse"></a>
+                                                <a class="list-icons-item" data-action="reload"></a>
+                                                <a class="list-icons-item" data-action="remove"></a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <div class="chart-container">
+                                            <div class="chart has-fixed-height" id="available_hours"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /available hours -->
+
+
+                                <!-- Schedule -->
+                                <div class="card">
+                                    <div class="card-header header-elements-inline">
+                                        <h5 class="card-title">My schedule</h5>
+                                        <div class="header-elements">
+                                            <div class="list-icons">
+                                                <a class="list-icons-item" data-action="collapse"></a>
+                                                <a class="list-icons-item" data-action="reload"></a>
+                                                <a class="list-icons-item" data-action="remove"></a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <div class="my-schedule"></div>
+                                    </div>
+                                </div>
+                                <!-- /schedule -->
+                            </div>
+                            <div class="tab-pane fade" id="orders">
+                            </div>
+                            <!-- /right content -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /page content -->
+
+
+        <div id="add-sender" class="modal fade" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Remitter Validation</h5>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Please enter verification code sent on Mobile number:</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" placeholder="" required>
+                                        <span class="input-group-append">
+												<button class="btn btn-primary" onclick="resendOtp()" type="button">Re-send Code</button>
+											</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Verify</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="remitterDetails" class="modal fade" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Remitter Details</h5>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Remitter Name</label>
+                                    <label for="remitterDetails_name"></label>
+                                    <input type="text" name="remitterDetails_name" id="remitterDetails_name"
+                                           class="form-control" disabled placeholder=""/>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Mobile number</label>
+                                    <label for="remitterDetails_mobile"></label>
+                                    <input type="text" name="remitterDetails_mobile" id="remitterDetails_mobile"
+                                           class="form-control" disabled placeholder=""/>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Account state</label>
+                                    <label for="remitterDetails_state"></label>
+                                    <input type="text" name="remitterDetails_state" id="remitterDetails_state"
+                                           class="form-control" disabled placeholder=""/>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Transaction Limit</label>
+                                    <label for="remitterDetails_limit"></label>
+                                    <input type="text" name="remitterDetails_limit" id="remitterDetails_limit"
+                                           class="form-control" disabled placeholder=""/>
+                                </div>
+                            </div>
+<!--                            <div class="col-md-6">-->
+<!--                                <div class="form-group">-->
+<!--                                    <label>Search Beneficiary</label>-->
+<!--                                    <div class="input-group">-->
+<!--                                        <input type="number" class="form-control" placeholder="" required name="searchBeneficiary_mobile"-->
+<!--                                               id="searchBeneficiary_mobile">-->
+<!--                                        <span class="input-group-append">-->
+<!--                                            <button class="btn btn-primary" onclick="searchBeneficiary()" type="button">Search</button>-->
+<!--                                        </span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <a href="#" id="viewBeneficiaryList" class="btn btn-primary">View/Add Beneficiary
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="new_remitter" class="modal fade" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Register New Remitter</h5>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>First Name: <span
+                                            class="text-danger">*</span></label>
+
+                                    <input type="text" name="fname"
+                                           id="fname"
+                                           class="form-control required"
+                                           placeholder="">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Last Name <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" name="lname"
+                                           id="lname"
+                                           class="form-control required"
+                                           placeholder="">
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Address<span class="text-danger">*</span></label>
+                                    <textarea rows="2" cols="3"
+                                              name="address" id="address"
+                                              class="form-control"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Pic Code<span
+                                            class="text-danger">*</span></label>
+                                    <input type="number" name="zipcode"
+                                           id="zipcode"
+                                           class="form-control"
+                                           onkeyup="zipcodeCheck()"
+                                           required="required"
+                                           placeholder="Pincode">
+                                    <div class="form-control-feedback"
+                                         id="zipSpinner"
+                                         style="display: none">
+                                        <i class="icon-spinner2 spinner"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>State<span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-control select-search"
+                                            data-placeholder="Select State"
+                                            name="state" id="state"
+                                            data-fouc>
+                                        <option></option>
+                                        <optgroup label="Select State">
+                                            <option th:each="item : ${states}"
+                                                    th:selected="${(kycDetails !=null && !#strings.isEmpty(kycDetails.state) and kycDetails.getStateCode() == item.id)}"
+                                                    th:value="${item.id}"
+                                                    th:text="${item.name}"/>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>City/District <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-control select-search"
+                                            data-placeholder="Select District"
+                                            name="city" id="city" data-fouc>
+                                        <option></option>
+                                        <optgroup label="Select city">
+                                            <option th:each="item : ${cities}"
+                                                    th:value="${item.id}"
+                                                    th:text="${item.name}"/>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Mobile number <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" name="remitterMobileNumber"
+                                           id="remitterMobileNumber"
+                                           class="form-control required"
+                                           placeholder="">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Add Beneficiary</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="add-beneficiary" class="modal fade" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add New Beneficiary</h5>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Name:</label>
+                                    <input type="text" name="name" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Mobile No.:</label>
+                                    <input type="text" name="name" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Bank</label>
+
+                                    <select class="form-control select-search">
+                                        <option value="AZ">text</option>
+                                        <option value="CO">text</option>
+                                        <option value="ID">text</option>
+                                        <option value="WY">text</option>
+                                    </select>
+
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Account No.:</label>
+                                    <input type="text" name="ac" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>IFSC No.:</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Add Beneficiary</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="/js/dtm.js"></script>
+<script id="rendered-js">
+$(".toggle-password").click(function () {
+
+  $(this).toggleClass("fa-eye fa-eye-slash");
+  var input = $($(this).attr("toggle"));
+  if (input.attr("type") == "password") {
+    input.attr("type", "text");
+  } else {
+    input.attr("type", "password");
+  }
+});
+//# sourceURL=pen.js
+
+
+
+
+</script>
+
+<script>
+        $(document).ready(function () {
+            $('#state').select2();
+            $('#city').select2();
+        });
+
+
+
+</script>
+<script>
+        $(document).ready({
+            ajaxStart: function () {
+                $("body").addClass("loading");
+            },
+            ajaxStop: function () {
+                $("body").removeClass("loading");
+            }
+        });
+
+
+
+</script>
+
+
+</body>
+</html>

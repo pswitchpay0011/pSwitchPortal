@@ -28,13 +28,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import net.bytebuddy.utility.RandomString;
 import net.in.pSwitch.model.Menu;
 import net.in.pSwitch.model.Product;
 import net.in.pSwitch.model.ProductFlexiCommission;
 import net.in.pSwitch.model.ProductType;
 import net.in.pSwitch.model.Status;
-import net.in.pSwitch.model.UserInfo;
+import net.in.pSwitch.model.user.UserInfo;
 import net.in.pSwitch.dto.UserRegistrationDTO;
 import net.in.pSwitch.repository.MenuRepository;
 import net.in.pSwitch.repository.ProductFlexiCommissionRepository;
@@ -75,76 +74,76 @@ public class ServicesController {
 	@Autowired
 	private UtilService utilService;
 
-	@RequestMapping("/associates")
-	public String associates(Model model, @LoginUser LoginUserInfo loginUserInfo) {
-		model = binderService.bindUserDetails(model,loginUserInfo);
-		model.addAttribute(StringLiteral.KEY_ACTIVE_PAGE, StringLiteral.MENU_MANAGE_ASSOCIATES);
-		return "associateList";
-	}
+//	@RequestMapping("/associates")
+//	public String associates(Model model, @LoginUser LoginUserInfo loginUserInfo) {
+//		model = binderService.bindUserDetails(model,loginUserInfo);
+//		model.addAttribute(StringLiteral.KEY_ACTIVE_PAGE, StringLiteral.MENU_MANAGE_ASSOCIATES);
+//		return "associateList";
+//	}
 
-	@RequestMapping("/addAssociate")
-	public String addAssociate(Model model, @LoginUser LoginUserInfo loginUserInfo) {
-		model = binderService.bindUserDetails(model,loginUserInfo);
-		model.addAttribute(StringLiteral.KEY_ACTIVE_PAGE, StringLiteral.MENU_MANAGE_ASSOCIATES);
-		return "addAssociate";
-	}
+//	@RequestMapping("/addAssociate")
+//	public String addAssociate(Model model, @LoginUser LoginUserInfo loginUserInfo) {
+//		model = binderService.bindUserDetails(model,loginUserInfo);
+//		model.addAttribute(StringLiteral.KEY_ACTIVE_PAGE, StringLiteral.MENU_MANAGE_ASSOCIATES);
+//		return "addAssociate";
+//	}
 
-	@PostMapping("/saveAssociate")
-	public String saveAssociate(Model model, UserRegistrationDTO user, @LoginUser LoginUserInfo loginUserInfo) {
-		model = binderService.bindUserDetails(model,loginUserInfo);
-		model.addAttribute(StringLiteral.KEY_ACTIVE_PAGE, StringLiteral.MENU_MANAGE_ASSOCIATES);
-
-		UserInfo parentUser = (UserInfo) model.getAttribute("user");
-
-		UserInfo userProfile = new UserInfo();
-		userProfile.setAddress(user.getAddress());
-		userProfile.setCity(Long.parseLong(user.getCity()));
-		userProfile.setUsername(user.getUsername());
-		userProfile.setFirstName(user.getFirstName());
-		userProfile.setLastName(user.getLastName());
-		userProfile.setMobileNumber(user.getMobileNumber());
-		userProfile.setState(Long.parseLong(user.getState()));
-		userProfile.setCountry(Long.parseLong(user.getCountry()));
-		userProfile.setZipcode(user.getZipcode());
-		userProfile.setPwd(utilService.encodedData(PasswordGenerator.generatePassword()));
-		userProfile.setRoles(roleRepository.findByRoleCode(Utility.getAssociateRole(parentUser.getRoles().getRoleCode())));
-		userProfile.setIsActive(0l);
-		userProfile.setParent(parentUser);
-
-		boolean isValid = true;
-		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-		Validator validator = factory.getValidator();
-		Set<ConstraintViolation<UserInfo>> violations = validator.validate(userProfile);
-		List<String> errorMessage = new ArrayList<>();
-		for (ConstraintViolation<UserInfo> violation : violations) {
-			logger.error(violation.getMessage());
-			errorMessage.add(violation.getMessage());
-			isValid = false;
-		}
-
-		List<UserInfo> existUser = userInfoRepository.isUserExist(user.getUsername(), user.getMobileNumber());
-		if (isValid && CollectionUtils.isEmpty(existUser)) {
-
-//			String vCode = RandomString.make(64);
-			userProfile.setVerificationCode(utilService.encodedData(utilService.generateOTP()));
-
-			UserInfo savedUserProfile = userInfoRepository.save(userProfile);
-			model.addAttribute("confirmationMessage",
-					"A confirmation e-mail has been sent to " + userProfile.getUsername());
-			try {
-				utilService.sendVerificationMobileAndEmail(savedUserProfile);
-			} catch (Exception e) {
-				logger.error("Error", e);
-			}
-			user = new UserRegistrationDTO();
-			return "redirect:/service/associateList";
-		} else {
-			errorMessage.add("Oops! There is already a user registered with the email provided.");
-			model.addAttribute("errors", errorMessage);
-		}
-		model.addAttribute("data", user);
-		return "addAssociate";
-	}
+//	@PostMapping("/saveAssociate")
+//	public String saveAssociate(Model model, UserRegistrationDTO user, @LoginUser LoginUserInfo loginUserInfo) {
+//		model = binderService.bindUserDetails(model,loginUserInfo);
+//		model.addAttribute(StringLiteral.KEY_ACTIVE_PAGE, StringLiteral.MENU_MANAGE_ASSOCIATES);
+//
+//		UserInfo parentUser = (UserInfo) model.getAttribute("user");
+//
+//		UserInfo userProfile = new UserInfo();
+//		userProfile.setAddress(user.getAddress());
+//		userProfile.setCity(Long.parseLong(user.getCity()));
+//		userProfile.setUsername(user.getUsername());
+//		userProfile.setFirstName(user.getFirstName());
+//		userProfile.setLastName(user.getLastName());
+//		userProfile.setMobileNumber(user.getMobileNumber());
+//		userProfile.setState(Long.parseLong(user.getState()));
+//		userProfile.setCountry(Long.parseLong(user.getCountry()));
+//		userProfile.setZipcode(user.getZipcode());
+//		userProfile.setPwd(utilService.encodedData(PasswordGenerator.generatePassword()));
+//		userProfile.setRoles(roleRepository.findByRoleCode(Utility.getAssociateRole(parentUser.getRoles().getRoleCode())));
+//		userProfile.setIsActive(0l);
+////		userProfile.setParent(parentUser);
+//
+//		boolean isValid = true;
+//		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+//		Validator validator = factory.getValidator();
+//		Set<ConstraintViolation<UserInfo>> violations = validator.validate(userProfile);
+//		List<String> errorMessage = new ArrayList<>();
+//		for (ConstraintViolation<UserInfo> violation : violations) {
+//			logger.error(violation.getMessage());
+//			errorMessage.add(violation.getMessage());
+//			isValid = false;
+//		}
+//
+//		List<UserInfo> existUser = userInfoRepository.isUserExist(user.getUsername(), user.getMobileNumber());
+//		if (isValid && CollectionUtils.isEmpty(existUser)) {
+//
+////			String vCode = RandomString.make(64);
+//			userProfile.setVerificationCode(utilService.encodedData(utilService.generateOTP()));
+//
+//			UserInfo savedUserProfile = userInfoRepository.save(userProfile);
+//			model.addAttribute("confirmationMessage",
+//					"A confirmation e-mail has been sent to " + userProfile.getUsername());
+//			try {
+//				utilService.sendVerificationMobileAndEmail(savedUserProfile);
+//			} catch (Exception e) {
+//				logger.error("Error", e);
+//			}
+//			user = new UserRegistrationDTO();
+//			return "redirect:/service/associateList";
+//		} else {
+//			errorMessage.add("Oops! There is already a user registered with the email provided.");
+//			model.addAttribute("errors", errorMessage);
+//		}
+//		model.addAttribute("data", user);
+//		return "addAssociate";
+//	}
 
 	@RequestMapping("/shareProduct/{productId}")
 	@ResponseBody

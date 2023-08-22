@@ -53,9 +53,14 @@ public class LoginCheck implements HandlerInterceptor {
             }
             if (request.getRequestURI().startsWith("/api/")) {
                 isWeb = false;
+
+                if(request.getParameter("isWeb")!=null && request.getParameter("isWeb").equals("1")){
+                    isWeb=true;
+                }
+
             }
             // log.info("token : {}", token);
-            log.info("URL : {}", request.getRequestURI());
+            log.info("URL : {}", request.getRequestURI()+" isWeb: "+isWeb);
             // Set the user information verified in the request so that login information
             // can be easily retrieved and used like session.id in the View
             if (StringUtils.isEmpty(token)) {
@@ -86,14 +91,14 @@ public class LoginCheck implements HandlerInterceptor {
             log.error("Token expired");
 
             if (isWeb) {
-                ModelAndView mav = new ModelAndView("loginPage/signIn");
+                ModelAndView mav = new ModelAndView("redirect:/login");
                 String errorMessage = null;
-                mav.addObject("user", new UserRegistrationDTO());
-                mav.addObject("loginTab", "show active");
-                mav.addObject("resetPasswordTab", "");
-                mav.addObject("registerTab", "");
-                mav.addObject("errorMsg", errorMessage);
-                mav.addObject("return_url", request.getRequestURI());
+//                mav.addObject("user", new UserRegistrationDTO());
+//                mav.addObject("loginTab", "show active");
+//                mav.addObject("resetPasswordTab", "");
+//                mav.addObject("registerTab", "");
+//                mav.addObject("errorMsg", errorMessage);
+//                mav.addObject("return_url", request.getRequestURI());
 
                 throw new ModelAndViewDefiningException(mav);
             } else {
@@ -104,14 +109,15 @@ public class LoginCheck implements HandlerInterceptor {
         } catch (JwtException ex) {
             log.error("Invalid token");
             if (isWeb) {
-                ModelAndView mav = new ModelAndView("loginPage/signIn");
-                String errorMessage = null;
-                mav.addObject("user", new UserRegistrationDTO());
-                mav.addObject("loginTab", "show active");
-                mav.addObject("resetPasswordTab", "");
-                mav.addObject("registerTab", "");
-                mav.addObject("errorMsg", errorMessage);
-                mav.addObject("return_url", request.getRequestURI());
+                ModelAndView mav = new ModelAndView("redirect:/login");
+//                String errorMessage = null;
+//
+//                mav.addObject("user", new UserRegistrationDTO());
+//                mav.addObject("loginTab", "show active");
+//                mav.addObject("resetPasswordTab", "");
+//                mav.addObject("registerTab", "");
+//                mav.addObject("errorMsg", errorMessage);
+//                mav.addObject("return_url", request.getRequestURI());
 
                 throw new ModelAndViewDefiningException(mav);
             } else {
@@ -120,16 +126,16 @@ public class LoginCheck implements HandlerInterceptor {
                 return false;
             }
         } catch (Exception ex) {
-            log.error("Error: {}", ex);
+            log.error("Error: {}", ex.getLocalizedMessage());
             if (isWeb) {
-                ModelAndView mav = new ModelAndView("loginPage/signIn");
-                String errorMessage = null;
-                mav.addObject("user", new UserRegistrationDTO());
-                mav.addObject("loginTab", "show active");
-                mav.addObject("resetPasswordTab", "");
-                mav.addObject("registerTab", "");
-                mav.addObject("errorMsg", errorMessage);
-                mav.addObject("return_url", request.getRequestURI());
+                ModelAndView mav = new ModelAndView("redirect:/login");
+//                String errorMessage = null;
+//                mav.addObject("user", new UserRegistrationDTO());
+//                mav.addObject("loginTab", "show active");
+//                mav.addObject("resetPasswordTab", "");
+//                mav.addObject("registerTab", "");
+//                mav.addObject("errorMsg", errorMessage);
+//                mav.addObject("return_url", request.getRequestURI());
 
                 throw new ModelAndViewDefiningException(mav);
             } else {

@@ -3,8 +3,20 @@ package net.in.pSwitch.eko.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+
 @Data
+@Entity(name = "beneficiary" )
 public class Recipient {
+
+    @Id
+    @JsonProperty("recipient_id")
+    private Integer recipientId;
+
     @JsonProperty("channel_absolute")
     private Integer channelAbsolute;
 
@@ -56,11 +68,10 @@ public class Recipient {
     @JsonProperty("account")
     private String account;
 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "pipes")
     @JsonProperty("pipes")
     private Pipes pipes;
-
-    @JsonProperty("recipient_id")
-    private Integer recipientId;
 
     @JsonProperty("is_rblbc_recipient")
     private Integer isRblbcRecipient;

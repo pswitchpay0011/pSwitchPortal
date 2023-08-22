@@ -33,4 +33,7 @@ public interface MenuRepository extends JpaRepository<Menu, Long>, JpaSpecificat
 
 	List<Menu> findAllByBusinessAssociateMenuAndIsActiveOrderByMenuOrderAsc(long isBusinessAssociate, long isActive);
 
+	@Query("SELECT m FROM Menu m WHERE  m.isActive = ?2 and salesEmpMenu = ?1  order by m.menuName")
+	List<Menu> findAllSalesEmpMenu(long isSalesEmployeeMenu, long isActive);
+
 }

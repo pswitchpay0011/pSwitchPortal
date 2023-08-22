@@ -18,9 +18,10 @@ import net.in.pSwitch.model.MPIN;
 import net.in.pSwitch.model.Product;
 import net.in.pSwitch.model.Status;
 import net.in.pSwitch.model.Transaction;
-import net.in.pSwitch.model.UserInfo;
+import net.in.pSwitch.model.user.UserInfo;
 import net.in.pSwitch.model.wallet.UserBankDetails;
 import net.in.pSwitch.repository.AttachmentRepository;
+import net.in.pSwitch.repository.BankListRepository;
 import net.in.pSwitch.repository.CompanyBankDetailsRepository;
 import net.in.pSwitch.repository.FundRequestRepository;
 import net.in.pSwitch.repository.MPINRepository;
@@ -33,12 +34,14 @@ import net.in.pSwitch.service.BinderService;
 import net.in.pSwitch.service.FileStorageService;
 import net.in.pSwitch.service.UserDetailsImpl;
 import net.in.pSwitch.service.UtilService;
+import net.in.pSwitch.utility.PasswordGenerator;
 import net.in.pSwitch.utility.SMSManager;
 import net.in.pSwitch.utility.StringLiteral;
 import net.in.pSwitch.utility.Utility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -47,6 +50,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -90,6 +94,8 @@ public class UserAccountController {
 	@Autowired
 	private BinderService binderService;
 	@Autowired
+	private BankListRepository bankListRepository;
+	@Autowired
 	private PasswordEncoder passwordEncoder;
 	@Autowired
 	private UtilService utilService;
@@ -97,8 +103,6 @@ public class UserAccountController {
 	private MPINRepository mpinRepository;
 	@Autowired
 	private CompanyBankDetailsRepository companyBankDetailsRepository;
-	
-
 	@Autowired
 	private TransactionRepository transactionRepository;
 
@@ -204,9 +208,12 @@ public class UserAccountController {
 		UserInfo userInfo = (UserInfo) model.getAttribute("user");
 		List<Transaction> transactions = transactionRepository.searchUserTransactions(userInfo);
 		model.addAttribute("transactions", transactions);
-		
-		
-		
+
+		model.addAttribute("userBankList", userBankDetailsRepository.getUserBanksDetails(userInfo));
+		model.addAttribute("virtualAccounts", binderService.getUserVirtualAccountDetails(loginUserInfo));
+
+		model.addAttribute("bankList", bankListRepository.findAll(Sort.by(Sort.Direction.ASC, "bankName")));
+
 		return "viewWallet";
 	}
 
@@ -348,7 +355,8 @@ public class UserAccountController {
 				fundRequest.setTotalAmount(fundRequestDTO.getTotalAmount());
 				fundRequest.setUser(userInfo);
 				fundRequest.setStatus(Status.PENDING);
-				fundRequest.setParent(userInfo.getParent());
+				Optional<UserInfo> parentUser =  userInfoRepository.findById(userInfo.getUserMapping().getParentUser());
+				fundRequest.setParent(parentUser.get());
 
 				CompanyBankDetails bankDetails = null;
 				Optional<CompanyBankDetails> optional = companyBankDetailsRepository
@@ -886,4 +894,5 @@ public class UserAccountController {
 
 		return "loginPage/signIn";
 	}
+
 }

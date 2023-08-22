@@ -2,6 +2,7 @@ package net.in.pSwitch.eko.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import net.in.pSwitch.eko.InvalidParams;
 
 @Data
 public class EKOResponse<T> {
@@ -16,4 +17,7 @@ public class EKOResponse<T> {
     private String message;
     @JsonProperty("status")
     private Integer status;
+    @JsonProperty("invalid_params")
+    private InvalidParams invalidParams;
+    private boolean error=false;
 }

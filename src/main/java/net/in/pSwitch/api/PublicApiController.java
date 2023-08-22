@@ -3,7 +3,7 @@ package net.in.pSwitch.api;
 import net.in.pSwitch.model.EmailDetails;
 import net.in.pSwitch.model.LoginInfo;
 import net.in.pSwitch.model.Response;
-import net.in.pSwitch.model.UserInfo;
+import net.in.pSwitch.model.user.UserInfo;
 import net.in.pSwitch.model.request.AuthRequest;
 import net.in.pSwitch.repository.UserInfoRepository;
 import net.in.pSwitch.service.AuthService;

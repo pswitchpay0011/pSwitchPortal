@@ -1,5 +1,7 @@
 package net.in.pSwitch.model;
 
+import net.in.pSwitch.model.user.Role;
+import net.in.pSwitch.model.user.UserInfo;
 import net.in.pSwitch.repository.CompanyBankDetailsRepository;
 import net.in.pSwitch.repository.MenuRepository;
 import net.in.pSwitch.repository.RoleRepository;

@@ -2,13 +2,16 @@ package net.in.pSwitch.model.wallet;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.in.pSwitch.model.UserInfo;
+import net.in.pSwitch.model.Status;
+import net.in.pSwitch.model.user.UserInfo;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -46,6 +49,10 @@ public class UserBankDetails implements Serializable {
 
 	@Column(name = "account_type")
 	private String accountType;
+
+	@Column(name = "status")
+	@Enumerated(EnumType.STRING)
+	private Status status = Status.ACTIVE;
 
 	@OneToOne//(mappedBy = "bankDetails")
 	@JoinColumn(name = "user_id", referencedColumnName = "user_id")

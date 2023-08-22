@@ -1,4 +1,4 @@
-package net.in.pSwitch.model;
+package net.in.pSwitch.model.user;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -17,12 +17,16 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.in.pSwitch.model.Attachment;
+import net.in.pSwitch.model.BusinessDetails;
+import net.in.pSwitch.model.UserServiceId;
 import net.in.pSwitch.model.wallet.UserBankDetails;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -46,6 +50,7 @@ public class UserInfo implements Serializable {
     @Column(name = "pwd")
     private String pwd;
 
+    @NotNull(message = "Role can not be null")
     @OneToOne(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Role roles;
@@ -93,6 +98,9 @@ public class UserInfo implements Serializable {
 
     @Column(name = "verification_code")
     private String verificationCode;
+
+    @Column(name = "dob")
+    private String dob;
 
     @CreationTimestamp
     @Column(name = "created_date", updatable = false)
@@ -149,6 +157,13 @@ public class UserInfo implements Serializable {
     @Column(name = "account_state")
     private String accountState = "";
 
+    @OneToOne
+    @JoinColumn(name = "service_id")
+    private UserServiceId serviceId;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private UserMapping userMapping;
+
 //	@Column(name = "parent_user_id")
 //	private Long parentUserId;
 
@@ -156,16 +171,16 @@ public class UserInfo implements Serializable {
 //	@JoinColumn(name = "parent_user_id")
 //	private List<UserInfo> associate;
 
-//	@ManyToOne(cascade = CascadeType.ALL)
-//	@JoinColumn(name = "parent_user_id")
-//	private UserInfo parent;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "parent_user_id")
+	private UserInfo parent;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "parent_user_id")
-    protected UserInfo parent;
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "parent_user_id")
+//    protected UserInfo parent;
 
-    @OneToMany(mappedBy = "parent")
-    protected List<UserInfo> associate;
+//    @OneToMany(mappedBy = "parent")
+//    protected List<UserInfo> associate;
 
     @Column(name = "account_non_locked")
     private Boolean accountNonLocked = true;
@@ -198,5 +213,12 @@ public class UserInfo implements Serializable {
     public String getFullName() {
         return firstName + " " + lastName;
     }
+
+//    public UserInfo getParent(){
+//        if(userMapping!=null){
+//            return userMapping.getParentUser();
+//        }
+//        return null;
+//    }
 
 }

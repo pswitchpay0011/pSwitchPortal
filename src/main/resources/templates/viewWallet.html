@@ -10,6 +10,14 @@
 	<link rel="shortcut icon" href="images/favicon.ico" />
 
 	<div th:replace="fragment/StyleFragment :: style"></div>
+
+	<script src="/js/plugins/forms/wizards/steps.min.js"></script>
+	<script src="/js/plugins/forms/styling/uniform.min.js"></script>
+	<script src="/js/plugins/forms/inputs/inputmask.js"></script>
+	<script src="/js/plugins/forms/validation/validate.min.js"></script>
+	<script src="/js/plugins/extensions/cookie.js"></script>
+	<script src="/js/plugins/forms/selects/select2.min.js"></script>
+	<script src="/js/demo_pages/form_checkboxes_radios.js"></script>
 </head>
 
 <body>
@@ -49,7 +57,7 @@
 						<div class="card bg-indigo-400">
 							<div class="card-body">
 								<div class="d-flex">
-									<h3 class="font-weight-semibold mb-0">₹16,390</h3>
+									<h3 class="font-weight-semibold mb-0" th:text="'₹ '+ ${walletAmount}">₹ 0</h3>
 									<div class="list-icons ml-auto">
 										<a class="list-icons-item" data-action="reload"></a>
 									</div>
@@ -73,7 +81,7 @@
 						<div class="card bg-primary-400 bg-warning-400">
 							<div class="card-body">
 								<div class="d-flex">
-									<h3 class="font-weight-semibold mb-0">₹5,390</h3>
+									<h3 class="font-weight-semibold mb-0">₹ 0</h3>
 									<div class="list-icons ml-auto">
 										<a class="list-icons-item" data-action="reload"></a>
 									</div>
@@ -118,76 +126,74 @@
 			                	</div> -->
 							</div>
 
-							<div class="card-body" style="
-    height: 450px;
-">
-								<ul class="nav nav-tabs">
-									<li class="nav-item"><a href="#basic-tab1" class="nav-link active"
-											data-toggle="tab">Linked UPI IDs</a></li>
-									<li class="nav-item"><a href="#basic-tab2" class="nav-link" data-toggle="tab">Add
-											New UPI Id</a></li>
-								</ul>
+<!--							<div class="card-body" style="height: 450px;">-->
+<!--								<ul class="nav nav-tabs">-->
+<!--									<li class="nav-item"><a href="#basic-tab1" class="nav-link active"-->
+<!--											data-toggle="tab">Linked UPI IDs</a></li>-->
+<!--									<li class="nav-item"><a href="#basic-tab2" class="nav-link" data-toggle="tab">Add-->
+<!--											New UPI Id</a></li>-->
+<!--								</ul>-->
 
-								<div class="tab-content">
-									<div class="tab-pane fade show active" id="basic-tab1">
-										<div class="table-responsive mb-3">
-											<table class="table table-scrollable table-striped table-bordered">
-												<thead>
-													<tr>
-														<th>#</th>
-														<th>VPA</th>
-														<th>Status</th>
-														<th>Created</th>
-													</tr>
-												</thead>
-												<tbody>
-													<tr>
-<!--														<td><input type="radio" name="radio-styled"-->
-<!--																class="form-input-styled" data-fouc=""></td>-->
-<!--														<td>9885752158@hdfc</td>-->
-<!--														<td><span class="badge badge-success">Approved</span></td>-->
-<!--														<td>11 Jan 2023</td>-->
-													</tr>
+<!--								<div class="tab-content">-->
+<!--									<div class="tab-pane fade show active" id="basic-tab1">-->
+<!--										<div class="table-responsive mb-3">-->
+<!--											<table class="table table-scrollable table-striped table-bordered">-->
+<!--												<thead>-->
+<!--													<tr>-->
+<!--														<th>#</th>-->
+<!--														<th>VPA</th>-->
+<!--														<th>Status</th>-->
+<!--														<th>Created</th>-->
+<!--													</tr>-->
+<!--												</thead>-->
+<!--												<tbody>-->
+<!--													<tr>-->
+<!--&lt;!&ndash;														<td><input type="radio" name="radio-styled"&ndash;&gt;-->
+<!--&lt;!&ndash;																class="form-input-styled" data-fouc=""></td>&ndash;&gt;-->
+<!--&lt;!&ndash;														<td>9885752158@hdfc</td>&ndash;&gt;-->
+<!--&lt;!&ndash;														<td><span class="badge badge-success">Approved</span></td>&ndash;&gt;-->
+<!--&lt;!&ndash;														<td>11 Jan 2023</td>&ndash;&gt;-->
+<!--													</tr>-->
 
 
-												</tbody>
-											</table>
-										</div>
+<!--												</tbody>-->
+<!--											</table>-->
+<!--										</div>-->
 
-										<div>
+<!--										<div>-->
 
-											<div class="form-group">
-												<label>AMOUNT TO TRANSFER</label>
-												<div class="input-group">
-													<span class="input-group-prepend">
-														<span class="input-group-text"><i class="icon-inr">₹</i></span>
-													</span>
-													<input type="text" class="form-control"
-														placeholder="Amount to Transfer">
-												</div>
-											</div>
+<!--											<div class="form-group">-->
+<!--												<label>AMOUNT TO TRANSFER</label>-->
+<!--												<div class="input-group">-->
+<!--													<span class="input-group-prepend">-->
+<!--														<span class="input-group-text"><i class="icon-inr">₹</i></span>-->
+<!--													</span>-->
+<!--													<input type="text" class="form-control"-->
+<!--														placeholder="Amount to Transfer">-->
+<!--												</div>-->
+<!--											</div>-->
 
 
 
 
-											<div class="actions clearfix text-right">
-												<a href="#" class="btn btn-primary mt-2">Add Limit</a>
-											</div>
-										</div>
-									</div>
+<!--											<div class="actions clearfix text-right">-->
+<!--												<a href="#" class="btn btn-primary mt-2">Add Limit</a>-->
+<!--											</div>-->
+<!--										</div>-->
+<!--									</div>-->
 
-									<div class="tab-pane fade" id="basic-tab2">
-										<div class="form-group">
-											<label>Your VPA</label>
-											<input type="text" name="name" class="form-control" placeholder="abc@bank">
-										</div>
-										<div class="actions clearfix text-right">
-											<a href="#" class="btn btn-primary mt-2">Add New UPI ID</a>
-										</div>
-									</div>
+<!--									<div class="tab-pane fade" id="basic-tab2">-->
+<!--										<div class="form-group">-->
+<!--											<label>Your VPA</label>-->
+<!--											<input type="text" name="name" class="form-control" placeholder="abc@bank">-->
+<!--										</div>-->
+<!--										<div class="actions clearfix text-right">-->
+<!--											<a href="#" class="btn btn-primary mt-2">Add New UPI ID</a>-->
+<!--										</div>-->
+<!--									</div>-->
 
-								</div>
-							</div>
+<!--								</div>-->
+<!--							</div>-->
 						</div>
 					</div>
 
@@ -218,20 +224,19 @@
 												<tbody>
 													<tr>
 														<th>Bank</th>
+														<th>Holder Name</th>
 														<th>Ac. No.</th>
 														<th>IFSC Code</th>
 														<th>Status</th>
-														<th></th>
-													</tr>
-													<tr>
-<!--														<td>RBL Bank</td>-->
-<!--														<td>5650</td>-->
-<!--														<td>RATN0VAAPIS</td>-->
-<!--														<td><span class="badge badge-success">Active</span></td>-->
-<!--														<td width="5px" data-toggle="modal" data-target="#bank_info"><a-->
-<!--																href="#"><i class="icon-eye"></i></a></td>-->
-													</tr>
 
+													</tr>
+													<tr th:each="userBank: ${userBankList}">
+														<td th:text="${userBank.bankName}" />
+														<td th:text="${userBank.accountHolderName}" />
+														<td th:text="${userBank.AccountNumber}" />
+														<td th:text="${userBank.ifscCode}" />
+														<td th:text="${userBank.status}" />
+													</tr>
 												</tbody>
 											</table>
 										</div>
@@ -248,12 +253,10 @@
 													</tr>
 												</thead>
 												<tbody>
-													<tr>
-														<td>ICIC0001136</td>
-														<td>113601501759</td>
-													</tr>
-
-
+												<tr th:each="account: ${virtualAccounts}">
+													<td th:text="${account.IFSCCode}" />
+													<td th:text="${account.VirtualAccountNo}" />
+												</tr>
 												</tbody>
 											</table>
 										</div>
@@ -270,12 +273,15 @@
 											<div class="col-md-6">
 												<div class="form-group">
 													<label>Bank</label>
-													<select class="form-control">
-														<option value="opt1">Select Bank</option>
-														<option value="opt2">Bank 1</option>
-														<option value="opt2">Bank 2</option>
-														<option value="opt2">Bank 3</option>
-
+													<select class="form-control select-search"
+															data-placeholder="Select Bank" name="bankName"
+															id="bankName" data-fouc required>
+														<optgroup label="Lis of Banks">
+															<option></option>
+															<option th:each="item : ${bankList}"
+																	th:value="${item.id}"
+																	th:text="${item.bankName}" />
+														</optgroup>
 													</select>
 												</div>
 											</div>
@@ -283,11 +289,10 @@
 											<div class="col-md-6">
 												<div class="form-group">
 													<label>Account Type:</label>
-													<select class="form-control">
-														<option value="opt1">Select Account Type</option>
-														<option value="opt2">Saving Account</option>
-														<option value="opt3">Current Account</option>
-
+													<select class="form-control" name="accountType" id="accountType">
+														<option value="">Select Account Type</option>
+														<option value="Saving">Saving</option>
+														<option value="Current">Current</option>
 													</select>
 												</div>
 											</div>
@@ -295,7 +300,7 @@
 											<div class="col-md-6">
 												<div class="form-group">
 													<label>Account Number</label>
-													<input type="text" name="name" class="form-control"
+													<input type="text" name="accountNumber" id="accountNumber" class="form-control"
 														placeholder="Enter Account No.">
 												</div>
 											</div>
@@ -303,7 +308,7 @@
 											<div class="col-md-6">
 												<div class="form-group">
 													<label>IFSC Code</label>
-													<input type="text" name="name" class="form-control"
+													<input type="text" name="ifscCode" id="ifscCode" class="form-control"
 														placeholder="Enter Bank IFSC Code">
 												</div>
 											</div>
@@ -314,7 +319,7 @@
 
 
 										<div class="actions clearfix text-right">
-											<a href="#" class="btn btn-primary mt-2">Add Bank</a>
+											<button onclick="verifyBankInfo()" class="btn btn-primary mt-2">Verify and Add</button>
 										</div>
 									</div>
 
@@ -339,378 +344,369 @@
 
 
 
-							<div class="card-body">
-								<ul class="nav nav-tabs">
-									<li class="nav-item"><a href="#basic-tab1c" class="nav-link active"
-											data-toggle="tab">pSwitch's Bank A/C</a></li>
-									<li class="nav-item"><a href="#basic-tab2c" class="nav-link" data-toggle="tab">Limit
-											request status</a></li>
-								</ul>
-
-								<div class="tab-content">
-
-
-
-									<div class="tab-pane fade show active " id="basic-tab1c">
-
-
-
-
-										<div class="table-responsive p-0">
-
-
-											<div class="card-body p-0">
-												<ul class="nav nav-tabs nav-tabs-highlight">
-													<li class="nav-item ">
-														<a href="#top-icon-tab1" class="nav-link active"
-															data-toggle="tab">
-															<div class="bank-logo">
-																<img src="/images/boi-logo.jpg" alt="">
-															</div>
-														</a>
-													</li>
-													<li class="nav-item">
-														<a href="#top-icon-tab2" class="nav-link" data-toggle="tab">
-															<div class="bank-logo">
-																<img src="/images/sbi-logo.jpg" alt="">
-															</div>
-														</a>
-													</li>
-												</ul>
-
-												<div class="tab-content">
-													<div class="tab-pane fade show active" id="top-icon-tab1">
-														<table
-															class="table table-scrollable table-striped table-bordered">
-															<tbody>
-																<tr>
-																	<td>ACCOUNT NO</td>
-																	<td>2223330085645650</td>
-																</tr>
-																<tr>
-																	<td>BANK NAME</td>
-																	<td>BOI Bank</td>
-																</tr>
-
-																<tr>
-																	<td>Branch</td>
-																	<td>Vikas Puri</td>
-																</tr>
-
-																<tr>
-																	<td>IFSC CODE</td>
-																	<td>BOI11005</td>
-																</tr>
-
-															</tbody>
-														</table>
-
-														<div class="actions clearfix text-right mt-3">
-															<button type="button" class="btn btn-primary"
-																data-toggle="modal" data-target="#bank_req">Send limit
-																requesst <i class="icon-play3 ml-2"></i></button>
-
-														</div>
-													</div>
-
-													<div class="tab-pane fade" id="top-icon-tab2">
-														<table
-															class="table table-scrollable table-striped table-bordered">
-															<tbody>
-																<tr>
-																	<td>ACCOUNT NO</td>
-																	<td>258</td>
-																</tr>
-																<tr>
-																	<td>BANK NAME</td>
-																	<td>BOI Bank</td>
-																</tr>
-
-																<tr>
-																	<td>Branch</td>
-																	<td>Vikas Puri</td>
-																</tr>
-
-																<tr>
-																	<td>IFSC CODE</td>
-																	<td>BOI11005</td>
-																</tr>
-
-															</tbody>
-														</table>
-
-														<div class="actions clearfix text-right mt-3">
-															<button type="button" class="btn btn-primary"
-																data-toggle="modal" data-target="#bank_req">Send limit
-																requesst <i class="icon-play3 ml-2"></i></button>
-
-														</div>
-													</div>
-
-												</div>
-											</div>
-
-											<div class="collapse mt-3 show" id="bank1">
-												<div class="bank-details">
-													<div class="table-responsive mb-3">
-
-
-													</div>
-
-
-
-
-													<!-- Basic modal -->
-													<div id="bank_req" class="modal fade" tabindex="-1">
-														<div class="modal-dialog">
-															<div class="modal-content">
-																<div class="modal-header">
-																	<h5 class="modal-title">Cash Deposit</h5>
-																	<button type="button" class="close"
-																		data-dismiss="modal">&times;</button>
-																</div>
+<!--							<div class="card-body">-->
+<!--								<ul class="nav nav-tabs">-->
+<!--									<li class="nav-item"><a href="#basic-tab1c" class="nav-link active"-->
+<!--											data-toggle="tab">pSwitch's Bank A/C</a></li>-->
+<!--									<li class="nav-item"><a href="#basic-tab2c" class="nav-link" data-toggle="tab">Limit-->
+<!--											request status</a></li>-->
+<!--								</ul>-->
+
+<!--								<div class="tab-content">-->
+<!--									<div class="tab-pane fade show active " id="basic-tab1c">-->
+<!--										<div class="table-responsive p-0">-->
+<!--											<div class="card-body p-0">-->
+<!--												<ul class="nav nav-tabs nav-tabs-highlight">-->
+<!--													<li class="nav-item ">-->
+<!--														<a href="#top-icon-tab1" class="nav-link active"-->
+<!--															data-toggle="tab">-->
+<!--															<div class="bank-logo">-->
+<!--																<img src="/images/boi-logo.jpg" alt="">-->
+<!--															</div>-->
+<!--														</a>-->
+<!--													</li>-->
+<!--													<li class="nav-item">-->
+<!--														<a href="#top-icon-tab2" class="nav-link" data-toggle="tab">-->
+<!--															<div class="bank-logo">-->
+<!--																<img src="/images/sbi-logo.jpg" alt="">-->
+<!--															</div>-->
+<!--														</a>-->
+<!--													</li>-->
+<!--												</ul>-->
+
+<!--												<div class="tab-content">-->
+<!--													<div class="tab-pane fade show active" id="top-icon-tab1">-->
+<!--														<table-->
+<!--															class="table table-scrollable table-striped table-bordered">-->
+<!--															<tbody>-->
+<!--																<tr>-->
+<!--																	<td>ACCOUNT NO</td>-->
+<!--																	<td>2223330085645650</td>-->
+<!--																</tr>-->
+<!--																<tr>-->
+<!--																	<td>BANK NAME</td>-->
+<!--																	<td>BOI Bank</td>-->
+<!--																</tr>-->
+
+<!--																<tr>-->
+<!--																	<td>Branch</td>-->
+<!--																	<td>Vikas Puri</td>-->
+<!--																</tr>-->
+
+<!--																<tr>-->
+<!--																	<td>IFSC CODE</td>-->
+<!--																	<td>BOI11005</td>-->
+<!--																</tr>-->
+
+<!--															</tbody>-->
+<!--														</table>-->
+
+<!--														<div class="actions clearfix text-right mt-3">-->
+<!--															<button type="button" class="btn btn-primary"-->
+<!--																data-toggle="modal" data-target="#bank_req">Send limit-->
+<!--																requesst <i class="icon-play3 ml-2"></i></button>-->
+
+<!--														</div>-->
+<!--													</div>-->
+
+<!--													<div class="tab-pane fade" id="top-icon-tab2">-->
+<!--														<table-->
+<!--															class="table table-scrollable table-striped table-bordered">-->
+<!--															<tbody>-->
+<!--																<tr>-->
+<!--																	<td>ACCOUNT NO</td>-->
+<!--																	<td>258</td>-->
+<!--																</tr>-->
+<!--																<tr>-->
+<!--																	<td>BANK NAME</td>-->
+<!--																	<td>BOI Bank</td>-->
+<!--																</tr>-->
+
+<!--																<tr>-->
+<!--																	<td>Branch</td>-->
+<!--																	<td>Vikas Puri</td>-->
+<!--																</tr>-->
+
+<!--																<tr>-->
+<!--																	<td>IFSC CODE</td>-->
+<!--																	<td>BOI11005</td>-->
+<!--																</tr>-->
+
+<!--															</tbody>-->
+<!--														</table>-->
+
+<!--														<div class="actions clearfix text-right mt-3">-->
+<!--															<button type="button" class="btn btn-primary"-->
+<!--																data-toggle="modal" data-target="#bank_req">Send limit-->
+<!--																requesst <i class="icon-play3 ml-2"></i></button>-->
+
+<!--														</div>-->
+<!--													</div>-->
+
+<!--												</div>-->
+<!--											</div>-->
+
+<!--											<div class="collapse mt-3 show" id="bank1">-->
+<!--												<div class="bank-details">-->
+<!--													<div class="table-responsive mb-3">-->
+
+
+<!--													</div>-->
+
+
+
+
+<!--													&lt;!&ndash; Basic modal &ndash;&gt;-->
+<!--													<div id="bank_req" class="modal fade" tabindex="-1">-->
+<!--														<div class="modal-dialog">-->
+<!--															<div class="modal-content">-->
+<!--																<div class="modal-header">-->
+<!--																	<h5 class="modal-title">Cash Deposit</h5>-->
+<!--																	<button type="button" class="close"-->
+<!--																		data-dismiss="modal">&times;</button>-->
+<!--																</div>-->
 
-																<div class="modal-body">
-																	<p><b>Transferred to pSwitch Bank Account</b><br>
-																		19930 | State Bank Of India | Noida | 000152364
-																	</p>
-																	<div class="row">
+<!--																<div class="modal-body">-->
+<!--																	<p><b>Transferred to pSwitch Bank Account</b><br>-->
+<!--																		19930 | State Bank Of India | Noida | 000152364-->
+<!--																	</p>-->
+<!--																	<div class="row">-->
 
-																		<div class="col-md-6">
-																			<div class="form-group">
-																				<label>Amount to Transfer</label>
-																				<input type="text" name="name"
-																					class="form-control"
-																					placeholder="Amount Transfer">
-
-																			</div>
-																		</div>
-
-																		<div class="col-md-6">
-																			<div class="form-group">
-																				<label>Date of Transfer</label>
-																				<input class="form-control" type="date"
-																					name="date">
-
-																			</div>
-																		</div>
-
-
-																		<div class="col-md-6">
-																			<div class="form-group">
-																				<label>Mode of Transfer</label>
-																				<select class="form-control">
-																					<option value="opt1">Select Mode of
-																						Transfer</option>
-																					<option value="opt2">Cash</option>
-																					<option value="opt2">CDM(Cash
-																						Deposit Machine)</option>
-																					<option value="opt2">Cheque</option>
-																					<option value="opt2">INF/BIL
-																					</option>
-
-																				</select>
-																			</div>
-																		</div>
-
-																		<div class="col-md-6">
-																			<div class="form-group">
-																				<label>Transaction Reference No.</label>
-																				<input type="text" name="name"
-																					class="form-control"
-																					placeholder="Transaction No.">
-																			</div>
-																		</div>
-
-																		<div class="col-md-6">
-																			<div class="form-group">
-																				<label>Remarks</label>
-																				<input type="text" name="name"
-																					class="form-control"
-																					placeholder="Enter Remarks">
-																			</div>
-																		</div>
-
-																		<div class="col-md-6">
-																			<div class="form-group">
-																				<label>Upload Deposit Slip</label>
-																				<input type="file"
-																					class="form-control-uniform"
-																					data-fouc>
-																			</div>
-																		</div>
-
-
-
-																	</div>
-																</div>
-
-																<div class="modal-footer">
-																	<button type="button" class="btn btn-primary"
-																		data-dismiss="modal">Send limit Request</button>
-																</div>
-															</div>
-														</div>
-													</div>
-													<!-- /basic modal -->
-
-												</div>
-											</div>
-
-
-
-
-										</div>
-
-										<div>
-
-										</div>
-									</div>
-
-									<div class="tab-pane fade" id="basic-tab2c">
-
-										<div class="table-responsive mb-3">
-
-											<table class="table table-scrollable table-striped table-bordered">
-												<thead>
-													<tr>
-														<th>Req. ID</th>
-														<th>Date</th>
-														<th>Amount</th>
-														<th>A/C No. </th>
-														<th>Mode</th>
-														<th>Status</th>
-													</tr>
-												</thead>
-												<tbody>
-													<tr>
-														<td>754632</td>
-														<td>18 Feb 2023</td>
-														<td>1.00</td>
-														<td>10221 | ICICI Bank | Noida</td>
-														<td>Cash</td>
-														<td><span class="badge badge-warning">Pending</span></td>
-
-													</tr>
-
-												</tbody>
-											</table>
-
-										</div>
-
-										<div class="actions clearfix text-right">
-											<button type="button" class="btn btn-primary" data-toggle="modal"
-												data-target="#view_all_limits">View All <i
-													class="icon-play3 ml-2"></i></button>
-
-										</div>
-
-										<!-- Basic modal -->
-										<div id="view_all_limits" class="modal fade" tabindex="-1">
-											<div class="modal-dialog modal-lg">
-												<div class="modal-content">
-													<div class="modal-header">
-														<h5 class="modal-title">Limit Request List</h5>
-														<button type="button" class="close"
-															data-dismiss="modal">&times;</button>
-													</div>
-
-													<div class="modal-body">
-
-														<div class="row">
-
-															<div class="col-md-3">
-																<div class="form-group">
-																	<label>Limit Request ID</label>
-																	<input type="text" name="name" class="form-control"
-																		placeholder="Limit Request ID">
-
-																</div>
-															</div>
-
-															<div class="col-md-3">
-																<div class="form-group">
-																	<label>Date</label>
-																	<input class="form-control" type="date" name="date">
-
-																</div>
-															</div>
-
-
-															<div class="col-md-3">
-																<div class="form-group">
-																	<label>Amount</label>
-																	<input type="text" name="name" class="form-control"
-																		placeholder="Amount">
-																</div>
-															</div>
-															<div class="col-md-3">
-																<div class="form-group">
-																	<label>&nbsp;&nbsp;&nbsp;&nbsp;</label>
-																	<br><button type="button"
-																		class="btn btn-primary">Search</button>
-																</div>
-															</div>
-
-
-
-														</div>
-
-														<div class="table-responsive mb-3">
-
-															<table
-																class="table table-scrollable table-striped table-bordered">
-																<thead>
-																	<tr>
-																		<th>Req. ID</th>
-																		<th>Date</th>
-																		<th>Amount</th>
-																		<th>A/C No. </th>
-																		<th>Mode</th>
-																		<th>Status</th>
-																	</tr>
-																</thead>
-																<tbody>
-																	<tr>
-																		<td>754632</td>
-																		<td>18 Feb 2023</td>
-																		<td>1.00</td>
-																		<td>10221 | ICICI Bank | Noida</td>
-																		<td>Cash</td>
-																		<td><span
-																				class="badge badge-warning">Pending</span>
-																		</td>
-																	</tr>
-																	<tr>
-																		<td>785369</td>
-																		<td>19 Feb 2023</td>
-																		<td>1000.00</td>
-																		<td>10221 | ICICI Bank | Noida</td>
-																		<td>Cash</td>
-																		<td><span
-																				class="badge badge-warning">Pending</span>
-																		</td>
-																	</tr>
-
-																</tbody>
-															</table>
-
-														</div>
-													</div>
-
-													<div class="modal-footer">
-														<button type="button" class="btn btn-primary"
-															data-dismiss="modal">Close</button>
-													</div>
-												</div>
-											</div>
-										</div>
-										<!-- /basic modal -->
-
-									</div>
-
-								</div>
-							</div>
+<!--																		<div class="col-md-6">-->
+<!--																			<div class="form-group">-->
+<!--																				<label>Amount to Transfer</label>-->
+<!--																				<input type="text" name="name"-->
+<!--																					class="form-control"-->
+<!--																					placeholder="Amount Transfer">-->
+
+<!--																			</div>-->
+<!--																		</div>-->
+
+<!--																		<div class="col-md-6">-->
+<!--																			<div class="form-group">-->
+<!--																				<label>Date of Transfer</label>-->
+<!--																				<input class="form-control" type="date"-->
+<!--																					name="date">-->
+
+<!--																			</div>-->
+<!--																		</div>-->
+
+
+<!--																		<div class="col-md-6">-->
+<!--																			<div class="form-group">-->
+<!--																				<label>Mode of Transfer</label>-->
+<!--																				<select class="form-control">-->
+<!--																					<option value="opt1">Select Mode of-->
+<!--																						Transfer</option>-->
+<!--																					<option value="opt2">Cash</option>-->
+<!--																					<option value="opt2">CDM(Cash-->
+<!--																						Deposit Machine)</option>-->
+<!--																					<option value="opt2">Cheque</option>-->
+<!--																					<option value="opt2">INF/BIL-->
+<!--																					</option>-->
+
+<!--																				</select>-->
+<!--																			</div>-->
+<!--																		</div>-->
+
+<!--																		<div class="col-md-6">-->
+<!--																			<div class="form-group">-->
+<!--																				<label>Transaction Reference No.</label>-->
+<!--																				<input type="text" name="name"-->
+<!--																					class="form-control"-->
+<!--																					placeholder="Transaction No.">-->
+<!--																			</div>-->
+<!--																		</div>-->
+
+<!--																		<div class="col-md-6">-->
+<!--																			<div class="form-group">-->
+<!--																				<label>Remarks</label>-->
+<!--																				<input type="text" name="name"-->
+<!--																					class="form-control"-->
+<!--																					placeholder="Enter Remarks">-->
+<!--																			</div>-->
+<!--																		</div>-->
+
+<!--																		<div class="col-md-6">-->
+<!--																			<div class="form-group">-->
+<!--																				<label>Upload Deposit Slip</label>-->
+<!--																				<input type="file"-->
+<!--																					class="form-control-uniform"-->
+<!--																					data-fouc>-->
+<!--																			</div>-->
+<!--																		</div>-->
+
+
+
+<!--																	</div>-->
+<!--																</div>-->
+
+<!--																<div class="modal-footer">-->
+<!--																	<button type="button" class="btn btn-primary"-->
+<!--																		data-dismiss="modal">Send limit Request</button>-->
+<!--																</div>-->
+<!--															</div>-->
+<!--														</div>-->
+<!--													</div>-->
+<!--													&lt;!&ndash; /basic modal &ndash;&gt;-->
+
+<!--												</div>-->
+<!--											</div>-->
+
+
+
+
+<!--										</div>-->
+
+<!--										<div>-->
+
+<!--										</div>-->
+<!--									</div>-->
+
+<!--									<div class="tab-pane fade" id="basic-tab2c">-->
+
+<!--										<div class="table-responsive mb-3">-->
+
+<!--											<table class="table table-scrollable table-striped table-bordered">-->
+<!--												<thead>-->
+<!--													<tr>-->
+<!--														<th>Req. ID</th>-->
+<!--														<th>Date</th>-->
+<!--														<th>Amount</th>-->
+<!--														<th>A/C No. </th>-->
+<!--														<th>Mode</th>-->
+<!--														<th>Status</th>-->
+<!--													</tr>-->
+<!--												</thead>-->
+<!--												<tbody>-->
+<!--													<tr>-->
+<!--														<td>754632</td>-->
+<!--														<td>18 Feb 2023</td>-->
+<!--														<td>1.00</td>-->
+<!--														<td>10221 | ICICI Bank | Noida</td>-->
+<!--														<td>Cash</td>-->
+<!--														<td><span class="badge badge-warning">Pending</span></td>-->
+
+<!--													</tr>-->
+
+<!--												</tbody>-->
+<!--											</table>-->
+
+<!--										</div>-->
+
+<!--										<div class="actions clearfix text-right">-->
+<!--											<button type="button" class="btn btn-primary" data-toggle="modal"-->
+<!--												data-target="#view_all_limits">View All <i-->
+<!--													class="icon-play3 ml-2"></i></button>-->
+
+<!--										</div>-->
+
+<!--										&lt;!&ndash; Basic modal &ndash;&gt;-->
+<!--										<div id="view_all_limits" class="modal fade" tabindex="-1">-->
+<!--											<div class="modal-dialog modal-lg">-->
+<!--												<div class="modal-content">-->
+<!--													<div class="modal-header">-->
+<!--														<h5 class="modal-title">Limit Request List</h5>-->
+<!--														<button type="button" class="close"-->
+<!--															data-dismiss="modal">&times;</button>-->
+<!--													</div>-->
+
+<!--													<div class="modal-body">-->
+
+<!--														<div class="row">-->
+
+<!--															<div class="col-md-3">-->
+<!--																<div class="form-group">-->
+<!--																	<label>Limit Request ID</label>-->
+<!--																	<input type="text" name="name" class="form-control"-->
+<!--																		placeholder="Limit Request ID">-->
+
+<!--																</div>-->
+<!--															</div>-->
+
+<!--															<div class="col-md-3">-->
+<!--																<div class="form-group">-->
+<!--																	<label>Date</label>-->
+<!--																	<input class="form-control" type="date" name="date">-->
+
+<!--																</div>-->
+<!--															</div>-->
+
+
+<!--															<div class="col-md-3">-->
+<!--																<div class="form-group">-->
+<!--																	<label>Amount</label>-->
+<!--																	<input type="text" name="name" class="form-control"-->
+<!--																		placeholder="Amount">-->
+<!--																</div>-->
+<!--															</div>-->
+<!--															<div class="col-md-3">-->
+<!--																<div class="form-group">-->
+<!--																	<label>&nbsp;&nbsp;&nbsp;&nbsp;</label>-->
+<!--																	<br><button type="button"-->
+<!--																		class="btn btn-primary">Search</button>-->
+<!--																</div>-->
+<!--															</div>-->
+
+
+
+<!--														</div>-->
+
+<!--														<div class="table-responsive mb-3">-->
+
+<!--															<table-->
+<!--																class="table table-scrollable table-striped table-bordered">-->
+<!--																<thead>-->
+<!--																	<tr>-->
+<!--																		<th>Req. ID</th>-->
+<!--																		<th>Date</th>-->
+<!--																		<th>Amount</th>-->
+<!--																		<th>A/C No. </th>-->
+<!--																		<th>Mode</th>-->
+<!--																		<th>Status</th>-->
+<!--																	</tr>-->
+<!--																</thead>-->
+<!--																<tbody>-->
+<!--																	<tr>-->
+<!--																		<td>754632</td>-->
+<!--																		<td>18 Feb 2023</td>-->
+<!--																		<td>1.00</td>-->
+<!--																		<td>10221 | ICICI Bank | Noida</td>-->
+<!--																		<td>Cash</td>-->
+<!--																		<td><span-->
+<!--																				class="badge badge-warning">Pending</span>-->
+<!--																		</td>-->
+<!--																	</tr>-->
+<!--																	<tr>-->
+<!--																		<td>785369</td>-->
+<!--																		<td>19 Feb 2023</td>-->
+<!--																		<td>1000.00</td>-->
+<!--																		<td>10221 | ICICI Bank | Noida</td>-->
+<!--																		<td>Cash</td>-->
+<!--																		<td><span-->
+<!--																				class="badge badge-warning">Pending</span>-->
+<!--																		</td>-->
+<!--																	</tr>-->
+
+<!--																</tbody>-->
+<!--															</table>-->
+
+<!--														</div>-->
+<!--													</div>-->
+
+<!--													<div class="modal-footer">-->
+<!--														<button type="button" class="btn btn-primary"-->
+<!--															data-dismiss="modal">Close</button>-->
+<!--													</div>-->
+<!--												</div>-->
+<!--											</div>-->
+<!--										</div>-->
+<!--										&lt;!&ndash; /basic modal &ndash;&gt;-->
+
+<!--									</div>-->
+
+<!--								</div>-->
+<!--							</div>-->
 						</div>
 					</div>
 
@@ -726,173 +722,173 @@
 			                	</div> -->
 							</div>
 
-							<div class="card-body">
-								<ul class="nav nav-tabs">
-									<li class="nav-item"><a href="#basic-tab1d" class="nav-link active"
-											data-toggle="tab">My ATM Cards</a></li>
-									<li class="nav-item"><a href="#basic-tab2d" class="nav-link"
-											data-toggle="tab">Request New ATM Card</a></li>
-								</ul>
+<!--							<div class="card-body">-->
+<!--								<ul class="nav nav-tabs">-->
+<!--									<li class="nav-item"><a href="#basic-tab1d" class="nav-link active"-->
+<!--											data-toggle="tab">My ATM Cards</a></li>-->
+<!--									<li class="nav-item"><a href="#basic-tab2d" class="nav-link"-->
+<!--											data-toggle="tab">Request New ATM Card</a></li>-->
+<!--								</ul>-->
 
-								<div class="tab-content">
-									<div class="tab-pane fade show active" id="basic-tab1d">
-										<div class="table-responsive mb-3">
-											Tab 1
-										</div>
+<!--								<div class="tab-content">-->
+<!--									<div class="tab-pane fade show active" id="basic-tab1d">-->
+<!--										<div class="table-responsive mb-3">-->
+<!--											Tab 1-->
+<!--										</div>-->
 
-										<div>
+<!--										<div>-->
 
-										</div>
-									</div>
+<!--										</div>-->
+<!--									</div>-->
 
-									<div class="tab-pane fade" id="basic-tab2d">
-
-
-										<div class="row">
+<!--									<div class="tab-pane fade" id="basic-tab2d">-->
 
 
-											<div class="col-md-6">
-												<div class="form-group">
-													<label>Address Line1</label>
-													<input type="text" name="name" class="form-control" placeholder="">
-												</div>
-											</div>
-
-											<div class="col-md-6">
-												<div class="form-group">
-													<label>ADDRESS LINE2</label>
-													<input type="text" name="name" class="form-control" placeholder="">
-												</div>
-											</div>
-
-											<div class="col-md-6">
-												<div class="form-group">
-													<label>LANDMARK/AREA</label>
-													<input type="text" name="name" class="form-control" placeholder="">
-												</div>
-											</div>
-
-											<div class="col-md-6">
-												<div class="form-group">
-													<label>PINCODE</label>
-													<input type="text" name="name" class="form-control" placeholder="">
-												</div>
-											</div>
-
-											<div class="col-md-6">
-												<div class="form-group">
-													<label>State</label>
-													<select class="form-control" id="StateID" name="StateID">
-														<option value="">Select State</option>
-														<option value="9">ANDAMAN AND NICOBAR ISLANDS</option>
-														<option value="5">ANDHRA PRADESH</option>
-														<option value="10">ARUNACHAL PRADESH</option>
-														<option value="11">ASSAM</option>
-														<option value="12">BIHAR</option>
-														<option value="13">CHANDIGARH</option>
-														<option value="3">CHHATTISGARH</option>
-														<option value="33">DADRA AND NAGAR HAVELI</option>
-														<option value="36">DAMAN AND DIU</option>
-														<option value="8" selected>DELHI</option>
-														<option value="37">GOA</option>
-														<option value="2">GUJARAT</option>
-														<option value="29">HARYANA</option>
-														<option value="32">HIMACHAL PRADESH</option>
-														<option value="31">JAMMU AND KASHMIR</option>
-														<option value="30">JHARKHAND</option>
-														<option value="7">KARNATAKA</option>
-														<option value="14">KERALA</option>
-														<option value="15">LAKSHADWEEP</option>
-														<option value="4">MADHYA PRADESH</option>
-														<option value="1">MAHARASHTRA</option>
-														<option value="16">MANIPUR</option>
-														<option value="17">MEGHALAYA</option>
-														<option value="18">MIZORAM</option>
-														<option value="19">NAGALAND</option>
-														<option value="20">ODISHA</option>
-														<option value="21">PONDICHERRY</option>
-														<option value="22">PUNJAB</option>
-														<option value="34">RAJASTHAN</option>
-														<option value="23">SIKKIM</option>
-														<option value="24">TAMIL NADU</option>
-														<option value="6">TELANGANA</option>
-														<option value="25">TRIPURA</option>
-														<option value="38">UNKNOWN</option>
-														<option value="26">UTTAR PRADESH</option>
-														<option value="35">UTTARAKHAND</option>
-														<option value="27">WEST BENGAL</option>
-													</select>
-												</div>
-											</div>
-
-											<div class="col-md-6">
-												<div class="form-group">
-													<label>City</label>
-													<select class="form-control" id="CityID" name="CityID">
-														<option value="">Select City</option>
-														<option value="453">CENTRAL DELHI</option>
-														<option value="138">DELHI</option>
-														<option value="346">EAST DELHI</option>
-														<option value="141">NEW DELHI</option>
-														<option value="455">NORTH DELHI</option>
-														<option value="461">NORTH EAST DELHI</option>
-														<option value="314">NORTH WEST DELHI</option>
-														<option value="341">SOUTH DELHI</option>
-														<option value="451">SOUTH WEST DELHI</option>
-														<option value="338">WEST DELHI</option>
-													</select>
-												</div>
-											</div>
-
-											<div class="col-md-6">
-												<div class="form-group custom-checkbox">
-													<input type="checkbox" required class="custom-control-input"
-														id="custom_checkbox_stacked_unchecked"
-														name="remember">
-													<label class="custom-control-label  ml-4 mb-2"
-														for="custom_checkbox_stacked_unchecked"> I agree all the <a
-															href="#" data-toggle="modal" data-target="#modal_tnc">Terms
-															& Conditions</a> </label>
-												</div>
-											</div>
-
-											<!-- Basic modal -->
-											<div id="modal_tnc" class="modal fade" tabindex="-1">
-												<div class="modal-dialog">
-													<div class="modal-content">
-														<div class="modal-header">
-															<h5 class="modal-title">Terms & Conditions</h5>
-															<button type="button" class="close"
-																data-dismiss="modal">&times;</button>
-														</div>
-
-														<div class="modal-body">
-															<p>Text Here...</p>
+<!--										<div class="row">-->
 
 
-														</div>
+<!--											<div class="col-md-6">-->
+<!--												<div class="form-group">-->
+<!--													<label>Address Line1</label>-->
+<!--													<input type="text" name="name" class="form-control" placeholder="">-->
+<!--												</div>-->
+<!--											</div>-->
 
-														<div class="modal-footer">
-															<button type="button" class="btn btn-link"
-																data-dismiss="modal">Close</button>
-														</div>
-													</div>
-												</div>
-											</div>
-											<!-- /basic modal -->
+<!--											<div class="col-md-6">-->
+<!--												<div class="form-group">-->
+<!--													<label>ADDRESS LINE2</label>-->
+<!--													<input type="text" name="name" class="form-control" placeholder="">-->
+<!--												</div>-->
+<!--											</div>-->
+
+<!--											<div class="col-md-6">-->
+<!--												<div class="form-group">-->
+<!--													<label>LANDMARK/AREA</label>-->
+<!--													<input type="text" name="name" class="form-control" placeholder="">-->
+<!--												</div>-->
+<!--											</div>-->
+
+<!--											<div class="col-md-6">-->
+<!--												<div class="form-group">-->
+<!--													<label>PINCODE</label>-->
+<!--													<input type="text" name="name" class="form-control" placeholder="">-->
+<!--												</div>-->
+<!--											</div>-->
+
+<!--											<div class="col-md-6">-->
+<!--												<div class="form-group">-->
+<!--													<label>State</label>-->
+<!--													<select class="form-control" id="StateID" name="StateID">-->
+<!--														<option value="">Select State</option>-->
+<!--														<option value="9">ANDAMAN AND NICOBAR ISLANDS</option>-->
+<!--														<option value="5">ANDHRA PRADESH</option>-->
+<!--														<option value="10">ARUNACHAL PRADESH</option>-->
+<!--														<option value="11">ASSAM</option>-->
+<!--														<option value="12">BIHAR</option>-->
+<!--														<option value="13">CHANDIGARH</option>-->
+<!--														<option value="3">CHHATTISGARH</option>-->
+<!--														<option value="33">DADRA AND NAGAR HAVELI</option>-->
+<!--														<option value="36">DAMAN AND DIU</option>-->
+<!--														<option value="8" selected>DELHI</option>-->
+<!--														<option value="37">GOA</option>-->
+<!--														<option value="2">GUJARAT</option>-->
+<!--														<option value="29">HARYANA</option>-->
+<!--														<option value="32">HIMACHAL PRADESH</option>-->
+<!--														<option value="31">JAMMU AND KASHMIR</option>-->
+<!--														<option value="30">JHARKHAND</option>-->
+<!--														<option value="7">KARNATAKA</option>-->
+<!--														<option value="14">KERALA</option>-->
+<!--														<option value="15">LAKSHADWEEP</option>-->
+<!--														<option value="4">MADHYA PRADESH</option>-->
+<!--														<option value="1">MAHARASHTRA</option>-->
+<!--														<option value="16">MANIPUR</option>-->
+<!--														<option value="17">MEGHALAYA</option>-->
+<!--														<option value="18">MIZORAM</option>-->
+<!--														<option value="19">NAGALAND</option>-->
+<!--														<option value="20">ODISHA</option>-->
+<!--														<option value="21">PONDICHERRY</option>-->
+<!--														<option value="22">PUNJAB</option>-->
+<!--														<option value="34">RAJASTHAN</option>-->
+<!--														<option value="23">SIKKIM</option>-->
+<!--														<option value="24">TAMIL NADU</option>-->
+<!--														<option value="6">TELANGANA</option>-->
+<!--														<option value="25">TRIPURA</option>-->
+<!--														<option value="38">UNKNOWN</option>-->
+<!--														<option value="26">UTTAR PRADESH</option>-->
+<!--														<option value="35">UTTARAKHAND</option>-->
+<!--														<option value="27">WEST BENGAL</option>-->
+<!--													</select>-->
+<!--												</div>-->
+<!--											</div>-->
+
+<!--											<div class="col-md-6">-->
+<!--												<div class="form-group">-->
+<!--													<label>City</label>-->
+<!--													<select class="form-control" id="CityID" name="CityID">-->
+<!--														<option value="">Select City</option>-->
+<!--														<option value="453">CENTRAL DELHI</option>-->
+<!--														<option value="138">DELHI</option>-->
+<!--														<option value="346">EAST DELHI</option>-->
+<!--														<option value="141">NEW DELHI</option>-->
+<!--														<option value="455">NORTH DELHI</option>-->
+<!--														<option value="461">NORTH EAST DELHI</option>-->
+<!--														<option value="314">NORTH WEST DELHI</option>-->
+<!--														<option value="341">SOUTH DELHI</option>-->
+<!--														<option value="451">SOUTH WEST DELHI</option>-->
+<!--														<option value="338">WEST DELHI</option>-->
+<!--													</select>-->
+<!--												</div>-->
+<!--											</div>-->
+
+<!--											<div class="col-md-6">-->
+<!--												<div class="form-group custom-checkbox">-->
+<!--													<input type="checkbox" required class="custom-control-input"-->
+<!--														id="custom_checkbox_stacked_unchecked"-->
+<!--														name="remember">-->
+<!--													<label class="custom-control-label  ml-4 mb-2"-->
+<!--														for="custom_checkbox_stacked_unchecked"> I agree all the <a-->
+<!--															href="#" data-toggle="modal" data-target="#modal_tnc">Terms-->
+<!--															& Conditions</a> </label>-->
+<!--												</div>-->
+<!--											</div>-->
+
+<!--											&lt;!&ndash; Basic modal &ndash;&gt;-->
+<!--											<div id="modal_tnc" class="modal fade" tabindex="-1">-->
+<!--												<div class="modal-dialog">-->
+<!--													<div class="modal-content">-->
+<!--														<div class="modal-header">-->
+<!--															<h5 class="modal-title">Terms & Conditions</h5>-->
+<!--															<button type="button" class="close"-->
+<!--																data-dismiss="modal">&times;</button>-->
+<!--														</div>-->
+
+<!--														<div class="modal-body">-->
+<!--															<p>Text Here...</p>-->
 
 
-										</div>
+<!--														</div>-->
+
+<!--														<div class="modal-footer">-->
+<!--															<button type="button" class="btn btn-link"-->
+<!--																data-dismiss="modal">Close</button>-->
+<!--														</div>-->
+<!--													</div>-->
+<!--												</div>-->
+<!--											</div>-->
+<!--											&lt;!&ndash; /basic modal &ndash;&gt;-->
 
 
-										<div class="actions clearfix text-right">
-											<a href="#" class="btn btn-primary mt-2">Send Request For Axis Bank Deposit
-												Card</a>
-										</div>
-									</div>
+<!--										</div>-->
 
-								</div>
-							</div>
+
+<!--										<div class="actions clearfix text-right">-->
+<!--											<a href="#" class="btn btn-primary mt-2">Send Request For Axis Bank Deposit-->
+<!--												Card</a>-->
+<!--										</div>-->
+<!--									</div>-->
+
+<!--								</div>-->
+<!--							</div>-->
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -907,107 +903,107 @@
 			                	</div> -->
 							</div>
 
-							<div class="card-body">
-								<ul class="nav nav-tabs">
-									<li class="nav-item"><a href="#basic-tab1e" class="nav-link active"
-											data-toggle="tab">EasyPAY</a></li>
-									<li class="nav-item"><a href="#basic-tab2e" class="nav-link"
-											data-toggle="tab">Status</a></li>
-								</ul>
+<!--							<div class="card-body">-->
+<!--								<ul class="nav nav-tabs">-->
+<!--									<li class="nav-item"><a href="#basic-tab1e" class="nav-link active"-->
+<!--											data-toggle="tab">EasyPAY</a></li>-->
+<!--									<li class="nav-item"><a href="#basic-tab2e" class="nav-link"-->
+<!--											data-toggle="tab">Status</a></li>-->
+<!--								</ul>-->
 
-								<div class="tab-content">
-									<div class="tab-pane fade show active" id="basic-tab1e">
-
-
-										<div class="row">
+<!--								<div class="tab-content">-->
+<!--									<div class="tab-pane fade show active" id="basic-tab1e">-->
 
 
-											<div class="col-md-6">
-												<div class="form-group">
-													<label>Amount</label>
-													<input type="text" name="name" class="form-control" placeholder="">
-												</div>
-											</div>
-
-											<div class="col-md-6">
-												<div class="form-group">
-													<label>Mobile Number</label>
-													<input type="text" name="name" class="form-control" placeholder="">
-												</div>
-											</div>
-
-											<div class="col-md-6">
-												<div class="form-group">
-													<label>Mode of Payments</label>
-													<select class="form-control" id="" name="">
-														<option value="">Select Mode</option>
-														<option value="">Cash</option>
-														<option value="">Cheque</option>
-														<option value="">Transfer</option>
-													</select>
-												</div>
-											</div>
+<!--										<div class="row">-->
 
 
-											<div class="col-md-6">
-												<div class="form-group">
-													<label>Deposit Date</label>
-													<input type="date" name="date" class="form-control" placeholder="">
-												</div>
-											</div>
+<!--											<div class="col-md-6">-->
+<!--												<div class="form-group">-->
+<!--													<label>Amount</label>-->
+<!--													<input type="text" name="name" class="form-control" placeholder="">-->
+<!--												</div>-->
+<!--											</div>-->
 
-											<div class="col-md-6">
-												<div class="form-group">
-													<label>Remarks</label>
-													<input type="text" name="name" class="form-control" placeholder="">
-												</div>
-											</div>
+<!--											<div class="col-md-6">-->
+<!--												<div class="form-group">-->
+<!--													<label>Mobile Number</label>-->
+<!--													<input type="text" name="name" class="form-control" placeholder="">-->
+<!--												</div>-->
+<!--											</div>-->
 
-										</div>
-
-										<div class="actions clearfix text-right">
-											<a href="#" class="btn btn-primary mt-2">Submit</a>
-										</div>
-
-										<div class="table-responsive mb-3">
-										</div>
-
-										<div>
-
-										</div>
-									</div>
-
-									<div class="tab-pane fade" id="basic-tab2e">
+<!--											<div class="col-md-6">-->
+<!--												<div class="form-group">-->
+<!--													<label>Mode of Payments</label>-->
+<!--													<select class="form-control" id="" name="">-->
+<!--														<option value="">Select Mode</option>-->
+<!--														<option value="">Cash</option>-->
+<!--														<option value="">Cheque</option>-->
+<!--														<option value="">Transfer</option>-->
+<!--													</select>-->
+<!--												</div>-->
+<!--											</div>-->
 
 
-										<div class="table-responsive mb-3">
-											<table class="table table-scrollable table-striped table-bordered">
-												<tbody>
-													<tr>
-														<th>Amount</th>
-														<th>Mobile No.</th>
-														<th>Mode of Payments</th>
-														<th>Date</th>
-													</tr>
-													<tr>
-														<td>₹ 5,000</td>
-														<td>9876542580</td>
-														<td>Cash</td>
-														<td>06/03/2023</td>
+<!--											<div class="col-md-6">-->
+<!--												<div class="form-group">-->
+<!--													<label>Deposit Date</label>-->
+<!--													<input type="date" name="date" class="form-control" placeholder="">-->
+<!--												</div>-->
+<!--											</div>-->
+
+<!--											<div class="col-md-6">-->
+<!--												<div class="form-group">-->
+<!--													<label>Remarks</label>-->
+<!--													<input type="text" name="name" class="form-control" placeholder="">-->
+<!--												</div>-->
+<!--											</div>-->
+
+<!--										</div>-->
+
+<!--										<div class="actions clearfix text-right">-->
+<!--											<a href="#" class="btn btn-primary mt-2">Submit</a>-->
+<!--										</div>-->
+
+<!--										<div class="table-responsive mb-3">-->
+<!--										</div>-->
+
+<!--										<div>-->
+
+<!--										</div>-->
+<!--									</div>-->
+
+<!--									<div class="tab-pane fade" id="basic-tab2e">-->
+
+
+<!--										<div class="table-responsive mb-3">-->
+<!--											<table class="table table-scrollable table-striped table-bordered">-->
+<!--												<tbody>-->
+<!--													<tr>-->
+<!--														<th>Amount</th>-->
+<!--														<th>Mobile No.</th>-->
+<!--														<th>Mode of Payments</th>-->
+<!--														<th>Date</th>-->
+<!--													</tr>-->
+<!--													<tr>-->
+<!--														<td>₹ 5,000</td>-->
+<!--														<td>9876542580</td>-->
+<!--														<td>Cash</td>-->
+<!--														<td>06/03/2023</td>-->
 
 
 
-													</tr>
+<!--													</tr>-->
 
 
-												</tbody>
-											</table>
-										</div>
+<!--												</tbody>-->
+<!--											</table>-->
+<!--										</div>-->
 
-									</div>
+<!--									</div>-->
 
-								</div>
-							</div>
+<!--								</div>-->
+<!--							</div>-->
 						</div>
 					</div>
 
@@ -1070,6 +1066,13 @@
 				}
 			}
 		</script>
+		<script src="/js/custom.js"></script>
+		<script src="/js/wallet.js"></script>
+		<script>
+        $(document).ready(function () {
+            $('#bankName').select2();
+        });
+    </script>
 </body>
 
 </html>

@@ -35,14 +35,60 @@ var DatatableBasic = function() {
             dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
             language: {
                 search: '<span>Filter:</span> _INPUT_',
-                searchPlaceholder: 'Type to filter...',
+                searchPlaceholder: 'Type to filter1...',
                 lengthMenu: '<span>Show:</span> _MENU_',
                 paginate: { 'first': 'First', 'last': 'Last', 'next': $('html').attr('dir') == 'rtl' ? '&larr;' : '&rarr;', 'previous': $('html').attr('dir') == 'rtl' ? '&rarr;' : '&larr;' }
             }
+//            ,
+//            buttons: {
+//                dom: {
+//                    button: {
+//                        className: 'btn btn-light'
+//                    }
+//                },
+//                buttons: [
+//                    'copyHtml5',
+//                    'excelHtml5',
+//                    'csvHtml5',
+//                    'pdfHtml5'
+//                ]
+//            }
         });
 
         // Basic datatable
-        $('.datatable-basic').DataTable();
+//        $('.datatable-basic').DataTable({
+//                                            buttons: [
+//                                                                'copyHtml5',
+//                                                                'excelHtml5',
+//                                                                'csvHtml5',
+//                                                                'pdfHtml5'
+//                                                            ]
+//                                        } );
+
+        $('.datatable-basic').DataTable({
+                    buttons: {
+                        dom: {
+                            button: {
+                                className: 'btn btn-light'
+                            }
+                        },
+                        buttons: [
+                            'copyHtml5',
+                            'excelHtml5',
+                            'csvHtml5',
+                            'pdfHtml5'
+                        ]
+                    }
+                });
+
+//        $(document).ready(function() {
+//                    $('#example').DataTable( {
+//                        dom: 'Bfrtip',
+//                        buttons: [
+//                            'copy', 'csv', 'excel', 'pdf', 'print'
+//                        ]
+//                    } );
+//                } );
 
         // Alternative pagination
         $('.datatable-pagination').DataTable({
@@ -56,6 +102,7 @@ var DatatableBasic = function() {
         $('.datatable-save-state').DataTable({
             stateSave: true
         });
+
 
         // Scrollable datatable
         var table = $('.datatable-scroll-y').DataTable({

@@ -46,7 +46,7 @@
 				<div class="card">
 					<!-- Start Table -->
 
-					<table class="table datatable-basic">
+					<table id="userTable" class="table datatable-basic">
 						<thead>
 							<tr>
 								<th>Name</th>
@@ -195,5 +195,29 @@
 			</div>
 		</div>
 		<!-- /basic modal -->
+	</div>
+<script>
+	$(document).ready(function(){
+		var empDataTable = $('#userTable').DataTable({
+		 dom: 'Blfrtip',
+		 buttons: [{
+			  extend: 'copy'
+		   },
+		   {
+			  extend: 'pdf',
+			  exportOptions: {
+				columns: [0,1] // Column index which needs to export
+			  }
+		   },
+		   {
+			  extend: 'csv',
+		   },
+		   {
+			  extend: 'excel',
+		   }
+		 ]
+		});
+		});
+</script>
 </body>
 </html>

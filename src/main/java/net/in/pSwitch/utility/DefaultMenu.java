@@ -118,7 +118,7 @@ public class DefaultMenu {
 		dmtMenu.setIsActive(1);
 		dmtMenu.setMenuIcon("fas fa-rupee-sign");
 		dmtMenu.setMenuName(StringLiteral.MENU_DMT);
-		dmtMenu.setPageUrl("/retailer/dmt");
+		dmtMenu.setPageUrl("/retailer/dmtHome.html");
 		if (menuRepository.findByMenuName(StringLiteral.MENU_DMT) == null) {
 			menuRepository.save(dmtMenu);
 		}

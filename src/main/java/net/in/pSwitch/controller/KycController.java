@@ -6,6 +6,7 @@ import net.in.pSwitch.dto.KycDetails;
 import net.in.pSwitch.dto.UserBankDetailsDTO;
 import net.in.pSwitch.model.*;
 import net.in.pSwitch.model.api.*;
+import net.in.pSwitch.model.user.UserInfo;
 import net.in.pSwitch.model.wallet.UserBankDetails;
 import net.in.pSwitch.repository.*;
 import net.in.pSwitch.service.BinderService;
@@ -56,6 +57,12 @@ public class KycController {
     private UserBankDetailsRepository userBankDetailsRepository;
     @Autowired
     private BinderService binderService;
+    @Autowired
+    private PanCardRepository panCardRepository;
+    @Autowired
+    private AadhaarRepository aadhaarRepository;
+    @Autowired
+    private SplitAddressRepository splitAddressRepository;
     @Autowired
     RestTemplate restTemplate;
     @Autowired
@@ -272,6 +279,9 @@ public class KycController {
                 UserInfo userInfo = binderService.getCurrentUser(loginUserInfo);
                 userInfo.setAadhaarNumber(aadhaarCard);
                 userInfoRepository.save(userInfo);
+                verification.setId(aadhaarCard);
+                verification.setSplitAddress(splitAddressRepository.save(verification.getSplitAddress()));
+                aadhaarRepository.save(verification);
             }
         }
         return response;
@@ -308,6 +318,8 @@ public class KycController {
                 UserInfo userInfo = binderService.getCurrentUser(loginUserInfo);
                 userInfo.setPancardNumber(panCard);
                 userInfoRepository.save(userInfo);
+                verification.setId(panCard);
+                panCardRepository.save(verification);
             }
         }
         return response;

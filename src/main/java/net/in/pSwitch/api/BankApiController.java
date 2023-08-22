@@ -1,7 +1,6 @@
 package net.in.pSwitch.api;
 
-import net.in.pSwitch.eko.HmacSHA256;
-import net.in.pSwitch.model.UserInfo;
+import net.in.pSwitch.model.user.UserInfo;
 import net.in.pSwitch.model.database.CDMConfirmation;
 import net.in.pSwitch.model.database.ConfirmTransaction;
 import net.in.pSwitch.model.database.TransactionValidation;
@@ -16,7 +15,9 @@ import net.in.pSwitch.model.response.TokenResponse;
 import net.in.pSwitch.model.response.TransactionValidationResponse;
 import net.in.pSwitch.repository.CDMConfirmationRepository;
 import net.in.pSwitch.repository.ConfirmTransactionRepository;
+import net.in.pSwitch.repository.ConfirmTransactionRequestRepository;
 import net.in.pSwitch.repository.TransactionValidationRepository;
+import net.in.pSwitch.repository.TransactionValidationRequestRepository;
 import net.in.pSwitch.repository.UserInfoRepository;
 import net.in.pSwitch.service.AuthService;
 import org.slf4j.Logger;
@@ -33,17 +34,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -65,11 +62,18 @@ public class BankApiController {
 	@Autowired
 	private TransactionValidationRepository transactionValidationRepository;
 	@Autowired
+	private TransactionValidationRequestRepository validationRequestRepository;
+	@Autowired
 	private ConfirmTransactionRepository confirmTransactionRepository;
+
+	@Autowired
+	private ConfirmTransactionRequestRepository confirmTransactionRequestRepository;
 
 	@PostMapping(value = "/token")
 	public ResponseEntity<?> generateAuthenticationToken(@RequestBody TokenRequest tokenRequest){
 		TokenResponse response = new TokenResponse();
+
+		logger.info("Token request for : ", tokenRequest.getUserName());
 		try{
 			AuthRequest authenticationRequest = new AuthRequest();
 			authenticationRequest.setPassword(tokenRequest.getPassword());
@@ -96,8 +100,6 @@ public class BankApiController {
 			response.setMessage(e.getMessage());
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 		}
-
-		HmacSHA256.activateEKyc();
 
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
@@ -170,6 +172,48 @@ public class BankApiController {
 		confirmTransaction.setSndrIfsc(confirmTransactionRequest.getSndrIfsc());
 		confirmTransaction.setTranId(confirmTransactionRequest.getTranId());
 
+		TransactionValidation transactionValidation = transactionValidationRepository.findByUtr(confirmTransactionRequest.getUtr());
+
+		if(transactionValidation == null || StringUtils.isEmpty(confirmTransactionRequest.getUtr()) || !isAlphanumeric(confirmTransactionRequest.getUtr()) || !confirmTransactionRequest.getUtr().equals(transactionValidation.getUtr())){
+			response.setErrCd("001");
+			response.setSttsFlg("F");
+			response.setMessage("Invalid UTR Number");
+		}else if(!isValidAccount(confirmTransactionRequest.getBeneAccNo()) || !confirmTransactionRequest.getBeneAccNo().equals(transactionValidation.getBeneAccNo())){
+			response.setErrCd("001");
+			response.setSttsFlg("F");
+			response.setMessage("Invalid Bene Acc Number");
+		}else if(confirmTransactionRequest.getReqDtTime()==null || isValidLocalDate(confirmTransactionRequest.getReqDtTime())==null){
+			response.setErrCd("001");
+			response.setSttsFlg("F");
+			response.setMessage("Invalid Request DateTime");
+		}else if(confirmTransactionRequest.getTxnAmnt()==null || !isValidAmount(confirmTransactionRequest.getTxnAmnt()) || !confirmTransactionRequest.getTxnAmnt().equals(transactionValidation.getTxnAmount())){
+			response.setErrCd("001");
+			response.setSttsFlg("F");
+			response.setMessage("Invalid Tran Amount");
+		}else if(StringUtils.isEmpty(confirmTransactionRequest.getCorpCode()) || !confirmTransactionRequest.getCorpCode().equalsIgnoreCase("PSPL")){
+			response.setErrCd("001");
+			response.setSttsFlg("F");
+			response.setMessage("Invalid client code");
+		}else if(confirmTransactionRequest.getPmode().equalsIgnoreCase("NEFT") && ( StringUtils.isEmpty(confirmTransactionRequest.getSndrNm()) ||
+				StringUtils.isEmpty(confirmTransactionRequest.getSndrAcnt())
+				|| !confirmTransactionRequest.getSndrNm().equals(transactionValidation.getSndrNm())
+				|| !confirmTransactionRequest.getSndrAcnt().equals(transactionValidation.getSndrAcnt())
+		)){
+			response.setErrCd("001");
+			response.setSttsFlg("F");
+			response.setMessage("Invalid Sender Acct/Name");
+		}else if(confirmTransactionRequest.getPmode().equalsIgnoreCase("IMPS") && ( StringUtils.isEmpty(confirmTransactionRequest.getSndrNm1()) ||
+				StringUtils.isEmpty(confirmTransactionRequest.getSndrAcnt1()) || !confirmTransactionRequest.getSndrNm1().equals(transactionValidation.getSndrNm1())
+				|| !confirmTransactionRequest.getSndrAcnt1().equals(transactionValidation.getSndrAcnt1()))){
+			response.setErrCd("001");
+			response.setSttsFlg("F");
+			response.setMessage("Invalid Sender Acct/Name");
+		}else if(confirmTransactionRequest.getSndrIfsc()==null || !isValidIFSC(confirmTransactionRequest.getSndrIfsc()) || !confirmTransactionRequest.getSndrIfsc().equals(transactionValidation.getSndrIfsc())){
+			response.setErrCd("001");
+			response.setSttsFlg("F");
+			response.setMessage("Invalid Sender Ifsc code");
+		}else
+
 		if(confirmTransactionRepository.findByUtr(confirmTransactionRequest.getUtr())==null) {
 			confirmTransactionRepository.save(confirmTransaction);
 			response.setErrCd("000");
@@ -180,6 +224,12 @@ public class BankApiController {
 			response.setSttsFlg("F");
 			response.setMessage("Duplicate UTR");
 		}
+
+		confirmTransactionRequest.setErrCd(response.getErrCd());
+		confirmTransactionRequest.setSttsFlg(response.getSttsFlg());
+		confirmTransactionRequest.setMessage(response.getMessage());
+
+		confirmTransactionRequestRepository.save(confirmTransactionRequest);
 
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
@@ -235,7 +285,8 @@ public class BankApiController {
 			response.setErrCd("001");
 			response.setSttsFlg("F");
 			response.setMessage("Invalid Sender Acct/Name");
-		}else if(transactionValidationRequest.getSndrIfsc()==null || !isValidIFSC(transactionValidationRequest.getSndrIfsc())){
+		}else if(!transactionValidationRequest.getPmode().equalsIgnoreCase("TRANSFER") && (transactionValidationRequest.getSndrIfsc()==null
+				|| !isValidIFSC(transactionValidationRequest.getSndrIfsc()))){
 			response.setErrCd("001");
 			response.setSttsFlg("F");
 			response.setMessage("Invalid Sender Ifsc code");
@@ -256,6 +307,12 @@ public class BankApiController {
 			response.setSttsFlg("F");
 			response.setMessage("Incorrect client code");
 		}
+
+		transactionValidationRequest.setErrCd(response.getErrCd());
+		transactionValidationRequest.setSttsFlg(response.getSttsFlg());
+		transactionValidationRequest.setMessage(response.getMessage());
+
+		validationRequestRepository.save(transactionValidationRequest);
 
 
 		return ResponseEntity.status(HttpStatus.OK).body(response);

@@ -19,6 +19,7 @@ function getLocation() {
             $("#latLng").val(position.coords.latitude + "," + position.coords.longitude);
         });
     }else {
+        Console.log('Geolocation is not supported by this browser.');
         x.innerHTML = "Geolocation is not supported by this browser.";
     }
 }
@@ -27,11 +28,10 @@ const checkLatLng = () => {
     let valid = false;
     const latLng = latLngEl.value.trim();
     if (!isRequired(latLng)) {
-        showError(latLngEl, 'Please enable location');
+        showErrorText(latLngEl, 'Please enable location');
     } else if (!isLanLngValid(latLng)) {
-        showError(latLngEl, 'Location is not valid.')
+        showErrorText(latLngEl, 'Location is not valid.')
     } else {
-        // showSuccessText(latLngEl);
         valid = true;
     }
     return valid;
@@ -180,7 +180,7 @@ updatePasswordForm.addEventListener('submit', function (e) {
 loginForm.addEventListener('submit', function (e) {
     // prevent the form from submitting
     e.preventDefault();
-    getLocation();
+//    getLocation();
     // validate fields
     let
         isPasswordValid = checkLPassword(),
@@ -193,7 +193,7 @@ loginForm.addEventListener('submit', function (e) {
 
     // submit to the server if the form is valid
     if (isFormValid) {
-        ajaxCall("/api/authenticate", JSON.stringify({
+        ajaxCall("/api/authenticate?isWeb=1", JSON.stringify({
             "password": lPasswordEl.value.trim(),
             "latLng": latLngEl.value.trim(),
             "username": lUsernameEl.value.trim()

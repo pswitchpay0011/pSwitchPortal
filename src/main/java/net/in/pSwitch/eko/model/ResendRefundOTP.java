@@ -6,8 +6,8 @@ import lombok.Data;
 @Data
 public class ResendRefundOTP {
 
-    @JsonProperty("tid")
-    private String tid;
+    @JsonProperty("user_code")
+    private String userCode;
     @JsonProperty("otp")
     private String otp;
 }

@@ -4,8 +4,8 @@ import net.in.pSwitch.authentication.LoginUserInfo;
 import net.in.pSwitch.controller.ApplicationController;
 import net.in.pSwitch.model.GSTINData;
 import net.in.pSwitch.model.Menu;
-import net.in.pSwitch.model.UserInfo;
-import net.in.pSwitch.model.UserWallet;
+import net.in.pSwitch.model.user.UserInfo;
+import net.in.pSwitch.model.database.ConfirmTransaction;
 import net.in.pSwitch.repository.*;
 import net.in.pSwitch.utility.StringLiteral;
 import org.slf4j.Logger;
@@ -20,7 +20,9 @@ import org.springframework.ui.Model;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -46,6 +48,8 @@ public class BinderServiceImpl implements BinderService {
 	private UserWalletRepository userWalletRepository;
 	@Autowired
 	private GSTINRepository gstinRepository;
+	@Autowired
+	private ConfirmTransactionRepository confirmTransactionRepository;
 
 
 	@Override
@@ -128,6 +132,8 @@ public class BinderServiceImpl implements BinderService {
 				menuList = menuRepository.findAllBySuperDistributorMenuAndIsActiveOrderByMenuOrderAsc(1l, 1l);
 			else if (StringLiteral.ROLE_CODE_BUSINESS_ASSOCIATE.equalsIgnoreCase(userInfo.getRoles().getRoleCode()))
 				menuList = menuRepository.findAllByBusinessAssociateMenuAndIsActiveOrderByMenuOrderAsc(1l, 1l);
+			else if (StringLiteral.ROLE_CODE_SALES_EMPLOYEE.equalsIgnoreCase(userInfo.getRoles().getRoleCode()))
+				menuList = menuRepository.findAllSalesEmpMenu(1l, 1l);
 
 			model.addAttribute("menuList", getActiveMenu(menuList));
 
@@ -136,16 +142,55 @@ public class BinderServiceImpl implements BinderService {
 			model.addAttribute("news", news);
 			model.addAttribute("role", userInfo.getRoles());
 
-			UserWallet mUserWallet = userWalletRepository.findByUser(userInfo);
+//			UserWallet mUserWallet = userWalletRepository.findByUser(userInfo);
 
 			if(userInfo.isKycCompleted()) {
 				GSTINData gstinData = gstinRepository.findByUser(userInfo.getUserId());
 				model.addAttribute("gstin", gstinData != null ? gstinData.getGstin() : "");
 			}
 
-			model.addAttribute("walletAmount", mUserWallet != null ? mUserWallet.getCurrentAmount() : 0);
+			model.addAttribute("walletAmount", walletBalance(loginUserInfo));
+
 			return model;
 		}
 		return null;
+	}
+
+	@Override
+	public double walletBalance(LoginUserInfo loginUserInfo) {
+		try {
+
+			List<ConfirmTransaction> transactions = confirmTransactionRepository.findByBeneAccNo(getAxisVirtualAccountNo(loginUserInfo));
+
+			Double balance = transactions.stream()
+					.mapToDouble(transaction -> Double.parseDouble(transaction.getTxnAmnt()))
+					.sum();
+
+			return balance;
+		}catch (Exception e){
+			logger.error("Error :", e);
+		}
+		return 0;
+	}
+
+	@Override
+	public String getAxisVirtualAccountNo(LoginUserInfo loginUserInfo) {
+		UserInfo userInfo = getCurrentUser(loginUserInfo);
+		return "PSPL" + userInfo.getMobileNumber() + String.format("%06d", userInfo.getUserId());
+	}
+
+	@Override
+	public List<Map> getUserVirtualAccountDetails(LoginUserInfo loginUserInfo) {
+
+		List<Map> virtualAccounts = new ArrayList<>();
+
+		HashMap<String, String> axisVirtualAC = new HashMap<>();
+		axisVirtualAC.put("Bank Name", "Axis Bank");
+		axisVirtualAC.put("VirtualAccountNo", getAxisVirtualAccountNo(loginUserInfo));
+		axisVirtualAC.put("IFSCCode", "UTIB0CCH274");
+
+		virtualAccounts.add(axisVirtualAC);
+
+		return virtualAccounts;
 	}
 }
