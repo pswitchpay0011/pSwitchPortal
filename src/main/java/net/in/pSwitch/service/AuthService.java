@@ -35,7 +35,7 @@ public class AuthService {
     @Value("${pSwitch.token.timeOutInMinutes}")
     private Integer tokenTimeout;
 
-    public Map authenticate(AuthRequest authenticationRequest) throws Exception {
+    public Map<String, Object> authenticate(AuthRequest authenticationRequest) throws Exception {
 
         Map<String, Object> user = new HashMap<>();
         Authentication authentication = null;

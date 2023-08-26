@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>pSwitch - Welcome Retailer</title>
+
+    <link rel="shortcut icon" href="images/favicon.ico" />
+
+
+    <div th:replace="fragment/StyleFragment :: style"></div>
+
+    <script src="/js/demo_pages/form_select2.js"></script>
+
+</head>
+
+<body>
+
+<div th:replace="fragment/topnav :: navbar"></div>
+
+<!-- Page content -->
+<div class="page-content">
+    <div th:replace="fragment/mainSidebar :: sidebar"></div>
+
+    <!-- Main content -->
+    <div class="content-wrapper">
+
+        <!-- Page header -->
+        <div class="page-header">
+            <div class="page-header-content header-elements-md-inline">
+                <div class="page-title d-flex">
+                    <h4>
+                        <i class="icon-arrow-down52 mr-2"></i> Fund Request
+                    </h4>
+                    <a href="#" class="header-elements-toggle text-default d-md-none"><i
+                            class="icon-more"></i></a>
+                </div>
+
+
+            </div>
+        </div>
+        <!-- /page header -->
+
+
+        <!-- Content area -->
+        <div class="content">
+
+            <div class="card">
+                <div class="col-md-12 mb-3 ">
+                    <div th:if="${errorMsg}">
+                        <div class="alert alert-danger">
+                            <p th:text="${errorMsg}"></p>
+                        </div>
+                    </div>
+
+                    <div th:if="${confirmationMessage}"
+                         class="alert alert-success" role="alert"
+                         th:text="${confirmationMessage}"></div>
+
+                    <div th:if="${errors}" class="alert alert-danger" role="alert">
+                        <table>
+                            <tr th:each="error : ${errors}">
+                                <td class="text-left" th:text="${'* '+ error}">data</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                        <div class="card-body">
+                            <form id="fundTransfer" action="#" th:action="@{/fund/transfer}"
+                                  method="post">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Distributor/Retailer <span class="text-danger">*</span></label>
+                                        <div class="form-group form-group-feedback form-group-feedback-left">
+                                            <select class="form-control select-search" data-fouc name="role" id="role">
+                                                <option value="">Select</option>
+                                                <option value="D" th:selected="${(fundTransfer !=null && fundTransfer.role !=null && !#strings.isEmpty(fundTransfer.role) and fundTransfer.role == 'D')}">Distributor</option>
+                                                <option value="R"  th:selected="${(fundTransfer !=null && fundTransfer.role !=null && !#strings.isEmpty(fundTransfer.role) and fundTransfer.role == 'R')}">Retailer</option>
+                                            </select>
+                                            <small class="form-text text-danger"></small>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label>Select Receiver for Fund Transfer <span class="text-danger">*</span></label>
+                                        <div class="form-group form-group-feedback form-group-feedback-left">
+                                            <select class="form-control select-search" data-fouc name="toUser" id="toUser"
+                                                    data-placeholder="Select User">
+                                                <optgroup label="Select User">
+                                                    <option value="">None</option>
+                                                    <option th:each="item : ${toUserList}"
+                                                            th:selected="${(fundTransfer !=null && fundTransfer.toUser !=null && !#strings.isEmpty(fundTransfer.toUser) and fundTransfer.toUser == item.key)}"
+                                                            th:value="${item.key}" th:text="${item.value}"/>
+                                                </optgroup>
+                                            </select>
+                                            <small class="form-text text-danger"></small>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label>Amount Transfer <span class="text-danger">*</span></label>
+                                        <div class="form-group form-group-feedback form-group-feedback-left">
+                                            <div class="input-group">
+                                                <span class="input-group-prepend">
+                                                    <span class="input-group-text">₹</span>
+                                                </span>
+                                                    <input type="text" class="form-control" placeholder="Enter Amount" name="amount" id="amount"
+                                                           th:value="${fundTransfer!=null ? fundTransfer.amount : ''}" required
+                                                    onkeyup="formatAmount()">
+                                                    <span class="input-group-append">
+                                                    <span class="input-group-text bg-pink"><strong th:text="${'Available Balance: ₹ '+ walletAmount}">5,000 </strong></span>
+                                                </span>
+                                                <small class="form-text text-danger"></small>
+                                            </div>
+                                            <small class="form-text text-danger"></small>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Remarks</label>
+                                            <input type="text" name="remark" id="remark" class="form-control required" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class=" text-right">
+                                    <button type="submit" class="btn bg-primary">Fund Transfer To Distributor<i class="icon-paperplane ml-2"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                </div>
+            </div>
+            <!-- End Table -->
+
+
+        </div>
+        <!-- /main content -->
+
+        <!-- Footer -->
+        <div class="navbar navbar-expand-lg navbar-light">
+            <div class="text-center d-lg-none w-100">
+                <button type="button" class="navbar-toggler dropdown-toggle"
+                        data-toggle="collapse" data-target="#navbar-footer">
+                    <i class="icon-unfold mr-2"></i> Footer
+                </button>
+            </div>
+
+            <div class="navbar-collapse collapse" id="navbar-footer">
+                <span class="navbar-text"> &copy; 2020. </span>
+
+                <ul class="navbar-nav ml-lg-auto">
+                    <li class="nav-item"><a href="#" class="navbar-nav-link"
+                                            target="_blank"><i class="icon-lifebuoy mr-2"></i> Support</a></li>
+                    <li class="nav-item"><a href="#" class="navbar-nav-link"
+                                            target="_blank"><i class="icon-file-text2 mr-2"></i> Docs</a></li>
+
+
+                </ul>
+
+                <ul class="navbar-nav ml-lg-auto">
+
+
+                    <li class="nav-item"><a href="#" class="navbar-nav-link"
+                                            target="_blank"><i class="icon-facebook color-fb "></i> </a></li>
+
+                    <li class="nav-item"><a href="#" class="navbar-nav-link"
+                                            target="_blank"><i class="icon-twitter text-blue"></i> </a></li>
+
+                    <li class="nav-item"><a href="#" class="navbar-nav-link"
+                                            target="_blank"><i class="icon-youtube text-red"></i> </a></li>
+
+                </ul>
+            </div>
+        </div>
+        <!-- /footer -->
+
+    </div>
+    <!-- /page content -->
+    <script src="/js/ps/fundTransfer.js"></script>
+</div>
+</body>
+</html>

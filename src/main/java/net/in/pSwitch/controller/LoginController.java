@@ -7,6 +7,7 @@ import net.in.pSwitch.authentication.LoginUser;
 import net.in.pSwitch.authentication.LoginUserInfo;
 import net.in.pSwitch.dto.UserRegistrationDTO;
 import net.in.pSwitch.model.PasswordResetToken;
+import net.in.pSwitch.model.Response;
 import net.in.pSwitch.model.user.UserInfo;
 import net.in.pSwitch.repository.PasswordResetRepository;
 import net.in.pSwitch.repository.ProductRepository;
@@ -38,9 +39,11 @@ import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -133,10 +136,10 @@ public class LoginController {
 
 
 //                    logger.info(Inet4Address.getLocalHost().getHostAddress());
-                    setCookie(userInfo, response);
+                setCookie(userInfo, response);
 
-                    return "redirect:/index";
-                }
+                return "redirect:/index";
+            }
 //            }
         } catch (Exception e) {
             logger.error("Error: {}", e);
@@ -157,7 +160,7 @@ public class LoginController {
         return "loginPage/signIn";
     }
 
-    private void setCookie(UserInfo userInfo, HttpServletResponse response){
+    private void setCookie(UserInfo userInfo, HttpServletResponse response) {
         binderService.bindCookieData(response);
 
         Map<String, Object> user = new HashMap<>();
@@ -261,18 +264,18 @@ public class LoginController {
                 isValid = false;
             }
 
-            List<UserInfo> existUser = userInfoRepository.isUserExist(user.getUsername(), user.getMobileNumber());
+            List<UserInfo> existUser = userInfoRepository.isUserExist(user.getUsername(), user.getMobileNumber(), user.getRole());
 //		String navigationPage = "login";
             boolean isUserCreated = false;
             if (isValid && CollectionUtils.isEmpty(existUser)) {
 
-                UserInfo savedUserProfile =null;
+                UserInfo savedUserProfile = null;
                 try {
                     utilService.sendVerificationMobileAndEmail(userProfile);
 //                String vCode = utilService.generateOTP();
 //                userProfile.setVerificationCode(utilService.encodedData(vCode));
                     userProfile.setAccountState(StringLiteral.ACCOUNT_CREATION_STATE_STEP_1);
-                     savedUserProfile = userInfoRepository.save(userProfile);
+                    savedUserProfile = userInfoRepository.save(userProfile);
                     isUserCreated = true;
                     loginTracker.updateTracker(savedUserProfile.getUserId(), user.getLatLng());
 //                    userProfile.setContactOTP(utilService.encodedData(smsManager.sendOTP(userProfile.getMobileNumber().trim())));
@@ -291,12 +294,12 @@ public class LoginController {
 //                    Authentication authentication = new UsernamePasswordAuthenticationToken(authorities, null,
 //                            authorities.getAuthorities());
 //                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                	
-                	
-                	 model.addAttribute("confirmationMessage",
-                             "Complete verification by providing the OTP sent to your email and mobile number. Do check the spam folder as well.");
-                			
-        			 model.addAttribute("confirmationHeader","Thanks you for signing up!");
+
+
+                    model.addAttribute("confirmationMessage",
+                            "Complete verification by providing the OTP sent to your email and mobile number. Do check the spam folder as well.");
+
+                    model.addAttribute("confirmationHeader", "Thanks you for signing up!");
                     setCookie(savedUserProfile, response);
 
 //                    try {
@@ -315,13 +318,13 @@ public class LoginController {
                 try {
                     boolean isMobExist = false;
                     UserRegistrationDTO finalUser = user;
-                    if(existUser.stream().filter(u-> u.getMobileNumber().equals(finalUser.getMobileNumber())).findAny().isPresent()){
+                    if (existUser.stream().filter(u -> u.getMobileNumber().equals(finalUser.getMobileNumber())).findAny().isPresent()) {
                         isMobExist = true;
                         msg = "Oops! There is already a user registered with the mobile number provided.";
                     }
 
-                    if(existUser.stream().filter(u-> u.getUsername().equals(finalUser.getUsername())).findAny().isPresent()){
-                        if(!isMobExist)
+                    if (existUser.stream().filter(u -> u.getUsername().equals(finalUser.getUsername())).findAny().isPresent()) {
+                        if (!isMobExist)
                             msg = "Oops! There is already a user registered with the Email provided.";
                         else
                             msg = "Oops! There is already a user registered with the email and mobile number provided.";
@@ -342,9 +345,9 @@ public class LoginController {
 //		model.addAttribute("registerTab", "show active");
             model.addAttribute("rolesList", roleRepository.findByRoleCodeNot(StringLiteral.ROLE_CODE_ADMIN));
             if (isUserCreated) {
-                model.addAttribute("mob","(+91*****"+userProfile.getMobileNumber().substring(6)+")");
-                model.addAttribute("mail","("+userProfile.getUsername().substring(0,2)+"*****"+
-                        userProfile.getUsername().substring(userProfile.getUsername().indexOf("@"))+")");
+                model.addAttribute("mob", "(+91*****" + userProfile.getMobileNumber().substring(6) + ")");
+                model.addAttribute("mail", "(" + userProfile.getUsername().substring(0, 2) + "*****" +
+                        userProfile.getUsername().substring(userProfile.getUsername().indexOf("@")) + ")");
                 return "loginPage/otp";
             } else {
                 return "loginPage/signUp";
@@ -356,6 +359,30 @@ public class LoginController {
             model.addAttribute("errors", errorMessage);
         }
         return "loginPage/signUp";
+    }
+
+    @RequestMapping("/resendOTP/{type}")
+    @ResponseBody
+    public Response<String> resendOTP(Model model, @LoginUser LoginUserInfo loginUserInfo,
+                            @PathVariable("type") Integer type) {
+        UserInfo userInfo = binderService.getCurrentUser(loginUserInfo);
+        Response<String> response = new Response<>();
+        try {
+            if (type == 1) {
+                userInfo.setContactOTP(utilService.encodedData(smsManager.sendOTP(userInfo.getMobileNumber().trim())));
+            } else if (type == 2) {
+                userInfo.setVerificationCode(utilService.encodedData(utilService.generateOTP()));
+            }
+            userInfoRepository.save(userInfo);
+            response.setMessage("Resend OTP successfully");
+            response.setError(false);
+            return response;
+        }catch (Exception e){
+            logger.error("Error", e);
+        }
+        response.setMessage("Error while sending verification OTP");
+        response.setError(true);
+        return response;
     }
 
     @RequestMapping("/account/otp")
@@ -371,11 +398,11 @@ public class LoginController {
                     if (utilService.decodedData(userInfo.getContactOTP()).equals(mOtp) && utilService.decodedData(userInfo.getVerificationCode()).equals(eOtp)) {
                         userInfo.setAccountState(StringLiteral.ACCOUNT_CREATION_STATE_STEP_2);
 
-                        if (userInfo.getUserPSwitchId() == null) {
-                            String pSwitchUserId = Utility.getPSwitchUserId("XXX",
-                                    userInfo.getRoles().getRoleCode(), userInfo.getUserId());
-                            userInfo.setUserPSwitchId(pSwitchUserId);
-                        }
+//                        if (userInfo.getUserPSwitchId() == null) {
+//                            String pSwitchUserId = Utility.getPSwitchUserId(,
+//                                    userInfo.getRoles().getRoleCode(), userInfo.getUserId());
+//                            userInfo.setUserPSwitchId(pSwitchUserId);
+//                        }
 
 //                        setCookie(userInfo, response);
 
@@ -403,11 +430,11 @@ public class LoginController {
                         smsManager.sendWelcomeMsg(userInfo);
                         return "redirect:/kyc";
                     } else {
-                    	
-                    	 model.addAttribute("mob","(+91*****"+userInfo.getMobileNumber().substring(6)+")");
-                         model.addAttribute("mail","("+userInfo.getUsername().substring(0,2)+"*****"+
-                        		 userInfo.getUsername().substring(userInfo.getUsername().indexOf("@"))+")");
-                         
+
+                        model.addAttribute("mob", "(+91*****" + userInfo.getMobileNumber().substring(6) + ")");
+                        model.addAttribute("mail", "(" + userInfo.getUsername().substring(0, 2) + "*****" +
+                                userInfo.getUsername().substring(userInfo.getUsername().indexOf("@")) + ")");
+
                         model.addAttribute("errorMsg", "Invalid OTP of Email and Mobile!");
                     }
                 } else {

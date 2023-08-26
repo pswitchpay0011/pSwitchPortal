@@ -17,7 +17,7 @@ import net.in.pSwitch.model.FundRequest;
 import net.in.pSwitch.model.MPIN;
 import net.in.pSwitch.model.Product;
 import net.in.pSwitch.model.Status;
-import net.in.pSwitch.model.Transaction;
+import net.in.pSwitch.model.Transactions;
 import net.in.pSwitch.model.user.UserInfo;
 import net.in.pSwitch.model.wallet.UserBankDetails;
 import net.in.pSwitch.repository.AttachmentRepository;
@@ -34,7 +34,6 @@ import net.in.pSwitch.service.BinderService;
 import net.in.pSwitch.service.FileStorageService;
 import net.in.pSwitch.service.UserDetailsImpl;
 import net.in.pSwitch.service.UtilService;
-import net.in.pSwitch.utility.PasswordGenerator;
 import net.in.pSwitch.utility.SMSManager;
 import net.in.pSwitch.utility.StringLiteral;
 import net.in.pSwitch.utility.Utility;
@@ -50,7 +49,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -206,7 +204,8 @@ public class UserAccountController {
 	public String viewWallet(Model model, @LoginUser LoginUserInfo loginUserInfo) {
 		model = binderService.bindUserDetails(model,loginUserInfo);
 		UserInfo userInfo = (UserInfo) model.getAttribute("user");
-		List<Transaction> transactions = transactionRepository.searchUserTransactions(userInfo);
+		List<Transactions> transactions = new ArrayList<>();
+//		transactionRepository.searchUserTransactions(userInfo.getUserId());
 		model.addAttribute("transactions", transactions);
 
 		model.addAttribute("userBankList", userBankDetailsRepository.getUserBanksDetails(userInfo));

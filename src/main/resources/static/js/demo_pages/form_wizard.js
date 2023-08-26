@@ -316,6 +316,12 @@ function formatAadhaar() {
     $("#aadhaarCardNumber").val(value);
 }
 
+function formatIFSC() {
+    var value = $("#ifscCode").val().toUpperCase();
+    value = value.replace(/[^A-Za-z0-9]/g, "").substring(0, 11);
+    $("#ifscCode").val(value);
+}
+
 function formatOTP() {
     var value = $("#aadhaarOtp").val()
     value = value.replace(/\D/g, "").substring(0, 6);
@@ -369,7 +375,7 @@ function verifyAadhaarOtp() {
 }
 
 function formatPanCard() {
-    let value = $('#panCard').val();
+    let value = $('#panCard').val().toUpperCase();
     value = value.replace(/[^a-zA-Z 0-9]+/g, '').substring(0, 10);
     $("#panCard").val(value);
 }

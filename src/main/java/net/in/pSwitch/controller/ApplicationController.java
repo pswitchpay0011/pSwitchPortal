@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Controller
@@ -74,7 +75,13 @@ public class ApplicationController {
 			if(userInfo.getRoles().getRoleCode().equals(StringLiteral.ROLE_CODE_API_ROLE)){
 				return "redirect:/userLogout";
 			}
-			boolean isNotAdmin = !StringLiteral.ROLE_CODE_ADMIN.equalsIgnoreCase(userInfo.getRoles().getRoleCode());
+			boolean isNotAdmin = true;
+			if (StringLiteral.ROLE_CODE_ADMIN.equalsIgnoreCase(userInfo.getRoles().getRoleCode()) ||
+					StringLiteral.ROLE_CODE_OFFICE_ADMIN.equalsIgnoreCase(userInfo.getRoles().getRoleCode()) ||
+					StringLiteral.ROLE_CODE_SALES_EMPLOYEE.equalsIgnoreCase(userInfo.getRoles().getRoleCode())
+			) {
+				isNotAdmin = false;
+			}
 			if(isNotAdmin && (StringUtils.isEmpty(userInfo.getAccountState()) || StringLiteral.ACCOUNT_CREATION_STATE_STEP_1.equals(userInfo.getAccountState()))){
 				model.addAttribute("mob","(+91*****"+userInfo.getMobileNumber().substring(6)+")");
 				model.addAttribute("mail","("+userInfo.getUsername().substring(0,2)+"*****"+
@@ -119,6 +126,10 @@ public class ApplicationController {
 	public String profile(Model model, @LoginUser LoginUserInfo loginUserInfo) {
 		model = binderService.bindUserDetails(model, loginUserInfo);
 		UserInfo userInfo = (UserInfo) model.getAttribute("user");
+
+		Pattern regex = Pattern.compile("(?<!^).(?!$)");
+		userInfo.setPancardNumber(userInfo.getPancardNumber().replaceAll(regex.pattern(), "*"));
+		userInfo.setAadhaarNumber(userInfo.getAadhaarNumber().replaceAll(regex.pattern(), "*"));
 
 		if(userInfo.getBusinessDetails()!=null) {
 			Optional<MccType> optional = mccRepository.findById(userInfo.getBusinessDetails().getTypeOfMcc());

@@ -2,14 +2,15 @@ package net.in.pSwitch.controller;
 
 import net.in.pSwitch.authentication.LoginUser;
 import net.in.pSwitch.authentication.LoginUserInfo;
+import net.in.pSwitch.dto.FundTransferDTO;
 import net.in.pSwitch.model.FundRequest;
+import net.in.pSwitch.model.FundTransfer;
 import net.in.pSwitch.model.MPIN;
 import net.in.pSwitch.model.Status;
-import net.in.pSwitch.model.Transaction;
-import net.in.pSwitch.model.constant.TransactionType;
 import net.in.pSwitch.model.user.UserInfo;
 import net.in.pSwitch.model.UserWallet;
 import net.in.pSwitch.repository.FundRequestRepository;
+import net.in.pSwitch.repository.FundTransferRepository;
 import net.in.pSwitch.repository.MPINRepository;
 import net.in.pSwitch.repository.RoleRepository;
 import net.in.pSwitch.repository.TransactionRepository;
@@ -22,15 +23,19 @@ import net.in.pSwitch.utility.StringLiteral;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/fund")
@@ -43,6 +48,8 @@ public class FundController {
 	private UserInfoRepository userInfoRepository;
 	@Autowired
 	private FundRequestRepository fundRequestRepository;
+	@Autowired
+	private FundTransferRepository fundTransferRepository;
 	@Autowired
 	private BinderService binderService;
 	@Autowired
@@ -59,11 +66,41 @@ public class FundController {
 	@RequestMapping("/manageFundRequest")
 	public String manageFundRequest(Model model, @LoginUser LoginUserInfo loginUserInfo) {
 		model = binderService.bindUserDetails(model, loginUserInfo);
-		UserInfo userInfo = (UserInfo) model.getAttribute("user");
-		List<FundRequest> list = fundRequestRepository.findByParentOrderByCreatedTsDesc(userInfo);
+//		List<FundRequest> list = fundRequestRepository.findByParentOrderByCreatedTsDesc(userInfo);
+		List<FundTransfer> list = fundTransferRepository.fetchTransferreFundsList(loginUserInfo.getId());
 		model.addAttribute("fundRequestList", list);
 		model.addAttribute(StringLiteral.KEY_ACTIVE_PAGE, StringLiteral.MENU_MANAGE_FUND_REQUEST);
 		return "fundRequest/manageFundRequestList";
+	}
+
+	@RequestMapping("/transferFund")
+	public String transferFund(Model model, @LoginUser LoginUserInfo loginUserInfo) {
+		model = binderService.bindUserDetails(model, loginUserInfo);
+		model.addAttribute(StringLiteral.KEY_ACTIVE_PAGE, StringLiteral.MENU_MANAGE_FUND_REQUEST);
+		model.addAttribute("fundTransfer", new FundTransferDTO());
+
+		return "fundRequest/transferFund";
+	}
+
+	@RequestMapping("/transfer")
+	public String transfer(Model model, @LoginUser LoginUserInfo loginUserInfo, FundTransferDTO fundTransferDTO) {
+		model = binderService.bindUserDetails(model, loginUserInfo);
+		model.addAttribute(StringLiteral.KEY_ACTIVE_PAGE, StringLiteral.MENU_MANAGE_FUND_REQUEST);
+
+		if(binderService.transferFund(loginUserInfo, fundTransferDTO)==0){
+			model.addAttribute("fundTransfer", fundTransferDTO);
+			model.addAttribute("errorMsg", "Error while transfer fund, please try again later");
+		}else{
+			return "redirect:/fund/manageFundRequest";
+		}
+
+//		if(fundTransferDTO.getRole().equals("R")){
+//			model.addAttribute("toUserList", getRetailerOfDistributor(model, loginUserInfo));
+//		}else if(fundTransferDTO.getRole().equals("D")){
+//			model.addAttribute("toUserList", getDataForDatatable(model, loginUserInfo));
+//		}
+
+		return "fundRequest/transferFund";
 	}
 
 	@RequestMapping("/rejectFundRequest/{requestId}")
@@ -86,6 +123,30 @@ public class FundController {
 			model.addAttribute("fundRequest", fundRequest);
 		}
 		return "fundRequest/fundRequestDetail";
+	}
+
+	@GetMapping(value = "/distributors")
+	@ResponseBody
+	public Map<Integer, String> getDataForDatatable(Model model, @LoginUser LoginUserInfo loginUserInfo) {
+		List<UserInfo> distributor = userInfoRepository.findChildUser(loginUserInfo.getId(),
+				roleRepository.findByRoleCode(StringLiteral.ROLE_CODE_DISTRIBUTOR), Sort.by(Sort.Direction.ASC, "firstName"));
+
+		return distributor.stream().collect
+				(Collectors.toMap(UserInfo::getUserId, userInfo -> (userInfo.getUserPSwitchId() == null ?
+						userInfo.getFullName() : userInfo.getUserPSwitchId() + " - " + userInfo.getFullName())));
+
+	}
+
+	@GetMapping(value = "/retailer")
+	@ResponseBody
+	public Map<Integer, String> getRetailerOfDistributor(Model model, @LoginUser LoginUserInfo loginUserInfo) {
+		List<UserInfo> retailers = userInfoRepository.findChildUser(loginUserInfo.getId(),
+				roleRepository.findByRoleCode(StringLiteral.ROLE_CODE_RETAILER), Sort.by(Sort.Direction.ASC, "firstName"));
+
+		return retailers.stream().collect
+				(Collectors.toMap(UserInfo::getUserId, userInfo -> (userInfo.getUserPSwitchId() == null ?
+						userInfo.getFullName() : userInfo.getUserPSwitchId() + " - " + userInfo.getFullName())));
+
 	}
 
 	@RequestMapping("/transferAmount")
@@ -129,12 +190,12 @@ public class FundController {
 							userWalletRepository.save(userWallet);
 						}
 
-						Transaction transaction = new Transaction();
-						transaction.setToUser(fundRequest.getUser());
-						transaction.setFromUser(userInfo);
-						transaction.setAmount(fundRequest.getTotalAmount());
-						transaction.setTransactionType(TransactionType.WALLET);
-						transactionRepository.save(transaction);
+//						Transaction transaction = new Transaction();
+//						transaction.setToUser(fundRequest.getUser());
+//						transaction.setFromUser(userInfo);
+//						transaction.setAmount(fundRequest.getTotalAmount());
+//						transaction.setTransactionType(TransactionType.WALLET);
+//						transactionRepository.save(transaction);
 
 						fundRequest.setStatus(Status.APPROVED);
 						fundRequestRepository.save(fundRequest);

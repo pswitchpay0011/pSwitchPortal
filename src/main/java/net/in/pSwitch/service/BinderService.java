@@ -1,6 +1,7 @@
 package net.in.pSwitch.service;
 
 import net.in.pSwitch.authentication.LoginUserInfo;
+import net.in.pSwitch.dto.FundTransferDTO;
 import net.in.pSwitch.model.user.UserInfo;
 import org.springframework.ui.Model;
 
@@ -27,4 +28,6 @@ public interface BinderService {
 	String getAxisVirtualAccountNo(LoginUserInfo loginUserInfo);
 
 	List<Map> getUserVirtualAccountDetails(LoginUserInfo loginUserInfo);
+
+    Integer transferFund(LoginUserInfo loginUserInfo, FundTransferDTO fundTransferDTO);
 }

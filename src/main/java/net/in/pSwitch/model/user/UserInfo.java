@@ -44,7 +44,7 @@ public class UserInfo implements Serializable {
     @Column(insertable = false, name = "user_id", nullable = false)
     private Integer userId;
 
-    @Column(name = "username", nullable = false, unique = true)
+    @Column(name = "username", nullable = false)
     private String username;
 
     @Column(name = "pwd")

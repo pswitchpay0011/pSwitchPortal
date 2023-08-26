@@ -23,6 +23,7 @@ import net.in.pSwitch.authentication.LoginUserInfo;
 import net.in.pSwitch.dto.AttachmentDTO;
 import net.in.pSwitch.dto.UserRegistrationDTO;
 import net.in.pSwitch.model.BusinessDetails;
+import net.in.pSwitch.model.States;
 import net.in.pSwitch.model.user.Role;
 import net.in.pSwitch.model.user.UserMapping;
 import net.in.pSwitch.repository.CityRepository;
@@ -268,9 +269,22 @@ public class UserController {
     @ResponseBody
     public Map<Integer, String> getDataForDatatable(Model model, @LoginUser LoginUserInfo loginUserInfo, @PathVariable("masterDistributorId") Integer masterDistributorId) {
         List<UserInfo> distributor = userInfoRepository.findChildUser(masterDistributorId,
-                roleRepository.findByRoleCode("DS"), Sort.by(Sort.Direction.ASC, "firstName"));
+                roleRepository.findByRoleCode(StringLiteral.ROLE_CODE_DISTRIBUTOR), Sort.by(Sort.Direction.ASC, "firstName"));
 
         return distributor.stream().collect
+                (Collectors.toMap(UserInfo::getUserId, userInfo -> (userInfo.getUserPSwitchId() == null ?
+                        userInfo.getFullName() : userInfo.getUserPSwitchId() + " - " + userInfo.getFullName())));
+
+    }
+
+    @GetMapping(value = "/retailer/{distributorId}")
+    @ResponseBody
+    public Map<Integer, String> getRetailerOfDistributor(Model model, @LoginUser LoginUserInfo loginUserInfo,
+                                                    @PathVariable("distributorId") Integer distributorId) {
+        List<UserInfo> retailers = userInfoRepository.findChildUser(distributorId,
+                roleRepository.findByRoleCode(StringLiteral.ROLE_CODE_RETAILER), Sort.by(Sort.Direction.ASC, "firstName"));
+
+        return retailers.stream().collect
                 (Collectors.toMap(UserInfo::getUserId, userInfo -> (userInfo.getUserPSwitchId() == null ?
                         userInfo.getFullName() : userInfo.getUserPSwitchId() + " - " + userInfo.getFullName())));
 
@@ -287,10 +301,10 @@ public class UserController {
         if (currentUser.getRoles().getRoleCode().equals("AD")) {
             roles = roleRepository.findByRoleCodes(Arrays.asList("SE", "OAD"));
         } else if (currentUser.getRoles().getRoleCode().equals("SE")) {
-            roles = roleRepository.findByRoleCodes(Arrays.asList("SD", "DS", "RE"));
+            roles = roleRepository.findByRoleCodes(Arrays.asList("S", "D", "R"));
 
-            List<UserInfo> masterDistributor = userInfoRepository.findByRoles(currentUser.getUserId(), roleRepository.findByRoleCode("SD"), Sort.by(Sort.Direction.ASC, "firstName"));
-            List<UserInfo> distributor = userInfoRepository.findByRoles(currentUser.getUserId(), roleRepository.findByRoleCode("DS"), Sort.by(Sort.Direction.ASC, "firstName"));
+            List<UserInfo> masterDistributor = userInfoRepository.findByRoles(currentUser.getUserId(), roleRepository.findByRoleCode(StringLiteral.ROLE_CODE_SUPER_DISTRIBUTOR), Sort.by(Sort.Direction.ASC, "firstName"));
+            List<UserInfo> distributor = userInfoRepository.findByRoles(currentUser.getUserId(), roleRepository.findByRoleCode(StringLiteral.ROLE_CODE_DISTRIBUTOR), Sort.by(Sort.Direction.ASC, "firstName"));
 
             model.addAttribute("masterDistributors", masterDistributor.stream().collect
                     (Collectors.toMap(UserInfo::getUserId, userInfo -> (userInfo.getUserPSwitchId() == null ? userInfo.getFullName() : userInfo.getUserPSwitchId() + " - " + userInfo.getFullName()))));
@@ -342,9 +356,11 @@ public class UserController {
                 userProfile.setZipcode(user.getZipcode());
                 userProfile.setPwd(utilService.encodedData(PasswordGenerator.generatePassword()));
                 userProfile.setRoles(roleRepository.findByRoleCode(user.getRole()));
+
+                userProfile.setUserPSwitchId(user.getRole()+user.getMobileNumber());
                 userProfile.setIsActive(1l);
 
-                List<UserInfo> existUser = userInfoRepository.isUserExist(user.getEmail(), user.getMobileNumber());
+                List<UserInfo> existUser = userInfoRepository.isUserExist(user.getEmail(), user.getMobileNumber(), user.getRole());
 //		String navigationPage = "login";
                 boolean isUserCreated = false;
                 if (isValid && CollectionUtils.isEmpty(existUser)) {
@@ -383,7 +399,7 @@ public class UserController {
                         logger.error("Error while sending OTP : {}", e);
                         userInfoRepository.delete(userProfile);
 
-                        errorMessage.add(e.getLocalizedMessage());
+                        errorMessage.add("Failed to create user, Please try again later");
                         model.addAttribute("errors", errorMessage);
 
                         isUserCreated = false;
@@ -401,7 +417,7 @@ public class UserController {
 //			navigationPage = "redirect:/index";
 //			return "success";
                 } else {
-                    String msg = "Oops! There is already a user registered with the email or mobile number provided.";
+                    String msg = "Oops! There is already a user registered with the same Role, email and mobile number provided.";
                     try {
                         boolean isMobExist = false;
 //                    UserRegistrationDTO finalUser = user;
@@ -431,9 +447,9 @@ public class UserController {
             if (currentUser.getRoles().getRoleCode().equals("AD")) {
                 roles = roleRepository.findByRoleCodes(Arrays.asList("SE", "OAD"));
             } else if (currentUser.getRoles().getRoleCode().equals("SE")) {
-                roles = roleRepository.findByRoleCodes(Arrays.asList("SD", "DS", "RE"));
-                List<UserInfo> masterDistributor = userInfoRepository.findByRoles(currentUser.getUserId(), roleRepository.findByRoleCode("SD"), Sort.by(Sort.Direction.ASC, "firstName"));
-                List<UserInfo> distributor = userInfoRepository.findByRoles(currentUser.getUserId(), roleRepository.findByRoleCode("DS"), Sort.by(Sort.Direction.ASC, "firstName"));
+                roles = roleRepository.findByRoleCodes(Arrays.asList("S", "D", "R"));
+                List<UserInfo> masterDistributor = userInfoRepository.findByRoles(currentUser.getUserId(), roleRepository.findByRoleCode(StringLiteral.ROLE_CODE_SUPER_DISTRIBUTOR), Sort.by(Sort.Direction.ASC, "firstName"));
+                List<UserInfo> distributor = userInfoRepository.findByRoles(currentUser.getUserId(), roleRepository.findByRoleCode(StringLiteral.ROLE_CODE_DISTRIBUTOR), Sort.by(Sort.Direction.ASC, "firstName"));
 
                 model.addAttribute("masterDistributors", masterDistributor.stream().collect
                         (Collectors.toMap(UserInfo::getUserId, userInfo -> (userInfo.getUserPSwitchId() == null ? userInfo.getFullName() : userInfo.getUserPSwitchId() + " - " + userInfo.getFullName()))));

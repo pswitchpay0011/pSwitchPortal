@@ -36,6 +36,7 @@
     <script src="/js/plugins/forms/styling/uniform.min.js"></script>
 
     <script src="/js/app.js"></script>
+    <script src="/js/custom.js"></script>
     <script src="/js/demo_pages/login.js"></script>
     <!-- /theme JS files -->
 
@@ -99,6 +100,16 @@
                                         <p th:text="${errorMsg}"></p>
                                     </div>
                                 </div>
+
+                                <div class="alert alert-danger" role="alert" style="display: none"
+                                     id="errorAlert">
+                                    <p id="errorMessage">Error while saving data</p>
+                                </div>
+
+                                <div class="alert alert-success" role="alert" style="display: none"
+                                     id="successAlert">
+                                    <p id="successMessage">Success</p>
+                                </div>
                                 
                                 <div  th:if="${confirmationMessage}" class="alert alert-success" role="alert">
 								  <h5 class="alert-heading" th:text="${confirmationHeader}">Success</h5>
@@ -107,29 +118,37 @@
 
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div
-                                                class="form-group form-group-feedback form-group-feedback-left">
-                                            <input type="text" class="form-control form-control-lg"
-                                                   placeholder="Enter OTP Sent to your number" id="motp"
-                                                   required autofocus="autofocus" name="motp" value="">
-                                            <div class="form-control-feedback">
-                                                <i class="icon-mobile text-blue-800"></i>
+                                        <div class="form-group form-group-feedback form-group-feedback-left">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control form-control-lg"
+                                                       placeholder="Enter OTP Sent to your number" id="motp"
+                                                       required autofocus="autofocus" name="motp" value="">
+                                                <div class="form-control-feedback">
+                                                    <i class="icon-mobile text-blue-800"></i>
+                                                </div>
+                                                <span class="input-group-append">
+												    <button class="btn bg-teal" type="button" onclick="resendOTP(1)">Resend</button>
+											    </span>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="col-md-12">
                                         <div class="form-group form-group-feedback form-group-feedback-left">
-                                            <input type="text" class="form-control form-control-lg"
-                                                   placeholder="Enter OTP Sent to your email" id="eotp" required
-                                                   autofocus="autofocus" name="eotp" value="">
-                                            <div class="form-control-feedback">
-                                                <i class="icon-envelop text-blue-800"></i>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control form-control-lg"
+                                                       placeholder="Enter OTP Sent to your email" id="eotp" required
+                                                       autofocus="autofocus" name="eotp" value="">
+                                                <div class="form-control-feedback">
+                                                    <i class="icon-envelop text-blue-800"></i>
+                                                </div>
+                                                <span class="input-group-append">
+												    <button class="btn bg-teal" type="button" onclick="resendOTP(1)">Resend</button>
+											    </span>
                                             </div>
+
                                         </div>
                                     </div>
-
-
                                 </div>
 
 

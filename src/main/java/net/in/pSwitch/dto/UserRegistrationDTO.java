@@ -39,4 +39,17 @@ public class UserRegistrationDTO {
         }
         return 0l;
     }
+
+    public Integer getMSCode(){
+        if(!StringUtils.isEmpty(masterDistributor)) {
+            return Integer.parseInt(masterDistributor);
+        }
+        return 0;
+    }
+    public Integer getDSCode(){
+        if(!StringUtils.isEmpty(distributor)) {
+            return Integer.parseInt(distributor);
+        }
+        return 0;
+    }
 }

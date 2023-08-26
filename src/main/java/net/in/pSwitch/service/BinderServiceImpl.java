@@ -2,11 +2,20 @@ package net.in.pSwitch.service;
 
 import net.in.pSwitch.authentication.LoginUserInfo;
 import net.in.pSwitch.controller.ApplicationController;
+import net.in.pSwitch.dto.FundTransferDTO;
 import net.in.pSwitch.model.GSTINData;
 import net.in.pSwitch.model.Menu;
 import net.in.pSwitch.model.user.UserInfo;
-import net.in.pSwitch.model.database.ConfirmTransaction;
-import net.in.pSwitch.repository.*;
+import net.in.pSwitch.repository.CityRepository;
+import net.in.pSwitch.repository.CountryRepository;
+import net.in.pSwitch.repository.GSTINRepository;
+import net.in.pSwitch.repository.MenuRepository;
+import net.in.pSwitch.repository.ProductNewsRepository;
+import net.in.pSwitch.repository.RoleRepository;
+import net.in.pSwitch.repository.StatesRepository;
+import net.in.pSwitch.repository.TransactionRepository;
+import net.in.pSwitch.repository.UserInfoRepository;
+import net.in.pSwitch.repository.UserWalletRepository;
 import net.in.pSwitch.utility.StringLiteral;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +26,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureQuery;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -49,7 +61,14 @@ public class BinderServiceImpl implements BinderService {
 	@Autowired
 	private GSTINRepository gstinRepository;
 	@Autowired
-	private ConfirmTransactionRepository confirmTransactionRepository;
+	private TransactionRepository transactionRepository;
+
+	private final EntityManager entityManager;
+
+	@Autowired
+	public BinderServiceImpl(EntityManager entityManager) {
+		this.entityManager = entityManager;
+	}
 
 
 	@Override
@@ -160,18 +179,50 @@ public class BinderServiceImpl implements BinderService {
 	public double walletBalance(LoginUserInfo loginUserInfo) {
 		try {
 
-			List<ConfirmTransaction> transactions = confirmTransactionRepository.findByBeneAccNo(getAxisVirtualAccountNo(loginUserInfo));
+			StoredProcedureQuery query = entityManager.createStoredProcedureQuery("PR_GetBalanceAmount");
+			query.registerStoredProcedureParameter("userId", Integer.class, ParameterMode.IN);
+			query.registerStoredProcedureParameter("result", Integer.class, ParameterMode.OUT);
 
-			Double balance = transactions.stream()
-					.mapToDouble(transaction -> Double.parseDouble(transaction.getTxnAmnt()))
-					.sum();
+			query.setParameter("userId", loginUserInfo.getId());
+			query.execute();
 
-			return balance;
+			return (Integer) query.getOutputParameterValue("result");
 		}catch (Exception e){
 			logger.error("Error :", e);
 		}
 		return 0;
 	}
+
+	@Override
+	public Integer transferFund(LoginUserInfo loginUserInfo, FundTransferDTO fundTransferDTO){
+		try {
+
+			StoredProcedureQuery query = entityManager.createStoredProcedureQuery("PR_FundTransfer");
+			query.registerStoredProcedureParameter("TransferredFromUserId", Integer.class, ParameterMode.IN);
+			query.registerStoredProcedureParameter("TransferredToUserId", Integer.class, ParameterMode.IN);
+			query.registerStoredProcedureParameter("Amount", Integer.class, ParameterMode.IN);
+			query.registerStoredProcedureParameter("Remarks", String.class, ParameterMode.IN);
+			query.registerStoredProcedureParameter("IsActive", Integer.class, ParameterMode.IN);
+//			query.registerStoredProcedureParameter("CreatedOn", Timestamp.class, ParameterMode.IN);
+
+			query.registerStoredProcedureParameter("ReturnValue", Integer.class, ParameterMode.OUT);
+
+			query.setParameter("TransferredFromUserId", loginUserInfo.getId());
+			query.setParameter("TransferredToUserId", fundTransferDTO.getUserId());
+			int amount  = (int) Double.parseDouble(fundTransferDTO.getAmount());
+			query.setParameter("Amount", amount);
+			query.setParameter("Remarks", fundTransferDTO.getRemark());
+			query.setParameter("IsActive", 1);
+//			query.setParameter("CreatedOn", Instant.now());
+			query.execute();
+
+			return (Integer) query.getOutputParameterValue("ReturnValue");
+		}catch (Exception e){
+			logger.error("Error :", e);
+		}
+		return 0;
+	}
+
 
 	@Override
 	public String getAxisVirtualAccountNo(LoginUserInfo loginUserInfo) {

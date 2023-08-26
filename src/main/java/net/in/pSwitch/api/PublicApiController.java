@@ -23,9 +23,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
 import java.util.Optional;
 
-@CrossOrigin(maxAge = 3600)
+//@CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api")
 public class PublicApiController {
@@ -46,8 +47,8 @@ public class PublicApiController {
 
 
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-	public ResponseEntity<Response> generateAuthenticationToken(@RequestBody AuthRequest authenticationRequest){
-		Response response = new Response();
+	public ResponseEntity<Response<Map<String, Object>>> generateAuthenticationToken(@RequestBody AuthRequest authenticationRequest){
+		Response<Map<String, Object>> response = new Response<>();
 		try{
 			response.setResult(authService.authenticate(authenticationRequest));
 		} catch (DisabledException e) {

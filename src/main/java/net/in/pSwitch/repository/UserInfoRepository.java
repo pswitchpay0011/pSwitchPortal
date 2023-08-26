@@ -25,8 +25,8 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Integer>, Jp
 
 	UserInfo findByUsername(String username);
 
-	@Query("SELECT u FROM UserInfo u where u.username = ?1 OR u.mobileNumber = ?2")
-	List<UserInfo> isUserExist(String email, String mobile);
+	@Query("SELECT u FROM UserInfo u where u.username = ?1 AND u.mobileNumber = ?2 AND u.roles.roleCode = ?3")
+	List<UserInfo> isUserExist(String email, String mobile, String role);
 
 	UserInfo findByVerificationCode(String verificationCode);
 
@@ -68,6 +68,7 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Integer>, Jp
 	@Modifying
 	public void updateFailedAttempts(Integer failAttempts, String userPSwitchId);
 
-	@Query("select u FROM UserInfo u WHERE u.username = ?1 OR u.userPSwitchId = ?1 OR u.mobileNumber = ?1 OR u.userPSwitchId = ?1")
+//	@Query("select u FROM UserInfo u WHERE u.username = ?1 OR u.userPSwitchId = ?1 OR u.mobileNumber = ?1 OR u.userPSwitchId = ?1")
+	@Query("select u FROM UserInfo u WHERE u.userPSwitchId = ?1")
 	public UserInfo findUserForLogin(String userPSwitchId);
 }

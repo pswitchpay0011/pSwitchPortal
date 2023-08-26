@@ -3,14 +3,12 @@ package net.in.pSwitch.service;
 import net.in.pSwitch.model.EmailDetails;
 import net.in.pSwitch.model.PasswordResetToken;
 import net.in.pSwitch.model.Product;
-import net.in.pSwitch.model.States;
-import net.in.pSwitch.model.user.UserInfo;
 import net.in.pSwitch.model.VerificationToken;
+import net.in.pSwitch.model.user.UserInfo;
 import net.in.pSwitch.repository.PasswordResetRepository;
 import net.in.pSwitch.repository.StatesRepository;
 import net.in.pSwitch.repository.UserInfoRepository;
 import net.in.pSwitch.utility.SMSManager;
-import net.in.pSwitch.utility.Utility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,13 +130,13 @@ public class UtilServiceImpl implements UtilService {
 			String loginUrl = env.getProperty("my.server.name") + "/login";
 
 //			String password = RandomString.make(16);
-			Optional<States> optionalStates = statesRepository.findById(userInfo.getBusinessDetails().getState());
-			String pSwitchUserId = Utility.getPSwitchUserId(optionalStates.get().getName(),
-					userInfo.getRoles().getRoleCode(), userInfo.getUserId());
+//			Optional<States> optionalStates = statesRepository.findById(userInfo.getBusinessDetails().getState());
+//			String pSwitchUserId = Utility.getPSwitchUserId(optionalStates.get().getName(),
+//					userInfo.getRoles().getRoleCode(), userInfo.getUserId());
 
 //			userInfo.setPwd(passwordEncoder.encode(password));
-			userInfo.setUserPSwitchId(pSwitchUserId);
-			userInfoRepository.save(userInfo);
+//			userInfo.setUserPSwitchId(pSwitchUserId);
+//			userInfoRepository.save(userInfo);
 
 			String mailContent = "";
 			ClassLoader classLoader = getClass().getClassLoader();
@@ -150,7 +148,7 @@ public class UtilServiceImpl implements UtilService {
 				logger.error("Error: ", e);
 			}
 			mailContent = mailContent.replaceAll("loginUrl", loginUrl);
-			mailContent = mailContent.replaceAll("USER-NAME", pSwitchUserId);
+			mailContent = mailContent.replaceAll("USER-NAME", userInfo.getUserPSwitchId());
 			mailContent = mailContent.replaceAll("PASS-WORD", "**********");
 			mailContent = mailContent.replaceAll("USERNAME", userInfo.getFullName());
 			
@@ -268,6 +266,7 @@ public class UtilServiceImpl implements UtilService {
 			}
 			mailContent = mailContent.replaceAll("#FNAME#", userInfo.getFirstName());
 			mailContent = mailContent.replaceAll("#ROLE#", userInfo.getRoles().getRoleName());
+			mailContent = mailContent.replaceAll("#USERNAME#", userInfo.getUserPSwitchId());
 
 			Optional<UserInfo> createdBy =  userInfoRepository.findById(userInfo.getUserMapping().getCreatedBy());
 
@@ -323,11 +322,10 @@ public class UtilServiceImpl implements UtilService {
 	@Override
 	public void sendLoginDetailMail(UserInfo userInfo) {
 		sendLoginDetailsEmail(userInfo);
-
 		userInfo.setVerificationCode(encodedData(generateOTP()));
 		userInfo.setContactOTP(encodedData(smsManager.sendOTP(userInfo.getMobileNumber().trim())));
 		userInfoRepository.save(userInfo);
-		sendOTPMail(userInfo);
+//		sendOTPMail(userInfo);
 	}
 	@Override
 	public void sendVerificationMobileAndEmail(UserInfo userInfo) {
@@ -347,11 +345,6 @@ public class UtilServiceImpl implements UtilService {
 			ClassLoader classLoader = getClass().getClassLoader();
 			InputStream inputStream = classLoader.getResourceAsStream("templates/email/kycCompletedMail.html");
 
-			Optional<States> optionalStates = statesRepository.findById(userInfo.getBusinessDetails().getState());
-			String pSwitchUserId = Utility.getPSwitchUserId(optionalStates.get().getName(),
-					userInfo.getRoles().getRoleCode(), userInfo.getUserId());
-			userInfo.setUserPSwitchId(pSwitchUserId);
-			userInfoRepository.save(userInfo);
 			try {
 				mailContent = readFromInputStream(inputStream);
 			} catch (IOException e) {

@@ -47,3 +47,14 @@ var LoginRegistration = function () {
 document.addEventListener('DOMContentLoaded', function() {
     LoginRegistration.initComponents();
 });
+
+
+function resendOTP(type){
+    ajaxCall("/resendOTP/"+type, {}, 'GET', function(data) {
+        if (data.error == true) {
+            showError(data.message);
+        } else {
+            showSuccess(data.message);
+        }
+    }, function(error) {}, function(complete) {});
+}

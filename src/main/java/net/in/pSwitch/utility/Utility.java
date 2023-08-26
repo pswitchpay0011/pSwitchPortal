@@ -61,9 +61,9 @@ public class Utility {
 		return StringLiteral.ROLE_CODE_DISTRIBUTOR;
 	}
 
-	public static String getPSwitchUserId(String state, String role, long userId) {
-		return "PS_" + state.substring(0, 3).toUpperCase() + "_" + role + "_" + userId;
-	}
+//	public static String getPSwitchUserId(String state, String role, long userId) {
+//		return "PS_" + state.substring(0, 3).toUpperCase() + "_" + role + "_" + userId;
+//	}
 
 	// Function to validate the PAN Card number.
 	public static boolean isValidPanCardNo(String panCardNo) {

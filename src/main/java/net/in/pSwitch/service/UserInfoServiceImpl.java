@@ -74,7 +74,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 		int start = params.containsKey("start") ? Integer.parseInt(params.get("start").toString()) : 30;
 		int currentPage = start / length;
 
-		String sortName = "userId";
+		String sortName = "createdDate";
 		String dataTableOrderColumnIdx = params.get("order[0][column]").toString();
 		String dataTableOrderColumnName = "columns[" + dataTableOrderColumnIdx + "][data]";
 		if (params.containsKey(dataTableOrderColumnName))

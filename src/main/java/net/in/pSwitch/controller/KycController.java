@@ -349,9 +349,9 @@ public class KycController {
                 bankDetails = userBankDetailsRepository.save(bankDetails);
                 userInfo.setBankDetails(bankDetails);
                 userInfoRepository.save(userInfo);
-                if(userInfo.getUserPSwitchId().contains("XXX")) {
-                    utilService.sendKYCCompleteMail(userInfo);
-                }
+//                if(userInfo.getUserPSwitchId().contains("XXX")) {
+//                    utilService.sendKYCCompleteMail(userInfo);
+//                }
             }
         }
         return response;
@@ -391,6 +391,7 @@ public class KycController {
     @GetMapping("/postalPincode")
     @ResponseBody
     public Response<PostOffice> postalpincode(@RequestParam(value = "zipcode", required = true) String zipcode) {
+        Response<PostOffice> response = new Response<>();
         try {
             String url = "https://api.postalpincode.in/pincode/" + zipcode;
             PostalPincode[] postalPincodes = restTemplate.getForObject(url, PostalPincode[].class);
@@ -405,7 +406,6 @@ public class KycController {
                     if(city!=null)
                         postOffice.setDistrict(String.valueOf(city.getId()));
 
-                    Response response = new Response();
                     response.setMessage("Postal code found");
                     response.setError(false);
                     response.setResult(postOffice);
@@ -416,7 +416,11 @@ public class KycController {
         } catch (RestClientException e) {
             logger.error("Error: {}", e);
         }
-        return null;
+        response.setMessage("Postal code Not found");
+        response.setError(true);
+        response.setResult(null);
+
+        return response;
     }
 
     @GetMapping("/getTypeOfShops")

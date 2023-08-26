@@ -14,7 +14,7 @@
 
 </head>
 
-<body>
+<body onload="setMinDate()">
 
 <div th:replace="fragment/topnav :: navbar"></div>
 
@@ -64,7 +64,7 @@
                         </table>
                     </div>
 
-                    <form action="#" th:action="@{/user/save}"
+                    <form id="associateForm" action="#" th:action="@{/user/save}"
                           method="post">
                         <!-- Profile info -->
                         <div class="card">
@@ -83,49 +83,30 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <label>First Name <span class="text-danger">*</span></label>
-                                            <input type="text" id="firstName" name="firstName"
-                                                   required="required"
-                                                   th:value="${addUser!=null ? addUser.firstName : ''}"
-                                                   class="form-control">
+                                            <div class="form-group form-group-feedback form-group-feedback-left">
+                                                <input type="text" class="form-control form-control-lg"
+                                                       placeholder="First Name" id="firstName" name="firstName" maxlength="100"
+                                                       th:value="${addUser!=null ? addUser.firstName : ''}" required
+                                                       autofocus="autofocus">
+                                                <div class="form-control-feedback">
+                                                    <i class="icon-user-check text-blue-800"></i>
+                                                </div>
+                                                <small class="form-text text-danger"></small>
+                                            </div>
                                         </div>
+
                                         <div class="col-md-6">
                                             <label>Last Name <span class="text-danger">*</span></label>
-                                            <input type="text" id="lastName" name="lastName"
-                                                   th:value="${addUser!=null ? addUser.lastName : ''}"
-                                                   required="required" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div th:if="${masterDistributors!=null && user.roles.roleCode != 'AD'}" class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label>Master Distributor<span class="text-danger">*</span></label>
-                                            <select class="form-control select-search"
-                                                    data-placeholder="Select Master Distributor"
-                                                    name="masterDistributor" id="masterDistributor" data-fouc>
-
-                                                <optgroup label="Select Master Distributor">
-                                                    <option>None</option>
-                                                    <option th:each="item : ${masterDistributors}"
-                                                            th:selected="${(addUser !=null && addUser.role !=null && !#strings.isEmpty(addUser.role) and addUser.role == item.key)}"
-                                                            th:value="${item.key}" th:text="${item.value}"/>
-                                                </optgroup>
-                                            </select>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <label>Distributor<span class="text-danger">*</span></label>
-                                            <select class="form-control select-search"
-                                                    data-placeholder="Select Master Distributor"
-                                                    name="distributor" id="distributor" data-fouc>
-                                                <optgroup label="Select Distributor">
-                                                    <option>None</option>
-                                                    <option th:each="item : ${distributors}"
-                                                            th:selected="${(addUser !=null && addUser.role !=null && !#strings.isEmpty(addUser.role) and addUser.role == item.key)}"
-                                                            th:value="${item.key}" th:text="${item.value}"/>
-                                                </optgroup>
-                                            </select>
+                                            <div class="form-group form-group-feedback form-group-feedback-left">
+                                                <input type="text" class="form-control form-control-lg"
+                                                       placeholder="Last Name" id="lastName" name="lastName" maxlength="100"
+                                                       th:value="${addUser!=null ? addUser.lastName : ''}"
+                                                       autofocus="autofocus">
+                                                <div class="form-control-feedback">
+                                                    <i class="icon-user-check text-blue-800"></i>
+                                                </div>
+                                                <small class="form-text text-danger"></small>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -133,24 +114,75 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <label>User Role</label>
-                                            <select class="form-control select-search"
-                                                    data-placeholder="Select Role"
-                                                    name="role" id="role" data-fouc>
-                                                <option></option>
-                                                <optgroup label="Select Role">
-                                                    <option th:each="item : ${roles}"
-                                                            th:selected="${(addUser !=null && addUser.role !=null && !#strings.isEmpty(addUser.role) and addUser.role == item.roleCode)}"
-                                                            th:value="${item.roleCode}" th:text="${item.roleName}"/>
-                                                </optgroup>
-                                            </select>
+                                            <label>User Role <span class="text-danger">*</span></label>
+                                            <div class="form-group form-group-feedback form-group-feedback-left">
+                                                <select class="form-control select-search"
+                                                        data-placeholder="Select Role"
+                                                        name="role" id="role" data-fouc>
+                                                    <option></option>
+                                                    <optgroup label="Select Role">
+                                                        <option th:each="item : ${roles}"
+                                                                th:selected="${(addUser !=null && addUser.role !=null && !#strings.isEmpty(addUser.role) and addUser.role == item.roleCode)}"
+                                                                th:value="${item.roleCode}" th:text="${item.roleName}"/>
+                                                    </optgroup>
+                                                </select>
+                                                <small class="form-text text-danger"></small>
+                                            </div>
                                         </div>
 
                                         <div class="col-md-6">
                                             <label>Mobile No# <span class="text-danger">*</span></label>
-                                            <input type="text" id="mobileNumber" name="mobileNumber"
-                                                   th:value="${addUser!=null ? addUser.mobileNumber : ''}"
-                                                   required="required" class="form-control">
+                                            <div class="form-group form-group-feedback form-group-feedback-left">
+                                                <input type="text" class="form-control form-control-lg"
+                                                       placeholder="Mobile Number as per Aadhaar card number" maxlength="10"
+                                                       id="mobileNumber" name="mobileNumber"
+                                                       th:value="${addUser!=null ? addUser.mobileNumber : ''}" required
+                                                       autofocus="autofocus">
+                                                <div class="form-control-feedback">
+                                                    <i class="icon-mobile text-blue-800"></i>
+                                                </div>
+                                                <small class="form-text text-danger"></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div th:if="${masterDistributors!=null && user.roles.roleCode != 'AD'}"
+                                     class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Master Distributor</label>
+                                            <div class="form-group form-group-feedback form-group-feedback-left">
+                                                <select class="form-control form-control-lg select-search"
+                                                        data-placeholder="Select Master Distributor"
+                                                        name="masterDistributor" id="masterDistributor" data-fouc>
+
+                                                    <optgroup label="Select Master Distributor">
+                                                        <option value="">None</option>
+                                                        <option th:each="item : ${masterDistributors}"
+                                                                th:selected="${(addUser !=null && addUser.masterDistributor !=null && !#strings.isEmpty(addUser.masterDistributor) and addUser.getMSCode() == item.key)}"
+                                                                th:value="${item.key}" th:text="${item.value}"/>
+                                                    </optgroup>
+                                                </select>
+                                                <small class="form-text text-danger"></small>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label>Distributor</label>
+                                            <div class="form-group form-group-feedback form-group-feedback-left">
+                                                <select class="form-control select-search"
+                                                        data-placeholder="Select Master Distributor"
+                                                        name="distributor" id="distributor" data-fouc>
+                                                    <optgroup label="Select Distributor">
+                                                        <option value="">None</option>
+                                                        <option th:each="item : ${distributors}"
+                                                                th:selected="${(addUser !=null && addUser.distributor !=null && !#strings.isEmpty(addUser.distributor) and addUser.getDSCode() == item.key)}"
+                                                                th:value="${item.key}" th:text="${item.value}"/>
+                                                    </optgroup>
+                                                </select>
+                                                <small class="form-text text-danger"></small>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -160,15 +192,27 @@
 
                                         <div class="col-md-6">
                                             <label>Date of Birth<span class="text-danger">*</span></label>
-                                            <input class="form-control" id="dob" required="required"
-                                                   name="dob" type="date" th:value="${data!=null ? data.dob : ''}">
+                                            <div class="form-group form-group-feedback form-group-feedback-left">
+                                                <input class="form-control" id="dob" required="required"
+                                                   name="dob" type="date" th:value="${addUser!=null ? addUser.dob : ''}">
+                                                <div class="form-control-feedback">
+                                                    <i class="fa fa-calendar text-blue-800"></i>
+                                                </div>
+                                                <small class="form-text text-danger"></small>
+                                            </div>
                                         </div>
 
                                         <div class="col-md-6">
-                                            <label>Email <span class="text-danger">*</span></label> <input
-                                                type="text" id="email" name="email"
-                                                th:value="${addUser!=null ? addUser.email : ''}"
+                                            <label>Email <span class="text-danger">*</span></label>
+                                            <div class="form-group form-group-feedback form-group-feedback-left">
+                                                <input type="text" id="email" name="email"
+                                                th:value="${addUser!=null ? addUser.email : ''}" maxlength="50"
                                                 required="required" class="form-control">
+                                                <div class="form-control-feedback">
+                                                    <i class="fa fa-envelope text-blue-800"></i>
+                                                </div>
+                                                <small class="form-text text-danger"></small>
+                                            </div>
                                         </div>
 
                                     </div>
@@ -187,9 +231,15 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <label>Address line <span class="text-danger">*</span></label>
-                                            <input type="text" id="address" name="address"
-                                                   th:value="${addUser!=null ? addUser.address : ''}"
-                                                   required="required" class="form-control">
+                                            <div class="form-group form-group-feedback form-group-feedback-left">
+                                                <input type="text" id="address" name="address"
+                                                       th:value="${addUser!=null ? addUser.address : ''}" maxlength="100"
+                                                       required="required" class="form-control">
+                                                <div class="form-control-feedback">
+                                                    <i class="fa fa-address-card text-blue-800"></i>
+                                                </div>
+                                                <small class="form-text text-danger"></small>
+                                            </div>
                                         </div>
                                         <!--                                        <div class="col-md-6">-->
                                         <!--                                            <label>Country <span class="text-danger">*</span></label>-->
@@ -201,9 +251,16 @@
                                         <!--                                        </div>-->
                                         <div class="col-md-6">
                                             <label>ZIP code <span class="text-danger">*</span></label>
-                                            <input type="text" id="zipcode" name="zipcode" required="required"
-                                                   th:value="${addUser!=null ? addUser.zipcode : ''}" onkeyup="zipcodeCheck()"
-                                                   class="form-control">
+                                            <div class="form-group form-group-feedback form-group-feedback-left">
+                                                <input type="text" id="zipcode" name="zipcode" required="required"
+                                                       th:value="${addUser!=null ? addUser.zipcode : ''}"
+                                                       onkeyup="zipcodeCheck()"
+                                                       class="form-control">
+                                                <div class="form-control-feedback">
+                                                    <i class="icon-pushpin text-blue-800"></i>
+                                                </div>
+                                                <small class="form-text text-danger"></small>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -212,29 +269,35 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <label>State/Province <span class="text-danger">*</span></label>
-                                            <select class="form-control select-search"
-                                                    data-placeholder="Select State"
-                                                    name="state" id="state" data-fouc>
-                                                <option></option>
-                                                <optgroup label="Select State">
-                                                    <option th:each="item : ${states}"
-                                                            th:selected="${(addUser !=null && addUser.state !=null && !#strings.isEmpty(addUser.state) and addUser.getStateCode() == item.id)}"
-                                                            th:value="${item.id}" th:text="${item.name}" />
-                                                </optgroup>
-                                            </select>
+                                            <div class="form-group form-group-feedback form-group-feedback-left">
+                                                <select class="form-control select-search"
+                                                        data-placeholder="Select State"
+                                                        name="state" id="state" data-fouc>
+                                                    <option></option>
+                                                    <optgroup label="Select State">
+                                                        <option th:each="item : ${states}"
+                                                                th:selected="${(addUser !=null && addUser.state !=null && !#strings.isEmpty(addUser.state) and addUser.getStateCode() == item.id)}"
+                                                                th:value="${item.id}" th:text="${item.name}"/>
+                                                    </optgroup>
+                                                </select>
+                                                <small class="form-text text-danger"></small>
+                                            </div>
                                         </div>
                                         <div class="col-md-6">
                                             <label>City <span class="text-danger">*</span></label>
-                                            <select class="form-control select-search"
-                                                    data-placeholder="Select State"
-                                                    name="city" id="city" data-fouc>
-                                                <option></option>
-                                                <optgroup label="Select City">
-                                                    <option th:each="item : ${cities}"
-                                                            th:selected="${(addUser !=null && addUser.city !=null && !#strings.isEmpty(addUser.city) and addUser.getCityCode() == item.id)}"
-                                                            th:value="${item.id}" th:text="${item.name}" />
-                                                </optgroup>
-                                            </select>
+                                            <div class="form-group form-group-feedback form-group-feedback-left">
+                                                <select class="form-control select-search"
+                                                        data-placeholder="Select City"
+                                                        name="city" id="city" data-fouc>
+                                                    <option></option>
+                                                    <optgroup label="Select City">
+                                                        <option th:each="item : ${cities}"
+                                                                th:selected="${(addUser !=null && addUser.city !=null && !#strings.isEmpty(addUser.city) and addUser.getCityCode() == item.id)}"
+                                                                th:value="${item.id}" th:text="${item.name}"/>
+                                                    </optgroup>
+                                                </select>
+                                                <small class="form-text text-danger"></small>
+                                            </div>
                                         </div>
 
                                     </div>
@@ -254,7 +317,7 @@
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <button type="submit" class="btn btn-primary">Save
+                                    <button id="addAssociate" type="submit" class="btn btn-primary">Save
                                         changes
                                     </button>
                                 </div>
